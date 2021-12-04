@@ -1,0 +1,80 @@
+.filtros-col {
+    height: 245px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+}
+
+.filtros {
+    padding: 20px 0px;
+}
+
+.filtro-tags {
+    background-color:#4e92d1;
+    /* border:1px solid rgb(221, 221, 221); */
+    border:1px solid #4e92d1;
+    text-align: center;
+    width: 80%px;
+    margin: 5px;
+    /* display: inline-block;
+    margin-right: 1px; */
+    /* color: grey; */
+    color:white;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 10px;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.filtro-tags:hover {
+    background-color: #005ab3;
+    color: white;
+    cursor: pointer;
+}
+
+
+
+/* .ativado:hover {
+    background-color: black;
+    border:1px solid black;
+    color: white;
+} */
+
+
+
+/* .tem-coisa {
+    background-color: red;
+} */
+
+.tem-coisa {
+    background-color: #4e92d1;
+    color:white
+}
+
+
+
+.ativado {
+    background-color: #0084ff;
+    color: white;
+}
+
+.desativados {
+    color: #4e92d1;
+    background-color: white;
+    border: 1px solid #4e92d1;
+}
+
+.disponiveis {
+    background-color: white;
+    color: #4e92d1;
+    border: 1px solid #4e92d1;
+}
+
+.restolho {
+    background-color: #cfe8ff;
+    font-weight: 200;
+    color: #a1a1a1;
+    border-color: #bfbfbf;
+}

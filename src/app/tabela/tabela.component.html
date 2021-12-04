@@ -1,0 +1,358 @@
+
+<div class="container" style="max-width: 100%; height: 25%;">
+    <div class="row" style="overflow: hidden; height: 100%;">
+       
+        <div class="col-4" style="height: 100%; overflow-y: scroll;">
+            <h3>Controle Financeiro</h3>
+
+            <div class="row">
+                <div class="col">
+                    <!-- <span ngbTooltip="Ver etiquetas de filtro" placement="right"><button (click)="filtrosMostrar = !filtrosMostrar" class="btn btn-primary" style="width: 100%;"><i *ngIf="!filtrosMostrar" class="fas fa-chevron-down"></i> <i *ngIf="filtrosMostrar" class="fas fa-chevron-up"></i> <span style="margin-left: 10px;">Filtros</span> </button></span> -->
+                    <span *ngIf="filtrosMostrar" ngbTooltip="ocultar etiquetas de filtro" placement="right"><button (click)="filtrosMostrar = !filtrosMostrar" class="btn btn-primary" style="width: 100%;"> <i *ngIf="filtrosMostrar" class="fas fa-chevron-up"></i> <span style="margin-left: 10px;">Filtros</span> </button></span>
+                    <span *ngIf="!filtrosMostrar" ngbTooltip="exibir etiquetas de filtro" placement="right"><button (click)="filtrosMostrar = !filtrosMostrar" class="btn btn-primary" style="width: 100%;"><i *ngIf="!filtrosMostrar" class="fas fa-chevron-down"></i> <i *ngIf="filtrosMostrar" class="fas fa-chevron-up"></i> <span style="margin-left: 10px;">Filtros</span> </button></span>
+                </div>
+                <div class="col">
+                    <button class="btn btn-primary" (click)="openRelatorios()" style="width: 50%;">Ver relatórios</button>
+                    <button class="btn btn-primary" routerLink="/paginaprincipal" style="width: 50%;">Main Page</button>
+            
+                </div>
+            </div>
+
+            
+            <div #painelFiltros class="collapse" id="painelDeFiltros" [ngClass]="{'show':filtrosMostrar}"> 
+        
+                <button #botoesMeses [disabled]="edicaoEmAndamento" class="btn btn-outline-danger btn-sm" *ngFor="let mes of meses let i = index"
+                (click)="seletorDeMeses(i)">{{ mes.toString().substring(4,6) }}/{{ mes.toString().substring(0,4) }}</button>
+                <br>
+                <button #botoesCategorias [disabled]="edicaoEmAndamento" class="btn btn-outline-primary btn-sm" *ngFor="let categ of categorias; let i = index"
+                (click)="seletorDeCategoria(i)"><i class="icones-categs {{categ.icone}}" style="margin-right: 5px;"></i>{{ categ.title }}</button>
+        
+                <br>
+        
+                <button #botoesEstabelecimentos [disabled]="edicaoEmAndamento" class="btn btn-outline-success btn-sm" *ngFor="let estab of estabelecimentos; let i = index" 
+                id="filtroEstabelecimentoBotao {{i+1}}" (click)="seletorDeEstabelecimento(i)"> {{ estab }} </button>
+                <br>
+        
+                <button #botoesOrigem [disabled]="edicaoEmAndamento" class="btn btn-outline-warning btn-sm" 
+                *ngFor="let origem of origens let i = index" (click)="seletorDeOrigem(i)"> {{ origem }} </button>
+        
+                <br>
+        
+                <button #botoesEfetuadas [disabled]="edicaoEmAndamento" class="btn btn-outline-info btn-sm" 
+                *ngFor="let efet of statusEfetuadas; let i = index" (click)="seletorDeEfetuadas(i)" id={{efet.value}}> {{ efet.tag }} </button>
+                
+                <br>
+        
+                <button #botoesOrcamentos [disabled]="edicaoEmAndamento" class="btn btn-outline-primary btn-sm" 
+                (click)="seletorDeOrcamento(i)" *ngFor="let orc of orcamentos; let i = index"> {{ orc }} </button>
+        
+                <br>
+        
+                <button #botoesNatureza [disabled]="edicaoEmAndamento" class="btn btn-outline-success btn-sm" *ngFor="let nat of naturezas; let i = index" id={{nat}}
+                (click)="seletorDeNatureza(i)"> {{ getRotuloBotaoNatureza(nat) }} </button>
+        
+                <br>
+        
+            
+        
+            </div>
+            <br>
+        
+        
+        </div>
+
+        <div style="margin-top: 1%;" class="col-8">
+
+            <form action="">
+
+            
+            <!-- ***** FORMULÁRIO PARA ENVIO MANUAL DE NOVA MOVIMENTAÇÃO ***** -->
+            <div class="row">
+                <div class="col">
+
+                    <!-- INPUT DE DATA -->
+                    <input #dataNovaMovimentacao class="form-control" [ngModel]="novaMovimentacao.date | date:'yyyy-MM-dd'" (change)="setarDataNovaMovimentacao($event)" style="width: 80%" type="date" name="data">
+     
+                    <!-- INPUT DE MES DE REFERÊNCIA -->
+                    <select [(ngModel)]="novaMovimentacao.mesRef" (change)="setarAnoRefNovaMovimentacao()" class="form-select" style="width: 80%" name="mesRef" id="mesRef">
+                        <optgroup *ngFor="let ano of mesesDeReferenciaFormatados" label={{ano.ano}}>
+                            <option disabled selected hidden value="0">Mês de Referência* </option>
+                            <option *ngFor="let mes of ano.meses; let i = index" [ngValue]='ano.meses[i].codigo'> {{ mes.nome }}/{{ano.ano.toString().substring(2,4) }}  </option>
+                    </select>
+
+                    <!-- INPUT DE ESTABELECIMENTO: -->
+                    <input [ngModel]="novaMovimentacao.estabelecimentoPrestador" (change)="setarEstabNovaMovimentacao($event)"   
+                    name="estabelecimentoPrestador" class="form-control" style="width: 80%; text-transform: uppercase;" type="text" placeholder="ESTABELECIMENTO*">
+                  
+                    <!-- INPUT DE CATEGORIA -->
+                    <select  [(ngModel)]="novaMovimentacao.categoria" (change)="checarValidacao()" class="form-select" style="width: 80%" name="categoria" id="categoriaNovaMovimentacao">
+                        <option disabled selected hidden value="{{categoriasRegistradas[0]}}">Categoria*</option>
+                        <option *ngFor="let categ of categoriasRegistradas" [ngValue]=categ> {{categ.title}}</option> 
+                    </select>                   
+         
+                </div>
+
+                <div class="col"> 
+
+                    <!-- INPUT DE ORIGEM -->
+                    <select [(ngModel)]="novaMovimentacao.origem" (change)="checarValidacao()" class="form-select" style="width: 80%" name="origem" id="origem">
+                        <option disabled hidden value="{{ origensRegistradas[0] }}">Origem*</option>
+                        <option *ngFor="let orig of origensRegistradas" [ngValue]=orig> {{ orig.title }} </option>
+                    </select>
+
+                    <!-- INPUT DE ORCAMENTO -->
+                    <select [(ngModel)]="novaMovimentacao.orcamento" (change)="checarValidacao()" class="form-select" style="width: 80%" name="orcamento" id="orcamento">
+                        <option disabled selected hidden value="{{ orcamentosRegistrados[0] }}">Orçamento*</option>
+                        <option *ngFor="let orc of orcamentosRegistrados" [ngValue]="orc"> {{ orc.title }} </option>
+                    </select>
+
+                    <!-- CHECKBOX DE STATUS DA MOVIMENTAÇÃO -->
+                    <div style="margin: 6px;" class="form-check form-switch">
+                        <input [(ngModel)]="novaMovimentacao.efetuada" class="form-check-input" type="checkbox" name="efetuada" id="efetuada">
+                        <label for="efetuada">Movimentação já efetuada</label>
+                    </div>
+
+                    <!-- INPUT DE VALOR -->
+                    <div style="width: 80%" class="input-group">
+                        <span class="input-group-text" id="basic-addon1">R$</span>
+                        <input #formValor name="valor" (keyup)="checarValidacao()" currencyMask [(ngModel)]="novaMovimentacao.valor" [options]="{ prefix: '', thousands: '.', decimal: ',' }" class="form-control"  type="text" placeholder="0,00*" id="valor">
+                    </div>
+ 
+                   
+                </div>
+
+                <div class="col">
+
+
+                    <!-- RADIO DE NATUREZA DA OPERAÇÃO -->
+                    <div class="form-check form-check-inline">
+                        <input [(ngModel)]="novaMovimentacao.natureza" (change)="checarValidacao()" class="form-check-input" value="C" type="radio" name="natureza" id="naturezaCredito">
+                        <label class="form-check-label" for="natureza"> Crédito </label>
+                    </div>
+
+                    <div class="form-check form-check-inline" style="margin-right: 8px;">
+                        <input [(ngModel)]="novaMovimentacao.natureza" (change)="checarValidacao()" class="form-check-input" value="D" type="radio" name="natureza" id="naturezaDebito">
+                        <label class="form-check-label" for="natureza"> Débito </label>
+                    </div>
+                    <span *ngIf="novaMovimentacao.natureza==''">*</span>
+
+            
+                   <!-- SELETORES DE PARCELAMENTO -->
+                    <div style="margin-top: 1.5%;">
+                        <input #parcelas style="width: 40%; display: inline;" (change)="gerenciarParcelas($event)" class="form-control" placeholder="total de parcelas" type="number" min="2" max="36">
+                        <select #parcela [(ngModel)]="novaMovimentacao.parcela" #parcelaTags style="width: 40%; display: inline;" class="form-control" name="parcelaTags" id="parcelaTags" [disabled]="dropdownDisabled">
+                            <option disabled hidden selected value="">parcela</option>
+                            <option *ngFor="let parcelas of parcelasObjectParaDropdownMenu" value={{parcelas.value}}> {{ parcelas.label }} </option>
+                        </select>
+                    </div>
+
+                    
+                    <div class="row" style="margin-top: 15px;">
+                        <div class="col">
+
+                            <!-- BOTÃO DE ENVIO MANUAL DE NOVA NOVIMENTAÇÃO -->
+                            <button #botaoEnviar *ngIf="!taCarregando" (click)="novoEnvio()" [disabled]="!liberaBotao" class="btn btn-primary" style="width: 90%;">ENVIAR   </button>
+                            <button *ngIf="taCarregando" class="btn btn-primary" style="width: 90%;"><span class="spinner-border spinner-border-sm"></span> </button>
+                            <br>
+                            <span style="margin-top: 50px;" class="vermelho" [ngClass]="{'verde':movEnviada}"> {{ mensagemErroFormulario }}  </span>  
+                        </div>
+
+
+                        <div class="col">
+
+                            <!-- BOTÃO DE ENVIAR ARQUIVO CSV -->
+                            <button style="width: 90%;" class="btn btn-success" (click)="openModalEnviarCsv()">enviar CSV</button>
+                        </div>
+                    </div>
+
+                    <!-- CONTADOR DE VALIDAÇÃO -->
+                    <div *ngIf="validacao > 0" class="row">
+                        <div class="col" style="color: dodgerblue;"> (*) {{ validacao }} obrigatório<span *ngIf="validacao > 1">s</span>  </div>
+                        <div class="col"></div>
+                        
+                    </div>
+                    
+                    
+                 <!--    <div style="margin-top: 3%;">
+                        <button #botaoEnviar *ngIf="!taCarregando" (click)="novoEnvio()" class="btn btn-primary" style="width: 20%;">ENVIAR   </button>
+                        <br>
+
+                        
+                        <button *ngIf="taCarregando" class="btn btn-primary" style="width: 20%;"><span class="spinner-border spinner-border-sm"></span> </button>
+                        <span style="margin-top: 50px;" class="vermelho" [ngClass]="{'verde':movEnviada}"> {{ mensagemErroFormulario }}  </span>  
+                    </div> -->
+
+                 
+                     
+
+                </div>
+               
+            </div>
+            <div class="row">
+                <div class="col-8">
+
+                    <!-- INPUT DE DESCRIÇÃO -->
+                    <input [(ngModel)]="novaMovimentacao.descricao" (change)="checarValidacao()" 
+                    name="descricao" class="form-control" style="width: 90.3%" type="text" placeholder="Descrição*" id="descricao">
+                    
+                </div>
+
+
+                <!-- BOTÃO DE EXCLUSÃO DE TODAS MOVIMENTAÇÕES NA TABELA -->
+                <div class="col-4" style="padding-left: 15%;">
+                    <button (click)="excluirTodas()" class="btn btn-outline-danger"><i id="" class="fas fa-trash"></i> Excluir todas</button>
+                </div>
+            </div>
+
+        </form>
+            
+            
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div style="height:5%">
+    <div class="row">
+        <div class="col-6">
+            <!-- <h3>Total Débitos: R$ {{ getSumDebitos(movimentacoesToTable).toLocaleString('pt-BR',{'minimumFractionDigits':2}) }}  |  Total Créditos: R$ {{ getSumCreditos(movimentacoesToTable).toLocaleString('pt-BR',{'minimumFractionDigits':2}) }}</h3> -->
+            <h3 style="display: inline;">Total Débitos: <span *ngIf="!verTotais" style="display: inline-block; width: 170px; height: 60%; background-color: #ebebeb; border-radius: 5px;"></span> <span *ngIf="verTotais" style="width: 170px; display: inline-block;"> {{ totalDebitos | currency:'BRL' }}</span> | Total Créditos: <span *ngIf="verTotais" style="width: 170px; display: inline-block;">{{ totalCreditos | currency:'BRL' }}</span> <span *ngIf="!verTotais" style="display: inline-block; width: 170px; height: 60%; background-color: #ebebeb; border-radius: 5px;"></span></h3>
+            <i *ngIf="verTotais" class="far fa-eye-slash" style="font-size: 23px; margin-left: 12px;" (click)="verTotais = !verTotais" ngbTooltip="ocultar"></i>
+            <i *ngIf="!verTotais" class="far fa-eye" style="font-size: 23px; margin-left: 12px;" (click)="verTotais = !verTotais" ngbTooltip="exibir"></i>
+        </div>
+        <div class="col-3">
+            <h5>N° de movimentações: {{ movimentacoesToTable.length }} </h5>
+        </div>
+        <div class="col-3">
+
+            <button style="width: 33%;" class="btn btn-primary" (click)="openModal()">Gerenciar opções</button>
+            <button class="btn btn-primary"  style="width: 33%;" (click)="openMarcarEfetuadas()">Marcar efetuadas</button>
+            
+            <input *ngIf="!edicaoEmAndamento" type="checkbox" class="btn-check" id="modoEdicaoButton" (click)="toggleModoEdicao()" id="modoEdicaoButton">
+            <label *ngIf="!edicaoEmAndamento" style="width: 33%;" class="btn btn-outline-danger" for="modoEdicaoButton" [ngbTooltip]="modoEdicao ? 'desativar modo edição' : 'ativar modo edição'">Modo edição</label>
+
+            <button *ngIf="edicaoEmAndamento" class="btn btn-success" style="width: 16%;" (click)="atualizarTodas()" ngbTooltip="Salvar alterações" placement="top"><i class="fas fa-save fa-lg"></i></button>
+            <button *ngIf="edicaoEmAndamento" class="btn btn-danger" style="width: 16%;" (click)="cancelar()" ngbTooltip="Cancelar alterações" placement="left"> <i class="far fa-times-circle fa-lg"></i></button>
+
+          
+           
+          
+        </div>
+    </div>
+ 
+</div>
+
+
+
+<div style="overflow-y: auto; height:70%">
+
+   
+    <table class="table table-hover">
+      
+            <thead style="position: sticky; top: 0;" class="table-dark">
+                
+                <tr>
+                    <th></th>
+                    <th>Data</th>
+                    <th>Mês de Ref.</th>
+                    <th>Estabelecimento</th>
+                    <th>Origem</th>
+                    <th>Descrição</th>
+                    <th>Categoria</th>
+                    <th>Valor</th> 
+                    <th>Efetuada</th>
+                    <th>Orçamento</th>
+                </tr>
+                </thead>
+            
+    <tbody [ngClass]="{'modo-edicao':modoEdicao}">
+        
+        <tr #tableRow [ngClass]="{'tabelaPointer':modoEdicao,'nao-efetuada':mov.efetuada==false}" (click)="linhaClicada(i)" (mouseover)="mostrarLixeira(i)" (mouseleave)="esconderLixeira(i)" *ngFor="let mov of movimentacoesToTable; let i = index" id={{mov._id}}> 
+            
+            <td style="width: 40px; height: 0; padding: 0;"> <span class="trash-icon"><i (click)="excluirMov(i,modalData)" id="lixeira" class="fas fa-trash transparente"></i></span></td>
+            <td class="td-lixeira">  <span [ngClass]="{'esconder':notNumber(mov.date)}"> {{ mov.date.toLocaleDateString('pt-BR',{'month':'short','day':'2-digit'}).replace('de','').replace('.','') }} </span> </td>
+            <td> {{ mov.mesRef.toString().substring(4,6) }}/{{ mov.mesRef.toString().substring(0,4) }} </td>
+            <td> {{ mov.estabelecimentoPrestador }} </td>
+            <td> {{ mov.origem.title }} </td>
+            <td> {{ mov.descricao }} {{ mov.parcela }}  </td>
+            <td title="agaga"> {{ mov.categoria.title }}  </td>
+            <td [ngClass]="{'creditos':mov.natureza == 'C','creditos-a-receber':mov.efetuada == false && mov.natureza == 'C'}" > R$ {{ mov.valor.toLocaleString("pt-BR",{"minimumFractionDigits":2}) }}  </td>
+            <td> {{ getLetra(i) }}  </td>
+            <td> {{ mov.orcamento.title }} </td>
+           
+        </tr>
+   
+    </tbody>
+    </table>
+</div>
+
+<!-- MODAL DE CONFIRMAÇÃO DE EXCLUSÃO DE MOVIMENTAÇÃO -->
+<ng-template #modalData let-modal>
+    <div class="modal-header header-blue">
+      <h4 class="modal-title" id="modal-basic-title">Confirmação</h4>
+      <!-- <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">×</span>
+      </button> -->
+    </div>
+    <div class="modal-body">
+      <p><strong>Está certo de que deseja <span class="text-primary">"excluir"</span> esta movimentação?</strong></p>
+      
+        <div style="text-align: center; background-color: #232323; padding: 8px; border-radius: 13px;">
+            <i class="fas fa-exclamation-triangle" style="color: #ffc624; font-size: 30px;"></i>
+            <p style="font-variant: small-caps; color: #ffc624; margin-bottom: 0;">***Esta açao não poderá ser revertida.***</p>
+        </div>
+      
+      <br>
+      <h6 style="width: 100%; text-align: center;">RESUMO</h6>
+      <!-- <p> <strong> Data:</strong> <span [ngClass]="{'transparente':dataInvalida}"> {{movAserExcluida.date.toLocaleDateString('pt-BR',{'month':'short','day':'2-digit'}).replace('de','').replace('.','')}}</span>   </p>
+      
+      <p> <strong>Estabelecimento/Prestador:</strong>    {{movAserExcluida.estabelecimentoPrestador}}</p>
+      <p> <strong>Valor: </strong> R$ {{movAserExcluida.valor.toLocaleString("pt-BR",{"minimumFractionDigits":2})}}</p> -->
+
+      <div style="margin-top: 20px;" class="row">
+        <div class="col" style="text-align: center;">
+            <i class="fas fa-calendar-alt icones-movimentacoes"></i>
+            <p [ngClass]="{'transparente':dataInvalida}">{{movAserExcluida.date.toLocaleDateString('pt-BR',{'month':'short','day':'2-digit'}).replace('de','').replace('.','')}}</p>
+        </div>
+        <div class="col"  style="text-align: center;">
+            <i class="fas fa-industry icones-movimentacoes"></i>
+            <p>{{movAserExcluida.estabelecimentoPrestador}}</p>
+        </div>
+        <div class="col"  style="text-align: center;">
+            <i class="fas fa-dollar-sign icones-movimentacoes"></i>
+            <p>R$ {{movAserExcluida.valor.toLocaleString("pt-BR",{"minimumFractionDigits":2})}}</p>
+        </div>
+    </div>
+    </div>
+
+  
+
+
+
+    <div class="modal-footer" style="display: block;">
+     <h6 class="verde">{{mensagemConfirmaExclusao}}</h6>
+        <div class="row">
+
+            <div class="col">
+                <button style="width: 85px;" *ngIf="!taCarregandoExclusao" type="button" class="btn btn-danger" (click)="exclusaoConfirmada()">Excluir</button>
+                <button style="width: 85px;" *ngIf="taCarregandoExclusao" class="btn btn-danger" style="width: 20%;"><span class="spinner-border spinner-border-sm"></span> </button>
+            </div>
+
+            <div class="col" style="text-align: right;">
+               <button style="width: 85px;" type="button" class="btn btn-primary" (click)="modal.close('Save click')">Cancelar</button>
+            </div>
+
+        </div>
+      
+      
+    </div>
+</ng-template>
+
+<!-- <modal-editar-opcoes></modal-editar-opcoes> -->
+
+
+
+

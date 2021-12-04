@@ -1,0 +1,59 @@
+<div>
+
+  
+   
+    <div class="row">
+        <div class="col filtros-col">
+            <div class="filtros">
+                <div class="filtro-tags"
+                    *ngFor="let mes of mesesUtilizados; let i = index"
+                    [ngClass]="{'ativado':mes.filtrar, 'desativados': filtro_mesesSelecionados.length > 0 && !mes.filtrar, 'restolho': mesesAfrente > 0 && i >= mesesAfrente && !mes.filtrar}"
+                    (click)=setarFiltro_Meses(i)> {{ mes.label }}
+                </div>
+            </div>
+        </div>
+
+        <div class="col filtros-col">
+            <div class="filtros">
+                <div #categorias class="filtro-tags"
+                *ngFor="let categoria of categoriasUtilizadas; let i = index"
+                [ngClass]="{'ativado':categoria.filtrar, 'desativados': filtro_categoriasSelecionadas.length > 0 && !categoria.filtrar, 'restolho':categsAfrente > 0 && i >= categsAfrente && !categoria.filtrar}"
+                (click)="setarFiltro_Categoria (i)"> {{ categoria.title }} </div>
+            </div>
+        </div>
+
+        <div class="col filtros-col">
+            <div class="filtros">
+                <div class="filtro-tags"
+                *ngFor="let estabelecimento of estabelecimentosUtilizados; let i = index"
+                [ngClass]="{'ativado':estabelecimento.filtrar,'desativados':filtro_estabelecimentosSelecionados.length > 0 && !estabelecimento.filtrar, 'restolho':estabsAfrente > 0 && i >= estabsAfrente && !estabelecimento.filtrar, 'disponiveis':filtro_estabelecimentosSelecionados.length > 0 && !estabelecimento.filtrar && estabsAfrente > i }"
+                (click)="setarFiltro_Estabelecimento(i)"> {{ estabelecimento.title }}
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col filtros-col">
+            <div class="filtros">
+                <div class="filtro-tags"
+                *ngFor="let origem of origensUtilizadas; let i = index"
+                [ngClass]="{'ativado':origem.filtrar, 'desativados':filtro_origensSelecionadas.length > 0 && !origem.filtrar, 'restolho':origsAfrente > 0 && i >= origsAfrente && !origem.filtrar, 'disponiveis':filtro_origensSelecionadas.length > 0 && !origem.filtrar && origsAfrente > i }"
+                (click)="setarFiltro_Origem(i)"> {{ origem.title }}
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col filtros-col">
+            <div class="filtros">
+                <div class="filtro-tags"
+                *ngFor="let orcamento of orcamentosUtilizados; let i = index"
+                [ngClass]="{'ativado':orcamento.filtrar, 'desativados': filtro_orcamentosSelecionados.length > 0 && !orcamento.filtrar, 'restolho': orcsAfrente > 0 && i >= orcsAfrente}"
+                (click)="setarFiltro_Orcamento(i)"> {{ orcamento.title }}
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

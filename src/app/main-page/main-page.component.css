@@ -1,0 +1,120 @@
+.cfheader {
+    font-family: Arial,sans-serif;
+}
+
+.actionbar-holder {
+    background-color: white;
+    margin-top: 37px;
+}
+
+.actionbar-container {
+    width: 90%;
+    margin: auto;
+}
+
+.espaço {
+    width: 250px;
+    display: inline-block;
+}
+
+.acoes {
+    display: inline-flex;
+    width: calc(100% - 250px);
+}
+
+.actionlink {
+    height: 52px;
+    font-size: 21px;
+    border-left: 1px solid #e7e7e7;
+    padding: 9px 16px;
+    text-decoration: none;
+    color: #00b4c5;
+}
+
+.actionlink-label {
+    font-size: 11px;
+    font-weight: 700;
+    vertical-align: top;
+    line-height: 31px;
+    margin-left: 7px;
+}
+
+.container-main {
+    width: 90%;
+    margin: 70px auto;
+    position: relative;
+    min-height: 300px;
+}
+
+.content {
+    margin-left: 261px;
+}
+
+.sidebar {
+    width: 251px;
+    position: absolute;
+    background-color: white;
+    top: 0;
+    bottom: 0;
+}
+
+@media screen and (max-width: 1450px){
+    aside.sidebar {
+        display: none;
+    }
+
+    section.content {
+        margin-left: 0;
+    }
+
+
+}
+
+@media (max-width: 1163px) {
+    .container-main {
+        width: 100%;
+    }
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding-left: 0;
+    padding-top: 10px;
+}
+
+.sidebar-menu-item {
+    height: 40px;
+    cursor: pointer;
+    /* padding: 7px 7px; */
+}
+
+.sidebar-menu-item:hover {
+    background-color: rgb(241, 241, 241);
+}
+
+
+
+.sidebar-menu-item:hover a {
+    color: rgb(88, 88, 88);
+}
+
+
+
+.sidebar-link {
+    width: 100%;
+    display: block;
+    text-decoration: none;
+    color: dodgerblue;
+    font-size: 15px;
+    padding: 7px 7px;
+}
+
+.ativo {
+    background-color: dodgerblue;
+    color: white;
+}
+
+.sidebar-menu-item:hover a.ativo {
+    color: white;
+}
+

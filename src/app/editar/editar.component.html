@@ -1,0 +1,202 @@
+<div class="modal-header">
+    <h4>Editar movimentação</h4>
+</div>
+
+<div class="modal-body">
+
+     <!-- SPINNER ENQUANTO CARREGANDO MOVIMENTAÇÕES: -->
+     <div *ngIf="carregando" class="spinner-carregando loading-movs">
+        <span class="spinner-border"></span>
+    </div>
+
+    <div [ngClass]="{'escondido':carregando}" class="row">
+        <div class="col-11">
+          <div class="row novamov-linha">
+        
+        <!-- INPUT DE DATA -->
+        <div class="col">
+            <form id="campoData" class="form-inline full-height">
+                <div class="form-group full-height">
+                    <div class="input-group full-height">
+                        <div class="form-floating novamov-cols flexed">
+                            <input #editData class="form-control inputs-nova-mov border-with-resetador" placeholder="dd/mm/aaaa" [ngClass]="{'validation-warning border-config':movimentacao.date !== dataOriginal}"
+                            name="dp" [ngModel]="dateModel" (ngModelChange)="setarData($event,null)" 
+                            id="moveditDate" [dayTemplate]="day" [footerTemplate]="t" ngbDatepicker #d="ngbDatepicker">
+                            <label for="moveditDate">Data</label>
+                            <span class="resetador reto" ngbTooltip="restaurar data" [ngClass]="{'resetador-active':movimentacao.date !== dataOriginal}" (click)="restaurarData()"></span>
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary full-height custom-border-radius" [ngClass]="{'border-left-adjust':movimentacao.date !== dataOriginal}" (click)="d.toggle()" type="button"><i class="far fa-calendar-alt calendar-icon"></i></button>
+                            
+                            </div>
+                        
+                        </div>
+                        
+                    </div>
+                </div>
+            </form>
+
+            <ng-template #t>
+                <div class="calendar-button">
+                    <button class="btn btn-sm btn-outline-primary botao-hoje" (click)="hoje()">hoje</button>
+                </div>
+            
+            </ng-template>
+
+            <ng-template #day let-date let-currentMonth="currentMonth" let-focused="selected">
+                <span class="custom-day" [class.focused]="focused" [class.original]="dataCerta(date)" [class.outside]="dataOutside(date, currentMonth)">{{date.day}}</span> 
+            </ng-template>
+
+
+        </div>
+
+        <!-- INPUT DE MES DE REFERÊNCIA -->
+        <div class="col">
+            <div class="form-floating novamov-cols">
+                <select #mesRef [ngModel]="movimentacao.mesRef" (ngModelChange)="setarMesRefAnoRef($event)" (change)="blur($event)" class="form-control inputs-nova-mov" name="" id="moveditMesRef" [ngClass]="{'validation-warning':movimentacao.mesRef !== movimentacaoOriginal.mesRef}">
+                    <option selected hidden disabled value="0">selecione</option>
+                    <optgroup *ngFor="let anos of mesesDeReferenciaFormatados" [label]="anos.ano">      
+                        <option *ngFor="let meses of anos.meses"  [value]="meses.codigo" [ngClass]="{'valor-original':meses.codigo == movimentacaoOriginal.mesRef}"> {{ meses.rotulo }} </option>
+                    </optgroup>        
+                </select>
+                <label for="moveditMesRef">Mês de Referência</label>
+            </div>
+        </div>
+
+        <!-- INPUT DE ORIGEM -->
+        <div class="col">
+            <div class="form-floating novamov-cols">
+                <select #origem [ngModel]="movimentacao.origem._id" (ngModelChange)="setarOrigem($event)" (change)="blur($event)" [ngClass]="{'validation-warning':movimentacao.origem._id !== movimentacaoOriginal.origem._id}"
+                class="form-control inputs-nova-mov" name="" id="moveditOrigem">
+                    <option *ngFor="let origem of origensRegistradas" [value]="origem._id" [ngClass]="{'valor-original':origem._id == movimentacaoOriginal.origem._id}"> {{ origem.title }} </option>
+                </select>
+                <label for="moveditOrigem">Origem</label>
+            </div>
+        </div>
+
+        <!-- INPUT DE CATEGORIA -->
+        <div class="col">
+            <div class="form-floating novamov-cols">
+                <select #categoria 
+                [ngModel]="movimentacao.categoria._id" (ngModelChange)="setarCategoria($event)" (change)="blur($event)" [ngClass]="{'validation-warning':movimentacao.categoria._id !== movimentacaoOriginal.categoria._id}"
+                class="form-control inputs-nova-mov" name="" id="moveditCategoria">
+                    <option *ngFor="let categ of categoriasRegistradas" [value]="categ._id" [ngClass]="{'valor-original':categ._id == movimentacaoOriginal.categoria._id}"> {{ categ.title }} </option>
+                </select>
+                <label for="moveditCategoria">Categoria</label>
+            </div>
+        </div>
+
+        <!-- INPUT DE ORCAMENTO -->
+        <div class="col">
+            <div class="form-floating novamov-cols">
+                <select [ngModel]="movimentacao.orcamento._id" (ngModelChange)="setarOrcamento($event)" (change)="blur($event)" [ngClass]="{'validation-warning':movimentacao.orcamento._id !== movimentacaoOriginal.orcamento._id}"
+                class="form-control inputs-nova-mov" name="" id="moveditOrcamento">
+                    <option *ngFor="let orc of orcamentosRegistrados" [value]="orc._id" [ngClass]="{'valor-original':orc._id == movimentacaoOriginal.orcamento._id}"> {{ orc.title }} </option>
+                </select>
+                <label for="moveditOrcamento">Orçamento</label>
+            </div>
+        </div>
+
+        <!-- INPUT DE NATUREZA -->
+        <div class="col-1">
+            <div class="form-check checks-natureza">
+                <input [(ngModel)]="movimentacao.natureza" (ngModelChange)="validacao()" class="form-check-input" type="radio" name="moveditNatureza" id="credito" value="C">
+                <label class="form-check-label" for="credito">
+                <span [ngClass]="{'natureza-original':movimentacaoOriginal.natureza == 'C'}">Crédito</span> 
+                </label>
+            </div>
+            <div class="form-check checks-natureza">
+                <input [(ngModel)]="movimentacao.natureza" (ngModelChange)="validacao()" class="form-check-input" type="radio" name="moveditNatureza" id="debito" value="D">
+                <label class="form-check-label" for="debito">
+                <span [ngClass]="{'natureza-original':movimentacaoOriginal.natureza == 'D'}">Débito</span> 
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row novamov-linha">
+
+        <!-- INPUT DE ESTABELECIMENTO -->
+        <div class="col">
+            <div class="form-floating novamov-cols flexed">
+                <input #estabelecimento 
+                [ngModel]="movimentacao.estabelecimentoPrestador" (ngModelChange)="setarEstab($event)" [ngClass]="{'validation-warning border-config':movimentacao.estabelecimentoPrestador !== movimentacaoOriginal.estabelecimentoPrestador}"
+                class="form-control inputs-nova-mov input-novamov-estab" id="moveditEstabelecimento" type="text" placeholder="ESTABELECIMENTO">
+                <label for="moveditEstabelecimento">Estabelecimento/Prestador</label>
+                <span class="resetador" ngbTooltip="restaurar estabelecimento" (click)="restaurarEstab()" [ngClass]="{'resetador-active':movimentacao.estabelecimentoPrestador !== movimentacaoOriginal.estabelecimentoPrestador}"></span>
+            </div>
+        </div>
+
+        <!-- INPUT DE DESCRIÇÃO -->
+        <div class="col">
+            <div class="form-floating novamov-cols flexed">
+                <input #descricao 
+                [(ngModel)]="movimentacao.descricao" (ngModelChange)="validacao()" [ngClass]="{'validation-warning border-config':movimentacao.descricao !== movimentacaoOriginal.descricao}"
+                class="form-control inputs-nova-mov border-with-resetador" id="moveditDescricao" type="text" placeholder="Descrição">
+                <label for="moveditDescricao">Descrição</label>
+                <span class="resetador" ngbTooltip="restaurar descrição" (click)="restaurarDescricao()" [ngClass]="{'resetador-active':movimentacao.descricao !== movimentacaoOriginal.descricao}"></span>
+            </div>
+        </div>
+
+        <!-- INPUT DE VALOR -->
+        <div class="col-2">
+            <div class="form-floating novamov-cols flexed">
+                <input #valor [(ngModel)]="movimentacao.valor" (ngModelChange)="validacao()"  [ngClass]="{'validation-warning border-config':movimentacao.valor !== movimentacaoOriginal.valor}"
+                id="moveditValor" class="form-control inputs-nova-mov border-with-resetador" currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }" type="text" placeholder="R$ 0,00">
+                <label for="moveditValor">Valor</label>
+                <span class="resetador" ngbTooltip="restaurar valor" (click)="restaurarValor()" [ngClass]="{'resetador-active':movimentacao.valor !== movimentacaoOriginal.valor}"></span>
+            </div>
+        </div>
+
+        <!-- INPUT DE PARCELAMENTO -->
+        <div class="col">
+            <div class="row">
+                <div class="col novamov-parcelaQtde">
+                    <div class="form-floating novamov-cols">
+                        <input (change)="setarParcelas($event)" [ngModel]="qtdeParcelas" placeholder="total" id="moveditQtdeParcelas" class="form-control" type="number" min="2" max="48">
+                        <label class="labelQtdeParcelas" for="moveditQtdeParcelas">total de parcelas</label>
+                    </div>
+                </div>
+
+                <div class="col novamov-cols">
+                    <div class="form-floating novamov-cols">
+                        <select #parcela [(ngModel)] ="movimentacao.parcela" (ngModelChange)="validacao()" (change)="blur($event)" [disabled]="desativarParcela" [ngClass]="{'validation-warning':movimentacao.parcela !== movimentacaoOriginal.parcela}" class="form-control" name="" id="moveditParcela">
+                           
+                            <option *ngFor="let parcela of parcelas" [value]="parcela" [ngClass]="{'valor-original':parcela == movimentacaoOriginal.parcela}"> {{ parcela }} </option>
+                        </select>
+                        <label for="moveditParcela">parcela</label>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+        <!-- SWITCH DE STATUS (EFETUADA OU NÃO) -->
+        <div class="col-1 efetuada-checkbox">
+            <div class="form-check form-switch">
+                <input [(ngModel)]="movimentacao.efetuada" (ngModelChange)="validacao()" (change)="blur($event)" class="form-check-input" type="checkbox" id="moveditStatus">
+                <label class="form-check-label" for="moveditStatus" [ngClass]="{'status-original':movimentacaoOriginal.efetuada}">Efetuada</label>
+            </div>
+            <!-- <div class="form-check form-switch absolute">
+                <input [ngModel]="movimentacaoOriginal.efetuada" disabled class="form-check-input" type="checkbox" id="moveditStatus">
+            </div> -->
+        </div>
+    </div>  
+        </div>
+
+
+        <!-- BOTÃO DE ENVIO -->
+        <div class="col-1">
+               <button [disabled]="disableButton" class="btn btn-outline-primary botao-enviar" (click)="salvarEdicao()">
+                   <span *ngIf="enviandoEdicao" class="spinner-border spinner-border-sm"></span>
+                   <span *ngIf="!enviandoEdicao">SALVAR</span> 
+                </button>
+        </div>
+    </div>
+
+
+
+    
+
+</div>
+
+

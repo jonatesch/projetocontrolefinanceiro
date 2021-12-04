@@ -1,0 +1,109 @@
+.btn:focus {
+    box-shadow: none;
+}
+
+.btn-check:focus+.btn-outline-danger, .btn-outline-danger:focus {
+    box-shadow: none;
+}
+
+.form-check-input:focus {
+    box-shadow: none;
+}
+
+
+.tabelaPointer {
+    cursor: pointer;
+}
+
+.creditos {
+    color: green
+}
+
+.creditos-a-receber {
+    color:blue
+}
+
+.esconder{
+    font-size: 0;
+    transition: 0.2s;
+}
+
+.vermelho {
+    color: tomato;
+}
+
+.verde {
+    color:green
+}
+
+.nao-efetuada {
+    color:gray;
+}
+
+.colapsar {
+    visibility: hidden;
+}
+
+.table-hover>tbody>tr:hover {
+    color:saddlebrown;
+}
+
+.trash-icon {
+    display: inline-block;
+    background-color: tomato;
+    width: 0;
+    text-align: center;
+    display: inline-block;
+    height: 100%;
+    overflow: hidden;
+}
+
+.trash-icon-mostrar {
+    width: 30px;
+    transition: 0.5s;
+}
+
+#lixeira {
+    margin-top: 10px;
+}
+
+
+#lixeira:hover {
+    cursor: pointer;
+}
+
+.transparente {
+    color: transparent;
+}
+
+.branco {
+    color: whitesmoke;
+}
+
+.destaque {
+    color: salmon;
+}
+
+.ressaltar {
+    background-color:moccasin;
+    transition: 1s;
+}
+
+.modo-edicao {
+    background-color:#ffe6e0;
+}
+
+.editando {
+    background-color:#fa8b6f;
+    color: white;
+}
+
+.icones-movimentacoes {
+    color: dodgerblue;
+    font-size: 40px;
+}
+
+.select-categorias {
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900
+}

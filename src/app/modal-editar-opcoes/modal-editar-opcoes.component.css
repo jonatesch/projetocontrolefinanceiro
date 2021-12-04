@@ -1,0 +1,50 @@
+li:hover {
+    background-color: #f3f3f3;
+}
+
+.opcoes {
+    padding: 0;
+    height: 40px;
+}
+
+.vermelho {
+    color: tomato;
+}
+
+.verde {
+    color:green
+}
+
+.icones-categs {
+    color: dodgerblue;
+}
+
+.select-categorias {
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900
+}
+
+.modal-header {
+    background-color: #545454;
+    color: white;
+}
+
+.list-group-item {
+    border: none;
+    border-bottom: 1px solid rgba(0,0,0,.125)
+}
+
+.form-control:focus {
+    box-shadow: none;
+    border-color: orange;
+}
+
+.form-check-input:focus {
+    box-shadow: none;
+    border-color: orange;
+}
+
+.form-check-input:checked {
+    background-color: orange;
+    border-color: orange;
+}

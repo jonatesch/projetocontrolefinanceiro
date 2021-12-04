@@ -1,0 +1,201 @@
+.modal-header {
+    background-color: #545454;
+    color: white;
+}
+
+
+.calendar-button {
+    text-align: center;
+    margin: 10px;
+}
+
+.full-height {
+    height: 100%;
+}
+
+.novamov-cols {
+    /*  padding: 0; */
+    padding-left: 0;
+    height: 100%;
+ }
+
+ .inputs-nova-mov {
+    font-size: 15px;
+    height: 100%;
+}
+
+.flexed {
+    display: flex;
+}
+
+.botao-hoje {
+    width: 45%;
+    border-color: #fd820d;
+    color: #fd820d;
+}
+
+.botao-hoje:hover {
+    color: white;
+    background-color: #fd820d;
+}
+
+
+
+
+
+.input-novamov-estab {
+    text-transform: uppercase;
+    border-radius: .25rem 0 0 .25rem;
+}
+
+.border-with-resetador {
+    border-radius: .25rem 0 0 .25rem;
+}
+
+.labelQtdeParcelas {
+    padding: 17px 7px;
+}
+
+.efetuada-checkbox {
+    padding: 17px 0;
+}
+
+.novamov-linha {
+    margin: 10px 0;
+    height: 57px;
+}
+
+.botao-enviar {
+    height: 100%;
+    width: 80px;
+    border-color: #fd820d;
+    color: #fd820d;
+}
+
+.botao-enviar:hover {
+    background-color: #fd820d;
+    color: white;
+}
+
+.form-check-input:checked {
+    background-color: #fd820d;
+    border-color: #fd820d;
+}
+
+.valor-original {
+    color: #fd820d;
+}
+
+.resetador {
+    background-color:gainsboro;
+    width: 12px;
+    display: block;
+    border-radius: 0 .25rem .25rem 0;
+    cursor: pointer;
+}
+
+.reto {
+    border-radius:0;
+}
+
+.resetador:hover {
+    background-color: #fd820d;
+}
+
+.border-config {
+    border-right: none;
+}
+
+.border-left-adjust {
+    border-left: none;
+}
+
+.custom-border-radius {
+    border-radius: 0px 0.25rem 0.25rem 0px;
+}
+
+.resetador-active {
+    border: 1px solid #fd820d;
+}
+
+.natureza-original::after {
+    content: '*';
+    color: #fd820d;
+}
+
+.form-control:focus {
+    box-shadow: none;
+    border-color: #fd820d;
+}
+
+.form-check-input:focus {
+    box-shadow: none;
+    border-color: #fd820d;
+}
+
+.form-switch .form-check-input:focus {
+    background-image: url('../image/orangedot.svg');
+}
+
+.status-original::after {
+    content: '*';
+    color: dodgerblue;
+}
+
+/* .form-control:focus {
+    box-shadow: none;
+} */
+
+.custom-day {
+    width: 2rem;
+    height: 2rem;
+    text-align: center;
+    display: inline-block;
+    padding: 3px 2px 0px 0px;
+    border-radius: 5px;
+}
+
+
+.custom-day:hover {
+    background-color: #ffddbd;
+}
+
+.custom-day.original {
+    color: #fd820d;
+}
+.custom-day.focused {
+    color: white;
+    background-color: #fd820d;
+    border-radius: 5px;
+
+}
+
+.custom-day.outside {
+    color: lightgray;
+}
+
+.calendar-icon {
+    font-size: 23px;
+}
+
+.absolute {
+    position: absolute
+}
+
+.escondido {
+    display: none;
+}
+
+.loading-movs {
+    text-align: center;
+    color: #fd820d;
+}
+
+.validation-warning {
+    border-color: #fd820d;
+}
+
+
+:host ::ng-deep .btn-link {
+    color: #fd820d;
+}

@@ -1,0 +1,7 @@
+<div class="meses-container">
+   <div class="meses-seletor" 
+    *ngFor="let mes of resumosMensais; let i = index" [ngClass]="{'ativo':mes.ativo}" (click)="toggleActive(i)"> 
+        {{ mes.rotulo }} 
+    </div> 
+</div>
+

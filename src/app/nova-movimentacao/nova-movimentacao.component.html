@@ -1,0 +1,479 @@
+<div class="row">
+    <div class="col-11 coluna-campos">
+        <div class="row novamov-linha">
+
+            <div class="col novamov-cols">
+                <form id="campoData" class="form-inline full-height">
+                    <div class="form-group full-height">
+                        <div class="input-group full-height">
+                            <div class="form-floating novamov-cols flexed">
+                                <input class="form-control inputs-nova-mov" placeholder="dd/mm/aaaa"
+                                name="dp" [ngModel]="dateModel" (ngModelChange)="setarData($event,'')" id="novamovDate" [footerTemplate]="t"  ngbDatepicker #d="ngbDatepicker">
+                                <label for="novamovDate">Data</label>
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary full-height" (click)="d.toggle()" type="button"><i class="far fa-calendar-alt calendar-icon"></i></button>
+                            </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </form>
+
+                <ng-template #t>
+                    <div class="calendar-button">
+                        <button class="btn btn-sm btn-outline-primary botao-hoje" (click)="hoje()">hoje</button>
+                    </div>
+                
+                </ng-template>
+            </div>
+
+            <div class="col novamov-cols">
+
+                <div class="form-floating novamov-cols">
+                    <select #mesRef [ngModel]="novaMovimentacao.mesRef" (ngModelChange)="setarMesRef($event)" class="form-control inputs-nova-mov" name="" id="novamovMesRef" [ngClass]="{'validation-warning':mesRef.value == '0'}">
+                        <option selected hidden disabled value="0">selecione</option>
+                        <optgroup *ngFor="let anos of mesesDeReferenciaFormatados" [label]="anos.ano">      
+                            <option *ngFor="let meses of anos.meses"  [value]="meses.codigo"> {{ meses.rotulo }} </option>
+                        </optgroup>        
+                    </select>
+                    <label for="novamovMesRef">Mês de Referência*</label>
+                </div>
+                
+            </div>
+
+            <div class="col novamov-cols">
+                <div class="form-floating novamov-cols">
+                    <select #origem [ngModel]="novaMovimentacao.origem" (ngModelChange)="setarOrigem($event)" class="form-control inputs-nova-mov" name="" id="novamovOrigem" [ngClass]="{'validation-warning':origem.value == 'selecione'}">
+                        <option selected disabled hidden value="selecione">selecione</option>
+                        <option *ngFor="let origem of origensRegistradas" [value]="origem._id"> {{ origem.title }} </option>
+                    </select>
+                    <label for="novamovOrigem">Origem*</label>
+                </div>
+                
+            </div>
+
+            <div class="col novamov-cols">
+                <div class="form-floating novamov-cols">
+                    <select #categoria [(ngModel)]="novaMovimentacao.categoria" (ngModelChange)="setarCategoria($event)" class="form-control inputs-nova-mov" name="" id="novamovCategoria" [ngClass]="{'validation-warning':categoria.value == 'selecione'}">
+                        <option selected disabled hidden value="selecione">selecione</option>
+                        <option *ngFor="let categ of categoriasRegistradas" [value]="categ._id"> {{ categ.title }} </option>
+                    </select>
+                    <label for="novamovCategoria">Categoria*</label>
+                </div>         
+            </div>
+
+            <div class="col novamov-cols">
+                <div class="form-floating novamov-cols">
+                    <select [(ngModel)]="novaMovimentacao.orcamento" class="form-control inputs-nova-mov" name="" id="novamovOrcamento">
+                        <option *ngFor="let orc of orcamentosRegistrados" [selected]="orc.title == 'Normal'" [value]="orc._id"> {{ orc.title }} </option>
+                    </select>
+                    <label for="novamovOrcamento">Orçamento</label>
+                </div>
+            
+                
+            
+            </div>
+
+            <div class="col-1 novamov-cols col-natureza">
+                <div class="form-check">
+                    <input [(ngModel)]="novaMovimentacao.natureza" class="form-check-input" type="radio" name="novamovNatureza" id="credito" value="C">
+                    <label class="form-check-label" for="credito">
+                    Crédito
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="novamovNatureza" id="debito" value="D" checked>
+                    <label class="form-check-label" for="debito">
+                    Débito
+                    </label>
+                </div>
+            
+                
+            </div>
+
+
+        </div>
+
+        <div class="row novamov-linha">
+
+            <div class="col novamov-cols">
+                <div class="form-floating novamov-cols">
+                    <input #estabelecimento [ngModel]="novaMovimentacao.estabelecimentoPrestador" (ngModelChange)="setarEstab($event)" class="form-control inputs-nova-mov input-novamov-estab" id="novaMovEstabelecimento" type="text" placeholder="ESTABELECIMENTO" [ngClass]="{'validation-warning':estabelecimento.value == '', 'autocompleting':!esconderEstabsAutocomplete}" autocomplete="new-password">
+                    <label for="novaMovEstabelecimento">Estabelecimento/Prestador*</label>
+                </div>
+                <div *ngIf="!esconderEstabsAutocomplete" class="estabs-autocomplete">
+                    <span class="fechar-estab-autocomplete"> <i class="fas fa-times x-button" (click)="esconderEstabsAutocomplete = true"></i> </span>
+                    <ul class="autocomplete-list">
+                        <li class="autocomplete-item" *ngFor="let estab of estabelecimentosFiltrados | slice:0:5" (click)="estabsAutocompletar($event)">{{ estab }}</li>
+                        
+                    </ul>
+                </div>
+            
+            
+            </div>
+
+            <div class="col novamov-cols">
+
+                <div class="form-floating novamov-cols">
+                    <input #descricao class="form-control inputs-nova-mov" [ngModel]="novaMovimentacao.descricao" (ngModelChange)="setarDescricao($event)" id="novamovDescricao" type="text" placeholder="Descrição" [ngClass]="{'validation-warning':descricao.value == '','autocompleting':!esconderDescAutocomplete}" autocomplete="new-password">
+                    <label for="novamovDescricao">Descrição*</label>
+                </div>
+                <div *ngIf="!esconderDescAutocomplete" class="estabs-autocomplete">
+                    <span class="fechar-estab-autocomplete"> <i class="fas fa-times x-button" (click)="esconderDescAutocomplete = true"></i> </span>
+                    <ul class="autocomplete-list">
+                        <li class="autocomplete-item" *ngFor="let descricao of descricoesFiltradas | slice:0:5" (click)="descAutocompletar($event)">{{ descricao }}</li>
+                        
+                    </ul>
+                </div>
+            
+            
+            </div>
+
+            <div class="col-2 novamov-cols">
+                <div class="form-floating novamov-cols">
+                    <input #valor [ngModel]="novaMovimentacao.valor" (ngModelChange)="setarValor($event)" id="novamovValor" class="form-control inputs-nova-mov" currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }" type="text" placeholder="R$ 0,00" [ngClass]="{'validation-warning':this.novaMovimentacao.valor == 0 || this.novaMovimentacao.valor == null}">
+                    <label for="novamovValor">Valor*</label>
+                </div>
+            </div>
+
+            <div class="col novamov-cols">
+                <div class="row">
+
+                    <div class="col novamov-parcelaQtde">
+                        <div class="form-floating novamov-cols">
+                            <input (change)="setarParcelas($event)" placeholder="total" id="novamovQtdeParcelas" class="form-control" type="number" min="2" max="36">
+                            <label for="novamovQtdeParcelas">total de parcelas</label>
+                        </div>
+                    </div>
+
+                    <div class="col novamov-cols">
+                        <div class="form-floating novamov-cols">
+                            <select #parcela [(ngModel)] ="novaMovimentacao.parcela" [disabled]="desativarParcela" class="form-control" name="" id="novamovParcela">
+                                <option *ngIf="!desativarParcela" disabled selected hidden>selecione</option>
+                                <option *ngFor="let parcela of parcelas" [value]="parcela"> {{ parcela }} </option>
+                            </select>
+                            <label for="novamovParcela">parcela</label>
+                        </div>
+                        
+                    </div>
+                </div>
+            
+            </div>
+
+            <div class="col-1 novamov-cols efetuada-checkbox">
+                <div class="form-check form-switch">
+                    <input [(ngModel)]="novaMovimentacao.efetuada" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                    <label class="form-check-label" for="flexSwitchCheckDefault">Efetuada</label>
+                </div>
+            </div>
+    
+        </div> 
+    </div>
+
+    
+    <div class="col-1 coluna-botaoenviar">
+        <span class="botao-enviar-disabled" *ngIf="disableEnviarButton" ngbTooltip="verifique os campos obrigatórios (*)">
+             <button  class="btn btn-outline-primary botao-enviar" [disabled]="disableEnviarButton">
+               <span *ngIf="validationCounter > 1">{{ validationCounter - 1 }}(*)</span>
+                ENVIAR
+            </button>
+        </span>
+           
+            <button *ngIf="!disableEnviarButton" class="btn btn-outline-primary botao-enviar" [disabled]="disableEnviarButton" (click)="enviarNovaMov()">
+                <span *ngIf="enviandoNovaMov" class="spinner-border spinner-border-sm"></span>
+                <span *ngIf="!enviandoNovaMov">ENVIAR</span> 
+             </button>
+            
+    </div>
+</div>
+
+
+<!-- <div class="container-novamov">
+    <div class="row row-nova-mov">
+
+    <div class="col">
+
+            <form class="form-inline">
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="form-floating full-width flexed">
+                            <input class="form-control" placeholder="dd/mm/aaaa"
+                            name="dp" [ngModel]="dateModel" (ngModelChange)="setarData($event,'')" id="novamovDate" [footerTemplate]="t"  ngbDatepicker #d="ngbDatepicker">
+                            <label for="novamovDate">Data</label>
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary full-height" (click)="d.toggle()" type="button"><i class="far fa-calendar-alt calendar-icon"></i></button>
+                        </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </form>
+        
+            <ng-template #t>
+                <div class="calendar-button">
+                    <button class="btn btn-sm btn-outline-primary botao-hoje" (click)="hoje()">hoje</button>
+                </div>
+            
+            </ng-template>
+    </div>
+
+    <div class="col">
+        <div class="form-floating novamov-cols">
+            <select #mesRef [ngModel]="novaMovimentacao.mesRef" (ngModelChange)="setarMesRef($event)" class="form-control inputs-nova-mov" name="" id="novamovMesRef" [ngClass]="{'validation-warning':mesRef.value == '0'}">
+                <option selected hidden disabled value="0">selecione</option>
+                <optgroup *ngFor="let anos of mesesDeReferenciaFormatados" [label]="anos.ano">      
+                    <option *ngFor="let meses of anos.meses"  [value]="meses.codigo"> {{ meses.rotulo }} </option>
+                </optgroup>        
+            </select>
+            <label for="novamovMesRef">Mês de Referência*</label>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="row full-height-centered">
+            <div class="col">
+                <div class="form-check form-switch">
+                    <input [(ngModel)]="novaMovimentacao.efetuada" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                    <label class="form-check-label" for="flexSwitchCheckDefault">Efetuada</label>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-check">
+                    <input [(ngModel)]="novaMovimentacao.natureza" class="form-check-input" type="radio" name="novamovNatureza" id="credito" value="C">
+                    <label class="form-check-label" for="credito">
+                    Crédito
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="novamovNatureza" id="debito" value="D" checked>
+                    <label class="form-check-label" for="debito">
+                    Débito
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </div>
+
+    <div class="row row-nova-mov">
+        <div class="col">
+            <div class="form-floating">
+                <input #estabelecimento [ngModel]="novaMovimentacao.estabelecimentoPrestador" (ngModelChange)="setarEstab($event)" class="form-control" id="novaMovEstabelecimento" type="text" placeholder="ESTABELECIMENTO" [ngClass]="{'validation-warning':estabelecimento.value == ''}">
+                <label for="novaMovEstabelecimento">Estabelecimento/Prestador*</label>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-floating">
+                <input #descricao class="form-control" [ngModel]="novaMovimentacao.descricao" (ngModelChange)="setarDescricao($event)" id="novamovDescricao" type="text" placeholder="Descrição" [ngClass]="{'validation-warning':descricao.value == ''}">
+                <label for="novamovDescricao">Descrição*</label>
+            </div>
+        </div>
+        <div class="col">
+            <div class="row">
+
+                <div class="col">
+                    <div class="form-floating">
+                        <input (change)="setarParcelas($event)" placeholder="total" id="novamovQtdeParcelas" class="form-control" type="number" min="2" max="36">
+                        <label for="novamovQtdeParcelas">total de parcelas</label>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="form-floating">
+                        <select #parcela [(ngModel)] ="novaMovimentacao.parcela" [disabled]="desativarParcela" class="form-control" name="" id="novamovParcela">
+                            <option *ngIf="!desativarParcela" disabled selected hidden>selecione</option>
+                            <option *ngFor="let parcela of parcelas" [value]="parcela"> {{ parcela }} </option>
+                        </select>
+                        <label for="novamovParcela">parcela</label>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row row-nova-mov">
+        <div class="col">
+            <div class="form-floating">
+                <select #origem [ngModel]="novaMovimentacao.origem" (ngModelChange)="setarOrigem($event)" class="form-control" name="" id="novamovOrigem" [ngClass]="{'validation-warning':origem.value == 'selecione'}">
+                    <option selected disabled hidden value="selecione">selecione</option>
+                    <option *ngFor="let origem of origensRegistradas" [value]="origem._id"> {{ origem.title }} </option>
+                </select>
+                <label for="novamovOrigem">Origem*</label>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-floating">
+                <select #categoria [(ngModel)]="novaMovimentacao.categoria" (ngModelChange)="setarCategoria($event)" class="form-control" name="" id="novamovCategoria" [ngClass]="{'validation-warning':categoria.value == 'selecione'}">
+                    <option selected disabled hidden value="selecione">selecione</option>
+                    <option *ngFor="let categ of categoriasRegistradas" [value]="categ._id"> {{ categ.title }} </option>
+                </select>
+                <label for="novamovCategoria">Categoria*</label>
+            </div>  
+        </div>
+        <div class="col">
+            <div class="row">
+                <div class="col">
+                    <div class="form-floating">
+                        <input #valor [ngModel]="novaMovimentacao.valor" (ngModelChange)="setarValor($event)" id="novamovValor" class="form-control inputs-nova-mov" currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }" type="text" placeholder="R$ 0,00" [ngClass]="{'validation-warning':this.novaMovimentacao.valor == 0 || this.novaMovimentacao.valor == null}">
+                        <label for="novamovValor">Valor*</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-floating">
+                        <select [(ngModel)]="novaMovimentacao.orcamento" class="form-control" name="" id="novamovOrcamento">
+                            <option *ngFor="let orc of orcamentosRegistrados" [selected]="orc.title == 'Normal'" [value]="orc._id"> {{ orc.title }} </option>
+                        </select>
+                        <label for="novamovOrcamento">Orçamento</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+</div> -->
+
+
+
+
+<!-- <div class="novamov-row">
+    <div class="novamov-col">
+        <span class="novamov-inputs">
+      
+            <label for="">Data: </label>
+            <input class="novamov-data" type="text">  
+         
+            
+     
+            <label for="">Mês de Referência: </label>
+            <select class="nomov-mesRef">
+                <optgroup *ngFor="let ano of mesesDeReferenciaFormatados" [label]="ano.ano"> 
+                    <option *ngFor="let mes of ano.meses" > {{ mes.rotulo }} </option>
+                </optgroup>
+                
+            </select>
+      
+            
+            
+        </span>
+    </div>
+
+    <div class="novamov-col">
+        <span class="novamov-inputs-bet">
+            <div class="form-check form-switch">
+                <input [(ngModel)]="novaMovimentacao.efetuada" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                <label class="form-check-label" for="flexSwitchCheckDefault">Efetuada</label>
+            </div>
+
+            <div class="novmov-natureza">
+                <div class="form-check inline-inputs">
+                    <input [(ngModel)]="novaMovimentacao.natureza" class="form-check-input" type="radio" name="novamovNatureza" id="credito" value="C">
+                    <label class="form-check-label" for="credito">
+                    Crédito
+                    </label>
+                </div>
+                <div class="form-check inline-inputs-right">
+                    <input class="form-check-input" type="radio" name="novamovNatureza" id="debito" value="D" checked>
+                    <label class="form-check-label" for="debito">
+                    Débito
+                    </label>
+                </div>
+            </div>
+
+        </span>
+    </div>
+
+
+
+
+
+</div>
+
+<div class="novamov-row">
+
+    <div class="novamov-col">
+
+        <span class="novamov-inputs">  
+           <label for="novaMov-estab">Estabelecimento/Prestador: </label>
+           <input class="extend-width-space" type="text" id="novaMov-estab"> 
+        </span>
+             
+    </div>
+
+    <div class="novamov-col">
+        <span class="novamov-inputs">
+            <label for="novmov-categoria">Categoria: </label>
+            <select class="extend-width-space" name="" id="novmov-categoria">   
+                <option hidden selected disabled>selecione</option>           
+                <option *ngFor="let categ of categoriasRegistradas" > {{ categ.title }} </option>
+            </select>
+        </span>
+       
+    </div>
+</div>
+
+<div class="novamov-row">
+    <div class="novamov-col">
+        <span class="novamov-inputs">
+            <label for="novaMov-desc">Descrição: </label>
+            <input class="extend-width-space" type="text" id="novaMov-desc">
+        </span>
+    </div>
+
+    <div class="novamov-col">
+        <span class="novamov-inputs">
+            <label for="">Total de parcelas: </label>
+            <input class="novamov-qtde-parcelas" type="number" min="2" max="48">
+       
+
+      
+            <label for="">parcela: </label>
+            <select class="novamov-parcela" name="" id="">
+                <option *ngFor="let parcela of parcelas"> {{ parcela }} </option>
+            </select>
+         </span>
+
+    </div>
+</div>
+
+<div class="novamov-row">
+    <div class="novamov-col">
+        <span class="novamov-inputs">
+            <label for="">Origem: </label>
+            <select class="extend-width-space">
+                <option disabled hidden selected>selecione</option>
+                <option *ngFor="let origem of origensRegistradas" value=""> {{ origem.title }} </option>
+            </select>
+        </span>
+    </div>
+
+    <div class="novamov-col">
+        <span class="novamov-inputs">
+            <label for="">Orçamento: </label>
+            <select class="extend-width-space">
+                <option disabled hidden selected>selecione</option>
+                <option *ngFor="let orcamento of orcamentosRegistrados"> {{ orcamento.title }} </option>
+            </select>
+        </span>
+    </div>
+</div>
+
+<div class="novamov-row">
+
+    <div class="novamov-col"></div>
+    
+    <div class="novamov-col">
+        <span class="novamov-inputs">
+            <label for="">Valor: </label>
+            <input class="extend-width-space" type="text">
+
+            <button style="margin-left: 10px; width: 50%;">ENVIAR</button>
+
+        </span>
+
+        
+    </div>
+</div> -->
+
+
+

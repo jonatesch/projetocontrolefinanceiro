@@ -1,0 +1,7 @@
+.btn:focus {
+    box-shadow: none;
+}
+
+.btn-check:focus+.btn-outline-danger, .btn-outline-danger:focus {
+    box-shadow: none;
+}

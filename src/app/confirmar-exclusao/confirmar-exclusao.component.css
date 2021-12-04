@@ -1,0 +1,38 @@
+.modal-header {
+    background-color: #545454;
+    color: white;
+}
+
+.footer-confirma-exclusao {
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn-check:focus+.btn-danger, .btn-danger:focus {
+    box-shadow: none;
+}
+
+.btn-check:focus+.btn-primary, .btn-primary:focus {
+    box-shadow: none;
+}
+
+.icones {
+    font-size: 32px;
+}
+
+.resumo-linha {
+    margin-top: 20px;
+}
+
+.resumo {
+    text-align: center;
+}
+
+.resumo-title {
+    text-align: center;
+    margin-top: 33px;
+}
+
+.confirma-exclusao-button {
+    width: 180px;
+}

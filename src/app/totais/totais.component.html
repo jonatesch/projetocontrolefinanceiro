@@ -1,0 +1,30 @@
+<div class="totais-content">
+    <div class="totais-grid">
+        <i class="fas fa-dollar-sign icone-totais verde"></i>
+        <span *ngIf="mostrarTotal_Creditos" class="totais verde" ngbTooltip="créditos"> {{ totalCreditos | currency:'BRL' }} </span>
+        <span *ngIf="!mostrarTotal_Creditos" class="esconder-totais"> <span class="colorir"></span> </span>
+        <span class="action">
+            <span *ngIf="!mostrarTotal_Creditos" class="pointerize" (click)="toggleMostrarTotal_Creditos()">exibir<i class="far fa-eye olho-totais" ></i></span> 
+            <span *ngIf="mostrarTotal_Creditos" class="pointerize" (click)="toggleMostrarTotal_Creditos()">ocultar<i class="far fa-eye-slash olho-totais"></i></span>
+             
+             
+         </span> 
+    </div>
+</div>
+
+
+
+<div class="totais-content">
+    <div class="totais-grid">
+        <i class="fas fa-dollar-sign icone-totais vermelho"></i>
+        <span *ngIf="mostrarTotal_Debitos" class="totais vermelho" ngbTooltip="débitos"> {{ totalDebitos | currency:'BRL' }} </span>
+        <span *ngIf="!mostrarTotal_Debitos" class="esconder-totais"> <span class="colorir"></span> </span>
+        <span class="action">
+            <span *ngIf="!mostrarTotal_Debitos" class="pointerize" (click)="toggleMostrarTotal_Debitos()">exibir<i class="far fa-eye olho-totais" ></i></span>
+            <span *ngIf="mostrarTotal_Debitos" class="pointerize" (click)="toggleMostrarTotal_Debitos()">ocultar<i class="far fa-eye-slash olho-totais" ></i></span>
+            
+            
+        </span>
+    </div>
+</div>
+

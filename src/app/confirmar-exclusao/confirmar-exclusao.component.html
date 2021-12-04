@@ -1,0 +1,31 @@
+<div class="modal-header">
+    <h4>Confirmar exclusão</h4>
+</div>
+
+<div class="modal-body">
+    <h6>Está certo de que deseja excluir a movimentação abaixo?</h6>
+
+    <h6 class="resumo-title">RESUMO</h6>
+
+    <div class="row resumo-linha">
+        <div class="col resumo">
+            <i class="fas fa-calendar-alt icones"></i>
+            <p> {{ movExcluir.date | date : 'dd MMM' }} </p>
+        </div>
+
+        <div class="col resumo">
+            <i class="fas fa-industry icones"></i>
+            <p> {{ movExcluir.estabelecimentoPrestador }} </p>
+        </div>
+        <div class="col resumo">
+            <i class="fas fa-dollar-sign icones"></i>
+            <p> {{ movExcluir.valor | currency:'BRL' }} </p>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer footer-confirma-exclusao">
+    <button class="btn btn-danger confirma-exclusao-button" (click)="confirmarExclusao()"><span *ngIf="carregandoExclusao" class="spinner-border spinner-border-sm"></span> <span *ngIf="!carregandoExclusao">Confirma exclusão</span> </button>
+   
+    <button class="btn btn-primary" (click)="fechar()">Cancelar</button>
+</div>

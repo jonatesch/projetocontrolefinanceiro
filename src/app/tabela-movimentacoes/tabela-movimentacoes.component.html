@@ -1,0 +1,167 @@
+
+<div class="row movs-title">
+        <div class="col">
+            <h1>Minhas movimentações</h1>
+        </div>
+
+        <div class="col">
+               <!-- COMPONENT DOS TOTAIS DE CRÉDITOS E DÉBITOS: -->
+        <totais class="col totais-container" [totalCreditos]="totalCreditos" [totalDebitos]="totalDebitos"></totais>
+        </div>
+
+     
+
+</div>  
+
+
+<div class="movs-container">
+    
+    <!-- LINHA BOTÃO DE FILTRO E QTDE DE MOVIMENTACOES  -->
+        <div class="filter-button-row" style="justify-content: left;">
+            <div>
+                <button class="filtrosButton" (click)="mostrarFiltros()">
+                    <i class="fas fa-chevron-down" [ngClass]="{'aberto':!escondido, 'fechado':escondido}"></i>
+                    <span class="texto-botao-filtros">Filtros</span> </button>
+            
+            </div>
+
+            <!-- ETIQUETAS DE FILTROS ATIVADOS (caso aba de filtros esteja fechada) -->
+            <div *ngIf="escondido" class="filtros-ativos">
+                <div *ngFor="let mes of filtro_MesesSelecionados" class="filtro-item" (click)="limparMes(mes)">{{mes.label}} <span class="limpafiltro-unique"><i class="fas fa-times"></i></span></div>
+                <div *ngFor="let categ of filtro_CategoriasSelecionadas" class="filtro-item" (click)="limparCategoria(categ)">{{categ.title}} <span class="limpafiltro-unique"><i class="fas fa-times"></i></span></div>
+                <div *ngFor="let estab of filtro_EstabelecimentosSelecionados" class="filtro-item" (click)="limparEstabelecimento(estab)">{{estab.title}} <span class="limpafiltro-unique"><i class="fas fa-times"></i></span></div>
+                <div *ngFor="let origem of filtro_OrigensSelecionadas" class="filtro-item" (click)="limparOrigem(origem)">{{origem.title}} <span class="limpafiltro-unique"><i class="fas fa-times"></i></span></div>
+                <div *ngFor="let orc of filtro_OrcamentosSelecionados" class="filtro-item" (click)="limparOrcamento(orc)">{{orc.title}} <span class="limpafiltro-unique"><i class="fas fa-times"></i></span></div>
+            </div>
+
+            <!-- CONTADOR DE FILTROS ATIVOS -->
+            <div *ngIf="tamanho > 0" class="qtdeDeFiltrosAtivos" (click)="limparFiltros()" ngbTooltip="limpar">
+               <span>{{tamanho}}</span> 
+               <span class="limpaFiltros"><i class="fas fa-times"></i></span>
+            </div>
+            
+        </div>
+
+        
+    <!-- /////////////////////// -->
+
+    <!-- COMPONENT DE FILTROS: -->
+       <filtros (setouFiltro)="setarFiltro($event)" (filtro)="filtro($event)" (done)="teste2()" style="overflow: hidden;" [ngClass]="{'escondido':escondido, 'teste':escondido}"></filtros> 
+     
+   
+    
+
+    <div class="row">
+        <div class="col">
+            <button class="filtrosButton" (click)="mostrarNovaMov()">
+                <i class="fas fa-chevron-down" [ngClass]="{'aberto':!esconderNovaMov, 'fechado':esconderNovaMov}"></i>
+                <span class="texto-botao-filtros">Nova movimentação</span> (manual) </button>
+                <i *ngIf="!esconderNovaMov" ngbTooltip="fechar e abrir restaura os campos" class="fas fa-info-circle info-novamov"></i>
+        </div>
+
+        <div class="col col-actions" *ngIf="movimentacoes.length > 0">   
+            <span class="col-centered"><span class="qtde">Qtde:</span> {{ movimentacoes.length }}  </span> 
+
+            <button class="default-button delete col-centered col-borderleft" (click)="openModal_Exclusao()"> <i class="fas fa-trash"></i> Excluir todas</button>
+
+            <button class="default-button col-centered col-borderboth" (click)="openModal_Efetuadas()"><i class="fas fa-check"></i> Marcar efetuadas</button>
+            
+            <button *ngIf="!edicaoPendente" class="default-button edicao col-centered" (click)="toggleModoEdicao()" [ngClass]="{'edicao-ativo':modoEdicao}"><i class="fas fa-edit"></i> Modo edição</button>
+           
+            <div *ngIf="edicaoPendente" class="default-button col-centered">  
+                <button class="btn btn-outline-primary salvar-edicoes-button" (click)="editarMovimentacoes()" ngbTooltip="salvar edições em andamento"> <span *ngIf="!salvandoEdicoes">Salvar</span> <span *ngIf="salvandoEdicoes" class="spinner-border spinner-edicoes"></span>  </button>
+                <button class="btn btn-outline-danger cancel-edicoes-button" (click)="cancelarEdicao()" ngbTooltip="cancelar edições em andamento"><i class="fas fa-times"></i></button> 
+           </div>
+
+        </div>
+
+    </div>
+
+    <!-- <nova-movimentacao [mesesDeReferencia]="mesesDeReferencia" *ngIf="!esconderNovaMov"></nova-movimentacao> -->
+    <nova-movimentacao [estabelecimentos]="estabelecimentosUtilizados" [descricoes]="descricoes" (novaMovimentacaoInserida)="teste($event)" *ngIf="!esconderNovaMov"></nova-movimentacao>
+
+
+    <!-- CABEÇALHO DA TABELA DE MOVIMENTAÇÕES: -->
+    <div class="row movs-header">
+        <div class="col-1 movs-header-cols-sm"> <span ngbTooltip="Data"> Data </span> </div>
+        <div class="col-1 movs-header-cols-sm"> <span ngbTooltip="Mês de Referência"> Mês de Ref. </span></div>
+        
+        <div class="col-2 movs-header-cols-lg"> <span ngbTooltip="Estabelecimento/Prestador"> Estabelecimento/Prestador </span> </div>
+        <div class="col-2 movs-header-cols-lg"> <span ngbTooltip="Descrição"> Descrição </span> </div>
+        
+        <div class="col-1 movs-header-cols-lg"> <span ngbTooltip="Categoria"> Categoria </span> </div>
+        <div id="origemHeader" class="col-2 movs-header-cols-lg"> <span ngbTooltip="Origem"> Origem </span></div>
+        <div class="col-1 movs-header-cols-sm"> <span ngbTooltip="Valor"> Valor </span> </div>
+        <div id="orcamentoHeader" class="col-1 movs-header-cols-lg"> <span ngbTooltip="Orçamento"> Orçamento </span> </div>
+        <div class="col-1 header-col-icones"></div>
+    </div>
+
+
+    <!-- SPINNER ENQUANTO CARREGANDO MOVIMENTAÇÕES: -->
+    <div *ngIf="carregandoMovimentacoes" class="spinner-carregando text-primary">
+        <span class="spinner-border"></span>
+    </div>
+
+
+    <!-- CORPO DA TABELA DE MOVIMENTAÇÕES: -->
+    <div #tr *ngFor="let movs of movimentacoes | slice:(page-1) * pageSize : page * pageSize; let i = index" class="row movs-content-rows" [ngClass]="{'em-edicao':modoEdicao, 'edicao-pendente':movs.pendente, 'nao-efetuada': !movs.efetuada}" (mouseenter)="showOptions(i, $event)" (mouseleave)="hideOptions(i, $event)" (click)="editarMovimentacao(i)">
+        <div class="efet-orc-alt" [ngClass]="{'flex-spacem':movs.efetuada}"> <i *ngIf="movs.efetuada" class="fas fa-check icon-status"></i> <span class="orc-alt"> {{ movs.orcamento.title }} </span> </div>
+        <!-- <div class="col-1 movs-content-sm center-text mov-data"> {{ movs.date | date:'dd/MM/YYYY' }} </div> -->
+        <div class="col-1 movs-content-sm center-text mov-data"> <span [ngbTooltip]="movs.date | date:'dd/MM/YYYY':'UTC'"> {{ dePeriodize(movs.date | date:'dd MMM':'UTC')  }} </span>  </div>
+        <div class="col-1 movs-content-sm center-text mov-mesref"> {{ movs.mesRef.toString().substring(4,6) + '/' + movs.mesRef.toString().substring(0,4) }} </div>
+        
+        <div class="col-2 movs-content-lg mov-estab"> <span> {{ movs.estabelecimentoPrestador }} </span> </div>
+        <div class="col-2 movs-content-lg mov-descricao"> <span placement="top" (click)="tooltipDescricao[i] = true"> {{ movs.descricao }}  {{ movs.parcela }} </span> </div>
+        <div *ngIf="tooltipDescricao[i]" class="tooltips"> 
+            <div class="closeTooltips">
+              <span class="closeTooltips-icon" (click)="tooltipDescricao[i] = false; esconderLixeira[i] = true"><i class="fas fa-times"></i></span>   
+            </div>
+            <span class="description" ngbTooltip="copiar" (click)="cbDescricao(i, movs.descricao)">{{movs.descricao}}</span>
+            
+           <!--  <button  >copiar</button> -->
+        </div>
+
+        
+        <div class="col-1 movs-content-lg mov-categoria"> <span> {{ movs.categoria.title }} </span> </div>
+        <div id="origemCell" class="col-2 movs-content-lg mov-origem"> <span> {{ movs.origem.title }} </span> </div>
+        <div class="col-1 movs-content-sm center-text mov-valor" [ngClass]="{'verde':movs.natureza == 'C', 'azul':movs.natureza == 'C' && movs.efetuada == false, 'mov-valor-debito':movs.natureza == 'D', 'mov-valor-credito':movs.natureza == 'C'}"> {{ movs.valor | currency:'BRL':'' }} </div>
+        <div id="orcamentoCell" class="col-1 movs-content-lg center-text"> <span> {{ movs.orcamento.title }} </span>   </div>
+        <div class="col-1 col-icones" ><i *ngIf="!esconderLixeira[i]" (click)="confirmarExclusao(i)" class="fas fa-trash lixeira" ngbTooltip="excluir movimentação" [ngClass]="{'hidden':modoEdicao}"></i></div>
+    </div>
+
+
+    <!-- PAGINAÇÃO: -->
+    <div class="pagination">
+       <ngb-pagination
+            [(page)]="page"
+            [pageSize]="pageSize"
+            [collectionSize]="movimentacoes.length">
+
+            <ng-template ngbPaginationPages let-page let-pages="pages" >
+                <li class="ngb-custom-pages-item" *ngIf="pages.length > 0">
+                    <div class="form-group d-flex flex-nowrap px-2">
+                        <label for="paginationInput" id="paginationInputLabel" class="col-form-label mr-2 ml-1">
+                            Página
+                        </label>
+                        <input #i 
+                            type="text"
+                            inputmode="numeric"
+                            pattern="[0-9]*"
+                            class="form-control custom-pages-input"
+                            id="paginationInput"
+                            [value]="page"
+                            (keyup.enter)="selectPage(i.value)"
+                            style="width: 2.5rem"
+                        >
+                        <span id="paginationDescription" class="col-form-label text-nowrap px-2">
+                            de {{ pages.length }}
+                        </span>
+                    </div>
+                </li>
+            </ng-template>
+
+        </ngb-pagination>  
+    </div>
+
+   
+</div>

@@ -1,0 +1,159 @@
+
+<div class="modal-header header-blue">
+
+         <h4 class="modal-title">Relatórios Mensais</h4> 
+    
+</div>
+
+
+
+<div class="modal-body">
+
+    
+    <div *ngIf="carregandoMeses" class="text-center" style="padding: 1rem;">
+        <div  class="spinner-border text-primary" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    
+    <div style="height: 10%; position: sticky; top: 0; background-color: white; padding: 1rem;">
+        <h6 *ngIf="!carregandoMeses">Selecione até dois meses para visualizar o relatório mensal.</h6>
+        <button #meses class="btn btn-outline-primary" *ngFor="let resumo of resumosMensais; let i = index" (click)="setarSelecionados(i)" style="margin: 2px;">
+            {{ resumo.label }}
+        </button>
+    </div>
+
+
+    <div class="row" style="height: 90%; margin: 0;">
+        
+
+        <div #testanders class="col" *ngFor="let mes of mesesSelecionados;  let a = index" style="height: 100%; overflow-y: auto;">
+            
+            <div *ngFor="let resumo of resumosMensais;">
+                    
+                <div *ngIf="resumo.code == mes">   
+    
+                    <h3 style="text-align: center;"> {{ resumo.label }} </h3>
+    
+                    <div style="background-color:#E5F2FF; margin: 0.5rem; padding: 0.5rem; border-radius: 10px; box-shadow: 1px 1px 7px 0px #8f8d8d;">
+                        <div class="row">
+                            <div class="col-8"><h5>Categorias (débitos)</h5></div>
+                            <div class="col-4">   <h5>{{ resumo.subtotalDebitos | currency:'BRL' }}</h5>   </div>
+                        </div>
+        
+                        <div class="row" *ngFor="let categs of resumo.resumoPorCategoria_Debitos; let i = index">
+                            <div class="col-8"> 
+                                <i *ngIf="isCollapsedDebitos[((i+1)+(categoriasDebitos.length*a))-1]" 
+                                (click)="isCollapsedDebitos[((i+1)+(categoriasDebitos.length*a))-1] = !isCollapsedDebitos[((i+1)+(categoriasDebitos.length*a))-1]" 
+                                class="fas fa-plus-circle">
+                            </i>
+            
+                            <i *ngIf="!isCollapsedDebitos[((i+1)+(categoriasDebitos.length*a))-1]" 
+                                (click)="isCollapsedDebitos[((i+1)+(categoriasDebitos.length*a))-1] = !isCollapsedDebitos[((i+1)+(categoriasDebitos.length*a))-1]" 
+                                class="fas fa-minus-circle">
+                            </i> 
+                                {{ categs.categoria.title }} 
+                            </div>
+                            <div class="col-4"> {{ categs.subtotal | currency:'BRL' }} </div>
+                            <div class="col-12" [(ngbCollapse)]="isCollapsedDebitos[((i+1)+(categoriasDebitos.length*a))-1]" >
+                                <div class="row cinzinha" *ngFor="let movs of categs.descricoes">
+                                    <div class="col-8" style="overflow: hidden; height: 25px;"><span style="padding-left: 10%;"> {{ movs.descricao }} </span></div>
+                                    <div class="col-4"> {{ movs.subtotal | currency:'BRL' }} </div>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="row" style="margin-top: 5%;">
+                            <div class="col-8"><h5>Categorias (créditos)</h5></div>
+                            <div class="col-4">   <h5>{{ resumo.subtotalCreditos | currency:'BRL' }}</h5>   </div>
+                        </div>
+    
+                        <div class="row" *ngFor="let categs of resumo.resumoPorCategoria_Creditos; let i = index">
+                            <div class="col-8"> 
+                                <i *ngIf="isCollapsedCreditos[((i+1)+(categoriasCreditos.length*a))-1]" 
+                                (click)="isCollapsedCreditos[((i+1)+(categoriasCreditos.length*a))-1] = !isCollapsedCreditos[((i+1)+(categoriasCreditos.length*a))-1]" 
+                                class="fas fa-plus-circle">
+                            </i>
+            
+                            <i *ngIf="!isCollapsedCreditos[((i+1)+(categoriasCreditos.length*a))-1]" 
+                                (click)="isCollapsedCreditos[((i+1)+(categoriasCreditos.length*a))-1] = !isCollapsedCreditos[((i+1)+(categoriasCreditos.length*a))-1]" 
+                                class="fas fa-minus-circle">
+                            </i> 
+                                {{ categs.categoria.title }} 
+                            </div>
+                            <div class="col-4"> {{ categs.subtotal | currency:'BRL' }} </div>
+                            <div class="col-12" [(ngbCollapse)]="isCollapsedCreditos[((i+1)+(categoriasCreditos.length*a))-1]" >
+                                <div class="row cinzinha" *ngFor="let movs of categs.descricoes">
+                                    <div class="col-8" style="overflow: hidden; height: 25px;"><span style="padding-left: 10%;"> {{ movs.descricao }} </span></div>
+                                    <div class="col-4"> {{ movs.subtotal | currency:'BRL' }} </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="background-color:#E5F2FF; margin: 0.5rem; padding: 0.5rem; border-radius: 10px; margin-top: 20px; box-shadow: 1px 1px 7px 0px #8f8d8d;">
+                        <div class="row">
+                            <div class="col-8"><h5>Estabelecimentos (débitos)</h5></div>
+                            <div class="col-4">   <h5>{{ resumo.subtotalDebitos | currency:'BRL' }}</h5>   </div>
+                        </div>
+    
+                        <div class="row" *ngFor="let estabs of resumo.resumoPorEstabelecimento_Debitos; let i = index">
+                            <div class="col-8"> 
+                                <i *ngIf="isCollapsedDebitosPorEstab[((i+1)+(estabelecimentosDebitos.length*a))-1]" 
+                                (click)="isCollapsedDebitosPorEstab[((i+1)+(estabelecimentosDebitos.length*a))-1] = !isCollapsedDebitosPorEstab[((i+1)+(estabelecimentosDebitos.length*a))-1]" 
+                                class="fas fa-plus-circle">
+                            </i>
+            
+                            <i *ngIf="!isCollapsedDebitosPorEstab[((i+1)+(estabelecimentosDebitos.length*a))-1]" 
+                                (click)="isCollapsedDebitosPorEstab[((i+1)+(estabelecimentosDebitos.length*a))-1] = !isCollapsedDebitosPorEstab[((i+1)+(estabelecimentosDebitos.length*a))-1]" 
+                                class="fas fa-minus-circle">
+                            </i> 
+                                {{ estabs.estabelecimento }} 
+                            </div>
+                            <div class="col-4"> {{ estabs.subtotal | currency:'BRL' }} </div>
+                            <div class="col-12" [(ngbCollapse)]="isCollapsedDebitosPorEstab[((i+1)+(estabelecimentosDebitos.length*a))-1]" >
+                                <div class="row cinzinha" *ngFor="let movs of estabs.descricoes">
+                                    <div class="col-8" style="overflow: hidden; height: 25px;"><span style="padding-left: 10%;"> {{ movs.descricao }} </span></div>
+                                    <div class="col-4"> {{ movs.subtotal | currency:'BRL' }} </div>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="row" style="margin-top: 5%;">
+                            <div class="col-8"><h5>Estabelecimentos (créditos)</h5></div>
+                            <div class="col-4">   <h5>{{ resumo.subtotalCreditos | currency:'BRL' }}</h5>   </div>
+                        </div>
+    
+                        <div class="row" *ngFor="let estabs of resumo.resumoPorEstabelecimento_Creditos; let i = index">
+                            <div class="col-8"> 
+                                <i *ngIf="isCollapsedCreditosPorEstab[((i+1)+(estabelecimentosCreditos.length*a))-1]" 
+                                (click)="isCollapsedCreditosPorEstab[((i+1)+(estabelecimentosCreditos.length*a))-1] = !isCollapsedCreditosPorEstab[((i+1)+(estabelecimentosCreditos.length*a))-1]" 
+                                class="fas fa-plus-circle">
+                            </i>
+            
+                            <i *ngIf="!isCollapsedCreditosPorEstab[((i+1)+(estabelecimentosCreditos.length*a))-1]" 
+                                (click)="isCollapsedCreditosPorEstab[((i+1)+(estabelecimentosCreditos.length*a))-1] = !isCollapsedCreditosPorEstab[((i+1)+(estabelecimentosCreditos.length*a))-1]" 
+                                class="fas fa-minus-circle">
+                            </i> 
+                                {{ estabs.estabelecimento }} 
+                            </div>
+                            <div class="col-4"> {{ estabs.subtotal | currency:'BRL' }} </div>
+                            <div class="col-12" [(ngbCollapse)]="isCollapsedCreditosPorEstab[((i+1)+(estabelecimentosCreditos.length*a))-1]" >
+                                <div class="row cinzinha" *ngFor="let movs of estabs.descricoes">
+                                    <div class="col-8" style="overflow: hidden; height: 25px;"><span style="padding-left: 10%;"> {{ movs.descricao }} </span></div>
+                                    <div class="col-4"> {{ movs.subtotal | currency:'BRL' }} </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                   
+
+                </div>
+                 
+            </div>
+    
+        </div>
+    
+    </div>
+</div>

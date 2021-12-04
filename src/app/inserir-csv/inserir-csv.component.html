@@ -1,0 +1,138 @@
+<div class="modal-header header-blue">
+    <h4>Enviar arquivo CSV</h4>
+</div>
+
+<div class="modal-body">
+    <div style="height: 20%; width: 50%; margin: auto;">
+        <div class="form-floating">
+            <select [(ngModel)]="cartaoNubankSelecionado" (change)="setarOrigem()" name="" id="seletorDeCartaoNubank" class="form-control">
+                <option *ngFor="let origem of origens" [ngValue]="origem"> {{ origem.title }} </option> 
+            </select>
+            <label for="seletorDeCartaoNubank">Selecione o cartão de crédito</label>
+        </div>
+    
+        <div class="form-floating">
+            <select [(ngModel)]="mesDeReferenciaSelecionado" (change)="setarMesRef()" name="" id="seletorDeMês" class="form-control">
+                <optgroup *ngFor="let ano of mesesDeReferencia" label="{{ ano.ano }}">  
+                <option *ngFor="let mes of ano.meses" [ngValue]="mes"> {{mes.rotulo}} </option> 
+            </optgroup>
+            </select>
+            <label for="seletorDeMês">Mês de referência</label>
+        </div>
+    
+        <input *ngIf="mesDeReferenciaSelecionado.rotulo !== '' && cartaoNubankSelecionado.title !== ''" type="file" class="form-control" (change)="analyzeData($event)">
+    
+        <br>
+    </div>
+    
+    
+    <div *ngIf="csvArray.length > 0" style="height: 80%; overflow-y: auto; overflow-x: hidden;">
+
+        <p>Verifique as movimentações coletadas, edite se necessário e clique em salvar.</p>
+    
+        <div style="margin-bottom: 5px;">
+            <div class="row" style="padding: 10px; align-items: center;">
+                <div class="col">
+                    <h5>Quantidade de movimentações: {{ csvArray.length }} </h5>
+                </div>
+                <div class="col">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" checked (change)="setarEfetuadas($event)" type="checkbox" id="efetuadasNubank">
+                        <label class="form-check-label" for="efetuadasNubank">Marcar como efetuadas</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <!-- <button *ngIf="!taCarregandoEnvioNubank" class="btn btn-primary" style="width: 15%;" (click)="enviarMovsNubank()">Salvar</button>
+                    <button *ngIf="taCarregandoEnvioNubank" class="btn btn-primary" style="width: 15%;"><span class="spinner-border spinner-border-sm"></span> </button> -->
+                </div>
+            </div>
+       
+            <div class="row" style="height: 40px; background-color: dodgerblue; align-items:center; color: white;">
+                <div class="col" style="padding-right: 0;">
+                    <div style="width: 20%; display: inline-block; text-align: center;"><h6 style="margin: 0;">Data</h6></div>
+                    <div style="width: 20%; display: inline-block; text-align: center;"><h6 style="margin: 0;">Mês de referência</h6></div>
+                    <div style="width: 35%; display: inline-block; text-align: center;"><h6 style="margin: 0;">Estabelecimento</h6></div>
+                    <div style="width: 25%; display: inline-block; text-align: center;"><h6 style="margin: 0;">Origem</h6></div>
+                </div>
+                <div class="col" style="padding-left: 0;">
+                    <div style="width: 30%; display: inline-block; text-align: center;"><h6 style="margin: 0;">Descrição</h6></div>
+                    <div style="width: 10%; display: inline-block; text-align: center;"><h6 style="margin: 0;">Parcela</h6></div>
+                    <div style="width: 25%; display: inline-block; text-align: center;"><h6 style="margin: 0;">Categoria</h6></div>
+                    <div style="width: 15%; display: inline-block; text-align: center;"><h6 style="margin: 0;">Valor</h6></div>
+                    <div style="width: 20%; display: inline-block; text-align: center;"><h6 style="margin: 0;">Orçamento</h6></div>
+                </div>
+            </div>
+        </div>
+    
+        
+    
+    
+        <div *ngFor="let mov of csvArray" class="row">
+            <div class="col" style="padding-right: 0;">
+                <!-- <input class="form-control" style="width:20%;display: inline;" type="date" [(ngModel)]="mov.date"> -->
+    
+                <!-- <select  [ngModel]="mesDeReferenciaSelecionado" class="form-control" style="width:20%;display: inline;" name="" id="">
+                    <optgroup *ngFor="let ano of mesesDeReferencia" label="{{ano.ano}}">
+                        <option *ngFor="let mes of ano.meses" [ngValue]="mes"> {{ mes.rotulo }} </option>
+                     </optgroup>
+                </select> -->
+    
+                <div  style="width:20%;display: inline-grid; text-align: center;">
+                    <p style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; margin-bottom: 0;">{{ mov.date.toLocaleDateString('pt-BR',{day:'numeric'}) + " " + mov.date.toLocaleDateString('pt-BR',{month:'short'}).substring(0,3) }}</p>
+                </div>
+    
+                <div  style="width:20%;display: inline-grid; text-align: center;">
+                    <p style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; margin-bottom: 0;">{{ mesDeReferenciaSelecionado.rotulo }}</p>
+                </div>
+    
+                <input [(ngModel)]="mov.estabelecimentoPrestador" class="form-control" style="width:35%;display: inline;" type="text" placeholder="ESTABELECIMENTO">
+                
+                <div  style="width:25%;display: inline-grid; text-align: center;">
+                    <p style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; margin-bottom: 0;">{{ cartaoNubankSelecionado.title }}</p>
+                </div>
+                
+        
+            </div>
+            <div class="col" style="padding-left: 0;">
+    
+               <!--  INPUT DE DESCRIÇÃO: -->
+                <input [(ngModel)]="mov.descricao" class="form-control" style="width:30%;display: inline;" type="text" placeholder="Descrição">
+                
+                <div  style="width:10%;display: inline-grid; text-align: center;">
+                    <p style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; margin-bottom: 0;">{{ mov.parcela }}</p>
+                </div>
+                
+                <select [ngModel]="mov.categoria" class="form-control" style="width:25%;display: inline;" name="" id="">
+                    <option *ngFor="let categ of categorias" [ngValue]="categ._id"> {{ categ.title.substring(0,1).toUpperCase() + categ.title.substring(1,categ.title.length) }} </option>
+                </select>
+                
+    
+                <!-- <input [(ngModel)]="mov.valor" currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }" class="form-control" style="width:15%;display: inline;" type="text" placeholder="R$ 0,00"> -->
+                
+                <div  style="width:15%;display: inline-grid; text-align: center;">
+                    <p style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; margin-bottom: 0;"> {{ mov.valor | currency:'BRL' }} </p>
+                </div>
+    
+                <select [(ngModel)]="mov.orcamento" class="form-control" style="width:20%;display: inline;" name="" id="">
+                    <option *ngFor="let orcamento of orcamentos" [ngValue]="orcamento._id" style="text-align: center;">{{ orcamento.title }}</option>
+                </select>
+            </div>
+    
+        </div>
+    
+       
+    </div>
+</div>
+
+
+<div *ngIf="csvArray.length > 0" class="modal-footer">
+    <button *ngIf="!taCarregandoEnvioNubank" class="btn btn-primary" style="width: 15%;" (click)="enviarMovsNubank()">Salvar</button>
+    <button *ngIf="taCarregandoEnvioNubank" class="btn btn-primary" style="width: 15%;"><span class="spinner-border spinner-border-sm"></span> </button>
+</div>
+
+
+
+
+
+
+

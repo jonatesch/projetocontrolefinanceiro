@@ -1,0 +1,138 @@
+.what {
+    flex-grow: 1;
+    flex-basis: 0;
+}
+
+.hum {
+    font-size: 14px;
+}
+
+.icon-hidden {
+    display: none;
+}
+
+.verde {
+    color: green;
+}
+
+.col-orcamento-alt {
+    display: none;
+}
+
+@media (max-width:700px) {
+    .hum {
+        display: block;
+        background-color: #f3f7fb;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        padding: 5px;
+        padding-bottom: 15px;
+        border: 1px solid #bbbbbb;
+    }
+
+    .header {
+        display: none;
+    }
+
+    .icon-hidden {
+        display: inline-block;
+    }
+
+    .col-data::before {
+        content: 'Data: ';
+        font-weight: 700;
+    }
+
+    .col-mesref::before {
+        content: 'Mês de Referência: ';
+        font-weight: 700;
+    }
+
+    .col-estab::before {
+        content: 'Estabelecimento/Prestador: ';
+        font-weight: 700;
+    }
+
+    .col-data {
+        display: inline;
+    }
+
+    .col-mesref {
+        display: inline;
+    }
+
+    .col-orcamento-alt {
+        display: block;
+        text-align: end;
+        /* margin-bottom: -10px; */
+        padding: 0;
+        
+    }
+
+    .orc-content {
+        background-color: #3a699b;
+        border-radius: 4px;
+        padding: 2px 4px;
+        color: white;
+    }
+
+    .what {
+        padding-left: 5px;
+
+    }
+
+    .col-orcamento {
+        display: none;
+    }
+
+    .col-categoria::before {
+        content: 'Categoria: ';
+        font-weight: 700;
+    }
+
+    .col-origem::before {
+        content: 'Origem: ';
+        font-weight: 700;
+    }
+
+    .col-valor::before {
+        content: 'R$ ';
+        font-weight: 700;
+    }
+
+    .col-descricao::before{
+        content: 'Descrição: ';
+        font-weight: 700;
+    }
+
+    .icon-status {
+        color: rgb(168, 168, 168);
+    }
+
+    .spacem {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .valor-debito::after {
+        background-color: firebrick;
+        content: 'débito';
+        color: white;
+        padding: 1px 5px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 500;
+    }
+
+    .valor-credito::after {
+        background-color: green;
+        content: 'crédito';
+        color: white;
+        padding: 1px 5px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 500;
+    }
+
+  
+}

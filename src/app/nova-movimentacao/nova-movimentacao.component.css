@@ -1,0 +1,246 @@
+.calendar-button {
+    text-align: center;
+    margin: 10px;
+}
+
+.btn-check:focus+.btn-outline-primary, .btn-outline-primary:focus {
+    box-shadow: none;
+}
+
+.botao-hoje {
+    width: 45%;
+}
+
+#campoData.form-inline {
+    margin-bottom: 10px;
+}
+
+.novamov-linha {
+    margin: 10px 0;
+    height: 57px;
+}
+
+.novamov-cols {
+   /*  padding: 0; */
+   padding-left: 0;
+   height: 100%;
+}
+
+::placeholder {
+    color: #212529;
+  }
+
+.inputs-nova-mov {
+    font-size: 15px;
+    height: 100%;
+}
+
+.full-height {
+    height: 100%;
+}
+
+.efetuada-checkbox {
+    padding: 17px 0;
+}
+
+.calendar-icon {
+    font-size: 23px;
+}
+
+.form-floating label {
+    font-size: 15px;
+}
+
+.col-natureza {
+    padding: 3px 0;
+}
+
+.checks-natureza {
+    padding-left: 40px;
+}
+
+.novamov-parcelaQtde {
+    padding-right: 5px;
+}
+
+.coluna-botaoenviar {
+    padding: 20px;
+}
+
+.botao-enviar {
+    height: 100%;
+    width: 80px;
+}
+
+.flexed {
+    display: flex;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.row-nova-mov {
+    margin-bottom: 7px;
+}
+
+.full-height-centered {
+    height: 100%;
+    align-items: center;
+}
+
+.input-novamov-estab {
+    text-transform: uppercase;
+}
+
+.inputs-nova-mov:focus {
+    box-shadow: none;
+}
+
+.form-control:focus {
+    border-color: lightgray;
+}
+
+.input-novamov-estab:focus {
+    box-shadow: none;
+}
+
+/* .container-novamov {
+    background-color: indianred;
+} */
+
+.botao-enviar-disabled {
+    display: block;
+    height: 100%;
+}
+
+
+
+.validation-warning {
+    border-color: dodgerblue;
+}
+
+.validation-warning:focus {
+    border-color: dodgerblue;
+}
+
+.novamov-row {
+    display: flex;
+    width: 70%;
+    margin: auto;
+}
+
+.novamov-col {
+    width: 50%;
+}
+
+.novamov-inputs {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    margin-left: 5px;
+}
+
+.extend-width-space {
+    width: 100%;
+    margin-left: 5px;
+}
+
+.novamov-qtde-parcelas {
+    width: 28%;
+    margin-right: 10px;
+}
+
+.novamov-parcela {
+    width: 30%;
+}
+
+.novamov-inputs-bet {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 10px;
+    margin-left: 5px;
+}
+
+.inline-inputs {
+    display: inline-block;
+}
+
+.inline-inputs-right {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.novmov-natureza {
+    border-left: 1px solid;
+    padding-left: 40px;
+}
+
+.novamov-data {
+    width: 20%;
+    margin-right: 30px;
+}
+
+.nomov-mesRef {
+    width: 35%;
+}
+
+@media (max-width: 1730px) {
+  
+}
+
+.estabs-autocomplete {
+    position: absolute;
+    width: 315.4px;
+    background-color: white;
+    border: 1px solid lightgray;
+    border-radius: 0 0 7px 7px;
+    font-size: 13px;
+}
+
+.autocomplete-list {
+    padding: 0 5px;
+}
+
+.autocomplete-item {
+    list-style: none;
+    border: 1px solid transparent;
+    padding: 0 5px;
+    width: 90%;
+
+}
+
+.autocomplete-item:hover {
+    background-color: rgb(197, 226, 255);
+    border: 1px solid dodgerblue;
+    border-radius: 3px;
+}
+
+.fechar-estab-autocomplete {
+    width: 100%;
+    text-align: end;
+    padding-right: 6px;
+    padding-top: 6px;
+    margin: 0px 0 -15px 0px;
+    display: block;
+
+}
+
+.x-button {
+    padding: 4px 7px 0 0;
+    width: 25px;
+    height: 25px;
+    border-radius: 3px;
+    color: gray;
+}
+
+.x-button:hover {
+    background-color: lightgray;
+}
+
+.autocompleting {
+    border-radius: 7px 7px 0 0;
+    border-bottom: 0;
+    border-color: lightgray;
+}
+

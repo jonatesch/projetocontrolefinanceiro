@@ -1,0 +1,20 @@
+.vermelho {
+    color:tomato
+}
+
+.table-test td {
+        max-width: 100px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        vertical-align: middle;
+}
+
+.tirar-position-relative {
+    position: inherit;
+}
+
+.modal-header {
+    background-color: #545454;
+    color: white;
+}

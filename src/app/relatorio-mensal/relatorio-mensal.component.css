@@ -1,0 +1,7 @@
+.cinzinha {
+    color:slategray;
+}
+
+.btn:focus {
+    box-shadow: none;
+}

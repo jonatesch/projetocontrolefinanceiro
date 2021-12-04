@@ -1,0 +1,73 @@
+.totais-content {
+    padding: 10px;
+    background-color: white;
+    border-radius: 5px;
+}
+
+.totais-grid {
+    display: grid; 
+    grid-template-columns: 25px 1fr 72px; 
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas: "icone total total"
+                         "icone nada action";
+    height: 100%; 
+    align-items: center;
+}
+
+.icone-totais {
+    font-size: 34px;
+    grid-area: icone;
+}
+
+.verde {
+    color: green;
+}
+
+.vermelho {
+    color:firebrick
+}
+
+.totais {
+    font-weight: 600; 
+    font-size: 20px; 
+    grid-area: total;
+    width: 200px;
+    margin-left: 10px;
+    height: 30px;
+}
+
+.esconder-totais {
+    grid-area: total;
+    width: 210px;
+    height: 30px;
+    display: inline-flex;
+}
+
+.colorir {
+    background-color: #f7f7f7;
+    width: 70%;
+    height: 25px;
+    border-radius: 5px;
+    margin-top: 2px;
+
+}
+
+.action {
+    grid-area: action;
+    font-size: 15px;
+    text-align: end;
+}
+
+.olho-totais {
+    margin-left: 5px;
+}
+
+.pointerize {
+    cursor: pointer;
+}
+
+@media (max-width: 515px) {
+    .totais-content {
+        margin-bottom: 5px;
+    }
+}

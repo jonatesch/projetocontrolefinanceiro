@@ -1,0 +1,187 @@
+<div style="height: 10%;">
+    
+    <a routerLink="/tabela">Voltar</a>
+
+    <h1>Relatórios Mensais</h1>
+</div>
+
+
+   
+<div class="row" style="overflow-y: auto; height: 45%;">
+
+    <div *ngFor="let resumo of resumoMensalPorCategoria; let a = index" class="col-3" style="height: 100%; overflow-y: scroll;">
+    
+            <!-- RÓTULO DO MÊS -->
+            <div class="row" style="text-align: center; position: sticky; background-color:white; top: 0;">
+                <div class="col-12">
+                    <h5> {{ resumo.rotulo }} </h5>
+                </div>              
+            </div>
+
+             <!-- RÓTULO DÉBITOS E SUBTOTAL DOS DÉBITOS DO MÊS -->
+            <div class="row" style="text-align: center;">
+                <div class="col">
+                    <h5>Débitos</h5>
+                </div>
+                <div class="col"><h5> {{ resumo.subtotalDebitos | currency:'BRL' }} </h5></div>
+            </div>
+
+
+          <!-- RESUMO DOS DÉBITOS DO MÊS POR CATEGORIA -->
+          <div class="row">
+              <div class="col">
+                <div *ngFor="let categs of resumo.resumoPorCategoria_Debitos; let i = index" class="row testanders">
+                    
+                    <div class="col-8"> 
+                        <i *ngIf="isCollapsed[((i+1)+(categoriasDebitos.length*a))-1]" 
+                            (click)="isCollapsed[((i+1)+(categoriasDebitos.length*a))-1] = !isCollapsed[((i+1)+(categoriasDebitos.length*a))-1]" 
+                            class="fas fa-plus-circle">
+                        </i>
+        
+                        <i *ngIf="!isCollapsed[((i+1)+(categoriasDebitos.length*a))-1]" 
+                            (click)="isCollapsed[((i+1)+(categoriasDebitos.length*a))-1] = !isCollapsed[((i+1)+(categoriasDebitos.length*a))-1]" 
+                            class="fas fa-minus-circle">
+                        </i> 
+                        {{categs.categoria.title}} 
+                    </div>
+                    <div class="col-4">{{ categs.subtotal | currency:'BRL' }} </div>
+                    <div class="col-12" [(ngbCollapse)]="isCollapsed[((i+1)+(categoriasDebitos.length*a))-1]" >
+                        <div class="row cinzinha" *ngFor="let movs of categs.descricoes">
+                            <div class="col-8" style="overflow: hidden; height: 25px;"><span style="padding-left: 10%;"> {{ movs.descricao }} </span></div>
+                            <div class="col-4"> {{ movs.subtotal | currency:'BRL' }} </div>
+                        </div>
+                    </div>
+            
+                </div>
+              </div>
+          </div>
+
+             <!-- RÓTULO CRÉDITOS E SUBTOTAL DOS CRÉDITOS DO MÊS -->
+             <div class="row" style="text-align: center; margin-top: 5%;">
+                <div class="col">
+                    <h5>Créditos</h5>
+                </div>
+                <div class="col"><h5> {{ resumo.subtotalCreditos | currency:'BRL' }} </h5></div>
+            </div>
+
+
+          <!-- RESUMO DOS CRÉDITOS DO MÊS POR CATEGORIA -->
+          <div class="row">
+              <div class="col">
+                  <div *ngFor="let categs of resumo.resumoPorCategoria_Creditos; let i = index" class="row testanders">
+                    
+                    <div class="col-8">
+                        <i *ngIf="isCollapsedCreditos[((i+1)+(categoriasCreditos.length*a))-1]" 
+                        (click)="isCollapsedCreditos[((i+1)+(categoriasCreditos.length*a))-1] = !isCollapsedCreditos[((i+1)+(categoriasCreditos.length*a))-1]" 
+                        class="fas fa-plus-circle">
+                         </i>
+    
+                        <i *ngIf="!isCollapsedCreditos[((i+1)+(categoriasCreditos.length*a))-1]" 
+                            (click)="isCollapsedCreditos[((i+1)+(categoriasCreditos.length*a))-1] = !isCollapsedCreditos[((i+1)+(categoriasCreditos.length*a))-1]" 
+                            class="fas fa-minus-circle">
+                        </i> 
+                        {{categs.categoria.title}} 
+                    </div>
+                    <div class="col-4">
+                        {{ categs.subtotal | currency:'BRL' }}
+                    </div>
+                    <div class="col-12" [(ngbCollapse)]="isCollapsedCreditos[((i+1)+(categoriasCreditos.length*a))-1]">
+                        <div class="row cinzinha" *ngFor="let movs of categs.descricoes">
+                            <div class="col-8" style="overflow: hidden; height: 25px;"><span style="padding-left: 10%;"> {{ movs.descricao }} </span></div>
+                            <div class="col-4"> {{ movs.subtotal | currency:'BRL' }} </div>
+                        </div>
+                    </div>
+
+
+                  </div>
+              </div>
+          </div>
+
+          <!-- RÓTULO DÉBITOS E SUBTOTAL DOS DÉBITOS DO MÊS -->
+          <div class="row" style="text-align: center; margin-top: 5%;">
+            <div class="col">
+                <h5>Débitos</h5>
+            </div>
+            <div class="col"><h5> {{ resumo.subtotalDebitos | currency:'BRL' }} </h5></div>
+        </div>
+
+        <!-- RESUMO DOS DÉBITOS DO MÊS POR ESTABELECIMENTO -->
+        <div class="row">
+            <div class="col">
+              <div *ngFor="let estabs of resumo.resumoPorEstabelecimento_Debitos; let i = index" class="row testanders">
+                  
+                  <div class="col-8"> 
+                      <i *ngIf="isCollapsedEstab[((i+1)+(estabelecimentosDebitos.length*a))-1]" 
+                          (click)="isCollapsedEstab[((i+1)+(estabelecimentosDebitos.length*a))-1] = !isCollapsedEstab[((i+1)+(estabelecimentosDebitos.length*a))-1]" 
+                          class="fas fa-plus-circle">
+                      </i>
+      
+                      <i *ngIf="!isCollapsedEstab[((i+1)+(estabelecimentosDebitos.length*a))-1]" 
+                          (click)="isCollapsedEstab[((i+1)+(estabelecimentosDebitos.length*a))-1] = !isCollapsedEstab[((i+1)+(estabelecimentosDebitos.length*a))-1]" 
+                          class="fas fa-minus-circle">
+                      </i> 
+                      {{estabs.estabelecimento}} 
+                  </div>
+                  <div class="col-4">{{ estabs.subtotal | currency:'BRL' }} </div>
+                  <div id="{{(i+1)+(estabelecimentosDebitos.length*a)}}" class="col-12" [(ngbCollapse)]="isCollapsedEstab[((i+1)+(estabelecimentosDebitos.length*a))-1]" >
+                      <div class="row cinzinha" *ngFor="let movs of estabs.descricoes">
+                          <div class="col-8" style="overflow: hidden; height: 25px;"><span style="padding-left: 10%;"> {{ movs.descricao }} </span></div>
+                          <div class="col-4"> {{ movs.subtotal | currency:'BRL' }} </div>
+                      </div>
+                  </div>
+          
+              </div>
+            </div>
+        </div>
+
+         <!-- RÓTULO CRÉDITOS E SUBTOTAL DOS CRÉDITOS DO MÊS -->
+         <div class="row" style="text-align: center; margin-top: 5%;">
+            <div class="col">
+                <h5>Créditos</h5>
+            </div>
+            <div class="col"><h5> {{ resumo.subtotalCreditos | currency:'BRL' }} </h5></div>
+        </div>
+
+          <!-- RESUMO DOS CRÉDITOS DO MÊS POR ESTABELECIMENTO -->
+          <div class="row">
+            <div class="col">
+                <div *ngFor="let estabs of resumo.resumoPorEstabelecimento_Creditos; let i = index" class="row testanders">
+                  
+                  <div class="col-8">
+                      <i *ngIf="isCollapsedEstabCreditos[((i+1)+(estabelecimentosCreditos.length*a))-1]" 
+                      (click)="isCollapsedEstabCreditos[((i+1)+(estabelecimentosCreditos.length*a))-1] = !isCollapsedEstabCreditos[((i+1)+(estabelecimentosCreditos.length*a))-1]" 
+                      class="fas fa-plus-circle">
+                       </i>
+  
+                      <i *ngIf="!isCollapsedEstabCreditos[((i+1)+(estabelecimentosCreditos.length*a))-1]" 
+                          (click)="isCollapsedEstabCreditos[((i+1)+(estabelecimentosCreditos.length*a))-1] = !isCollapsedEstabCreditos[((i+1)+(estabelecimentosCreditos.length*a))-1]" 
+                          class="fas fa-minus-circle">
+                      </i> 
+                      {{estabs.estabelecimento}} 
+                  </div>
+                  <div class="col-4">
+                      {{ estabs.subtotal | currency:'BRL' }}
+                  </div>
+                  <div class="col-12" [(ngbCollapse)]="isCollapsedEstabCreditos[((i+1)+(estabelecimentosCreditos.length*a))-1]">
+                      <div class="row cinzinha" *ngFor="let movs of estabs.descricoes">
+                          <div class="col-8" style="overflow: hidden; height: 25px;"><span style="padding-left: 10%;"> {{ movs.descricao }} </span></div>
+                          <div class="col-4"> {{ movs.subtotal | currency:'BRL' }} </div>
+                      </div>
+                  </div>
+
+
+                </div>
+            </div>
+        </div>
+            
+       
+        
+
+       
+
+    </div>
+
+    
+
+</div>
+

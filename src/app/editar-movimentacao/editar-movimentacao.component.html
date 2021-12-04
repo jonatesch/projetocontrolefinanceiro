@@ -1,0 +1,241 @@
+<!-- <div class="modal-header">
+
+    <h4 class="modal-title">Editar movimentações</h4>
+    
+ 
+</div>
+
+
+
+<div class="modal-body">
+
+<p>Marcar as seguintes movimentações como efetuadas?</p>
+<p>Confirme as datas.</p>
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th><button (click)="desmarcarTodas()">todas</button></th>
+            <th>Data</th>
+            <th>Origem</th>
+            <th>Estabelecimento</th>
+            <th>Descrição</th>
+            <th>Valor</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let movs of movimentacoes; let i = index">
+            <td>
+                <div class="form-check form-switch">
+                    <input #escolherParaEnviar class="form-check-input" [checked]="movs.enviar == true" type="checkbox" id="{{movs._id}}">
+                    <label class="form-check-label" for="{{movs._id}}"></label>
+                </div>
+            </td>
+            <td> <input [(ngModel)]="movs.dataString" class="form-control" type="date"></td>
+            <td>
+                <select (change)="mudarOrigem($event, i)" class="form-select">
+                    <option *ngFor="let orig of origens" [selected]="orig.title == movs.origem.title"> {{ orig.title }}  </option>
+                </select>
+            </td>
+            <td> {{ movs.estabelecimentoPrestador }} </td>
+            <td> {{ movs.descricao }} </td>
+            <td> {{ movs.valor }} </td>
+        </tr>
+    </tbody>
+</table>
+
+</div>
+
+<div class="modal-footer">
+    <button *ngIf="!taCarregando" style="width: 100px;" class="btn btn-primary" (click)="editarMovimentacoes()">Ok</button>
+    <button *ngIf="taCarregando" style="width: 100px;" class="btn btn-primary"><span class="spinner-border spinner-border-sm"></span> </button>
+</div> -->
+
+
+<div class="modal-header header-blue">
+   <h4 class="modal-title">Editar movimentação</h4>
+</div>
+
+<div class="modal-body">
+
+    <div class="row" style="margin-bottom: 5px;">
+
+        <div class="col">
+            <div class="form-floating">
+                <input #estabelecimentoPrestadorEdicao (change)="setarMovimentacaoEditando()" class="form-control" type="text" id="estabelecimentoPrestadorEdicao" [ngModel]="movimentTeste[indiceDaLinha].estabelecimentoPrestador" (ngModelChange)="movimentTeste[indiceDaLinha].estabelecimentoPrestador = $event.toUpperCase()">
+                <label for="estabelecimentoPrestadorEdicao">Estabelecimento/Prestador</label>
+             </div>
+             
+            
+        </div>
+
+        <div class="col">
+
+            <!-- <div class="row">
+                <div class="col-9"> -->
+                    <div class="form-floating">
+                        <input #descricaoEdicao (change)="setarMovimentacaoEditando()" class="form-control" type="text" id="descricaoEdicao" [(ngModel)]="movimentTeste[indiceDaLinha].descricao">  
+                        <label for="descricaoEdicao">Descrição</label>
+                    </div>
+                <!-- </div> -->
+
+                <!-- <div class="col-3">
+                    <div class="form-floating">
+                        <input class="form-control" id="parcelaEdicao" type="text" disabled [ngModel]="movimentTeste[indiceDaLinha].parcela">
+                        <label for="parcelaEdicao">Parcela</label>
+                    </div>
+                    
+                </div> -->
+        <!--     </div> -->
+
+        
+        </div>
+
+        <div class="col">
+
+            <div class="row">
+
+                <div class="col">
+                    <div class="form-floating">
+                        <select class="form-control" (change)="setarMovimentacaoEditando()" [compareWith]="comparaCategorias" [(ngModel)]="movimentTeste[indiceDaLinha].origem" name="" id="origemEdicao">
+                          <option *ngFor="let origem of origens" [ngValue]="origem"> {{ origem.title }} </option>
+                        </select>
+                        <label for="origemEdicao">Origem</label>
+                    </div>
+                </div>
+    
+                <div class="col">
+                    <div class="form-floating">
+                        <select class="form-control" (change)="setarMovimentacaoEditando()" [compareWith]="comparaCategorias" [(ngModel)]="movimentTeste[indiceDaLinha].orcamento" name="" id="orcamentoEdicao">
+                          <option *ngFor="let orcamento of orcamentos" [ngValue]="orcamento"> {{ orcamento.title }} </option>
+                        </select>
+                        <label for="orcamentoEdicao">Orçamento</label>
+                    </div>
+                    
+                </div>
+    
+            </div>
+
+
+        </div>
+
+        
+
+       
+
+    </div>
+
+    <div class="row">
+
+        <div class="col">
+            <div class="form-floating">
+                <select #categoriaEdicao class="form-control" (change)="setarMovimentacaoEditando()" [compareWith]="comparaCategorias" [(ngModel)]="movimentTeste[indiceDaLinha].categoria" name="" id="categoriaEdicao">
+                  <option *ngFor="let cat of categorias" [ngValue]="cat"> {{ cat.title }} </option>
+                </select>
+                <label for="categoriaEdicao">Categoria</label>
+            </div>
+
+        </div>
+
+        <div class="col">
+
+            <div class="row">
+
+                <div class="col">
+                    
+                    <div class="form-floating">
+                        <input class="form-control" (change)="setarMovimentacaoEditando()" type="date" [ngModel]="movimentTeste[indiceDaLinha].date | date:'yyyy-MM-dd'" (ngModelChange)="movimentTeste[indiceDaLinha].date = setarData($event)" id="dataEdicao">
+                        <label for="dataEdicao">Data</label>
+                    </div>
+
+                    
+
+                </div>
+
+                <div class="col">
+
+                    <div class="form-floating">
+                        <select [(ngModel)]="movimentTeste[indiceDaLinha].mesRef" (change)="setarMovimentacaoEditando()"  class="form-control" id="mesRefEdicao">
+                            <optgroup *ngFor="let ano of mesesDeReferenciaFormatados" label={{ano.ano}}>
+                            <option *ngFor="let mes of ano.meses; let i = index" [ngValue]='ano.meses[i].codigo'>  {{ mes.nome }}  </option>
+                        </select>
+                        <label for="mesRefEdicao">Mês de Referência</label>
+                    </div>
+
+                  
+
+                </div>
+                
+            </div>
+
+           
+
+        </div>
+
+        <div class="col">
+            
+            <div class="row">
+
+                <div class="col">
+
+                    <div class="row">
+                        <div class="col">
+                            <div style="margin-top: 20px;" class="form-check form-switch">
+                                <input  #efetuadaEdicao (change)="setarMovimentacaoEditando()" [(ngModel)]="movimentTeste[indiceDaLinha].efetuada" class="form-check-input" type="checkbox" id="efetuadaEdicao">  
+                                <label for="efetuadaEdicao">Efetuada</label>
+                            </div>
+                        </div>
+                        <div class="col" style="padding-top: 5px;">
+                            <div class="form-check form-check-inline">
+                                <input (change)="setarMovimentacaoEditando()" [(ngModel)]="movimentTeste[indiceDaLinha].natureza" class="form-check-input" value="C" type="radio" name="natureza" id="naturezaCredito">
+                                <label class="form-check-label" for="natureza"> Crédito </label>
+                            </div>
+        
+                            <div class="form-check form-check-inline">
+                                <input (change)="setarMovimentacaoEditando()" [(ngModel)]="movimentTeste[indiceDaLinha].natureza" class="form-check-input" value="D" type="radio" name="natureza" id="naturezaDebito">
+                                <label class="form-check-label" for="natureza"> Débito </label>
+                            </div>
+                        </div>
+                    </div>
+
+
+                
+
+              
+
+
+
+                </div>
+
+                <div class="col">
+                    <div class="form-floating">
+                        <input #valorEdicao (change)="setarMovimentacaoEditando()" currencyMask [options]="{ prefix: '', thousands: '.', decimal: ',' }" class="form-control" type="text" id="valorEdicao" [(ngModel)]="movimentTeste[indiceDaLinha].valor">  
+                        <label for="valorEdicao">Valor (R$)</label>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+   
+    
+   
+  
+
+    
+
+</div>
+
+<div class="modal-footer">
+    <h6 style="margin-right: 40px;">Não se esqueça de salvar a alteração.</h6>
+    <button *ngIf="!taCarregandoUpdate" (click)="atualizarMovimentacao()" class="btn btn-primary" style="width: 10%;">Salvar</button>
+    <button *ngIf="taCarregandoUpdate" class="btn btn-primary" style="width: 10%;"><span class="spinner-border spinner-border-sm"></span> </button>
+</div>

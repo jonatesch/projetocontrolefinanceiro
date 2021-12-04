@@ -1,0 +1,95 @@
+/* You can add global styles to this file, and also import other style files */
+body {
+    /* overflow: hidden; */
+    margin: 0;
+    padding: 0;
+}
+
+.myCustomModalClass .modal-dialog {
+    max-width: 40%;
+}
+
+.myCustomModalClass2 .modal-dialog {
+    max-width: 80%;
+}
+
+.myCustomModalClass3 .modal-dialog {
+    max-width: 60%;
+}
+
+.myCustomModalClass3 .modal-header {
+    display: block;
+}
+
+.myCustomModalClass4 .modal-dialog {
+    max-width: 52%;
+}
+
+.myCustomModalClass4 .modal-header {
+    display: block;
+}
+
+.myCustomModalClass4 .modal-body {
+    padding: 0;
+}
+
+.myCustomModalClass5 .modal-dialog {
+    max-width: 90%;
+}
+
+
+.trash-icon {
+    display: inline-block;
+    background-color: tomato;
+    width: 0;
+    text-align: center;
+    height: 100%;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.transparente {
+    color: transparent;
+}
+
+.branco {
+    color: whitesmoke;
+}
+
+.trash-icon-mostrar {
+    width: 30px;
+    transition: 0.5s;
+}
+
+#lixeiraCategoria {
+    margin-top: 10px;
+}
+
+.ressaltar {
+    background-color:moccasin;
+    transition: 1s;
+}
+
+.header-blue {
+    background-color: dodgerblue;
+    color: white;
+}
+
+.validation-warning {
+    border-color: dodgerblue;
+}
+
+.cfrow {
+    display: flex;
+}
+
+.cfcol {
+    flex-grow: 1;
+    padding: 0 10px;
+}
+
+
+
+.btn-check:focus+.btn, .btn:focus {
+    box-shadow: none;
+}

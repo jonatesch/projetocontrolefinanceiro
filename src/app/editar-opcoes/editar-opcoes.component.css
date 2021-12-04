@@ -1,0 +1,23 @@
+.opcoes-title {
+    margin-bottom: 40px;
+}
+
+.opcoes-container {
+    background-color: white;
+}
+
+.opcoes-list {
+    padding: 0;
+    list-style: none;
+}
+
+.opcoes-item {
+    height: 35px;
+    line-height: 35px;
+    border-bottom: 1px solid lightgray;
+    font-size: 15px;
+}
+
+.opcoes-item:hover {
+    background-color: #f3f3f3 ;
+}

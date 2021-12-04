@@ -1,0 +1,23 @@
+<div class="row header">
+    <div class="col">Data</div>
+    <div class="col">Mês de referência</div>
+    <div class="col">Estabelecimento/Prestador</div>
+    <div class="col">Descrição</div>
+    <div class="col">Categoria</div>
+    <div class="col">Origem</div>
+    <div class="col">Valor</div>
+    <div class="col">Orçamento</div>
+</div>
+
+<div *ngFor="let mov of movimentacoes" class="row hum">
+    <div class="col-orcamento-alt" [ngClass]="{'spacem':mov.efetuada}"> <i *ngIf="mov.efetuada" class="fas fa-check icon-status"></i> <span class="orc-content"> {{mov.orcamento}} </span>  </div>
+    <div class="what col-data"> {{ mov.data }} </div>
+    <div class="what col-mesref"> {{ mov.mesRef }} </div>
+    
+    <div class="what col-estab">  {{ mov.estabelecimentoPrestador }} </div>
+    <div class="what col-descricao"> {{ mov.descricao }} {{ mov.parcela }} </div>
+    <div class="what col-categoria"> {{ mov.categoria }} </div>
+    <div class="what col-origem"> {{ mov.origem }} </div>
+    <div class="what col-valor" [ngClass]="{'verde':mov.natureza == 'C', 'valor-debito':mov.natureza == 'D', 'valor-credito':mov.natureza == 'C'}"> {{ mov.valor | currency:'BRL':'' }} </div>
+    <div class="what col-orcamento"> {{ mov.orcamento }} </div>
+</div>

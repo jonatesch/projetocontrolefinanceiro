@@ -1,0 +1,77 @@
+<div class="modal-header">
+    <h4 class="modal-title">Marcar efetuadas</h4>
+</div>
+
+<div class="modal-body" style="padding: 0;">
+
+    <div style="background-color: white; position: sticky; top: 0; padding: 1rem;">    
+        <h6>Selecione abaixo as movimentações a serem marcadas como efetuadas.</h6>
+        <p>Você também pode atualizar <strong style="color:dodgerblue;">Data, Origem</strong>  e <strong style="color:dodgerblue;">Valor</strong>  das movimentações.</p>
+        <p *ngIf="!carregando">N° de movimentações: <strong style="color: #545454">{{movsNaoEfetuadas.length}}</strong> | Selecionadas: {{selecionadas.length}}</p>
+    </div>
+
+    <div style="margin: 1rem;">
+
+        <div style="text-align: center; color:'dodgerblue'"><span *ngIf="carregando" class="spinner-border spinner-edicoes"></span></div>
+        
+        <table *ngIf="!carregando" class="table table-test">
+
+            <thead>
+    
+                <tr>
+                    <th>
+                        <div class="form-check form-switch">
+                            <input (click)="toggleMarcar()" [checked]="marcaTodas" class="form-check-input" type="checkbox">
+                        </div>
+                    </th>
+                    <th>Data</th>
+                    <th>Origem</th>
+                    <th>Descrição</th>
+                    <th style="width: 15%;">Valor</th>
+                </tr>
+    
+            </thead>
+    
+            <tbody>
+    
+                <tr #tableRow *ngFor="let mov of movsNaoEfetuadas; let i = index">
+    
+                    <td style="vertical-align: middle;"> 
+                        <div class="form-check form-switch">
+                            <input #escolherParaEnviar class="form-check-input" [ngModel]="mov.enviar" (ngModelChange)="setarEnvio(i)" type="checkbox" id="{{mov._id}}">
+                            <label class="form-check-label" for="{{mov._id}}"></label>
+                        </div>
+                    </td>
+                    <td> <input [ngModel]="mov.date | date: 'yyyy-MM-dd'" (ngModelChange)="mov.date = setarData($event)" class="form-control" type="date"> </td>
+                    <td>
+                        <select class="form-control" [compareWith]="comparaObjetos" [(ngModel)]="mov.origem" name="" id="origemEdicao">
+                            <option *ngFor="let origem of origens" [ngValue]="origem"> {{ origem.title }} </option>
+                        </select>
+                    </td>
+                    <td> {{ mov.descricao }} </td>
+                    <td> 
+                        <div class="input-group tirar-position-relative">
+                            <span class="input-group-text" id="basic-addon1">R$</span>
+                            <input currencyMask [(ngModel)]="mov.valor" type="text" [options]="{ prefix: '', thousands: '.', decimal: ',' }" class="form-control tirar-position-relative" placeholder="0,00*"> 
+                        </div>
+                    
+                    </td>
+                    
+    
+                </tr>
+    
+            </tbody>
+    
+    
+        </table>
+
+    </div>
+
+
+</div>
+
+<div class="modal-footer">
+    <h6 class="vermelho" *ngIf="mostrarMensagemErro">Selecione alguma movimentação</h6>
+    <button class="btn btn-primary" style="width: 10%;" *ngIf="!taCarregandoUpdateEfetuadas" (click)="atualizarMovsSelecionadas()">Salvar</button>
+    <button class="btn btn-primary" style="width: 10%;" *ngIf="taCarregandoUpdateEfetuadas"><span class="spinner-border spinner-border-sm"></span> </button>
+</div>
