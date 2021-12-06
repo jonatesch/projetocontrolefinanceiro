@@ -1,7 +1,24 @@
-<div class="meses-container">
-   <div class="meses-seletor" 
-    *ngFor="let mes of resumosMensais; let i = index" [ngClass]="{'ativo':mes.ativo}" (click)="toggleActive(i)"> 
-        {{ mes.rotulo }} 
-    </div> 
+<div>
+   <h1>Meus relatórios mensais</h1>
+
+</div>  
+
+<div class="page-content">
+
+    <p>Selecione o ano e até dois meses para visualizar os relatórios mensais</p>
+
+    <select #ano [ngModel]="anoSelecionado" (ngModelChange)="setarAnoSelecionado($event)" class="form-control ano-seletor">
+        <option *ngFor="let ano of anos" >{{ ano }}</option>
+    </select> 
+
+    <div class="meses-container">   
+        <div class="meses-seletor" 
+        *ngFor="let mes of mesesFiltrados; let i = index" [ngClass]="{'ativo':mes.ativo}" (click)="toggleActive(i)"> 
+         {{ mes.rotulo }} 
+        </div> 
+    </div>
+
 </div>
+
+
 

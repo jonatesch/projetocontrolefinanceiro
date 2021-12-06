@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, ViewChildren, Input } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { WixApiService } from '../servico-teste.service';
 
 @Component({
@@ -271,7 +271,7 @@ export class FiltrosComponent implements OnInit {
         this.isFiltered_EstabelecimentoSlicer = false
       }
 
-
+      console.log(this.isFiltered_EstabelecimentoSlicer)
     //REORDENAR SLICER DE ESTABELECIMENTOS:
     let movsAtuais_Estabelecimentos:any[] = this._WixApiService.sortByTitle(this.estabelecimentosUtilizados.filter(e => this._WixApiService.removerIguaisEclassificar(this.movimentacoesAtuais.map(e => e.estabelecimentoPrestador)).includes(e.title))) 
     let movsAtuais_EstabelecimentosResto:any[] = this._WixApiService.sortByTitle(this.estabelecimentosUtilizados.filter(e => !this._WixApiService.removerIguaisEclassificar(this.movimentacoesAtuais.map(e => e.estabelecimentoPrestador)).includes(e.title))) 
@@ -282,7 +282,9 @@ export class FiltrosComponent implements OnInit {
 
     if(this.isFiltered_EstabelecimentoSlicer) {
         this.estabsAfrente = this._WixApiService.removerIguaisEclassificar(this.movimentacoesAtuais.map(e => e.estabelecimentoPrestador)).length 
+        
       } else {
+        //quando outro filtro for desativado e mais nenhum estiver ativo:
         this.estabsAfrente = 0
         this._WixApiService.sortByTitle(this.estabelecimentosUtilizados)
       }

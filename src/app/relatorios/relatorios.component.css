@@ -1,3 +1,14 @@
+.page-content {
+    background-color: white;
+    padding: 10px 10px;
+
+}
+
+.ano-seletor {
+    margin-bottom: 20px;
+    width: 100px;
+}
+
 .meses-container {
     display: flex;
 }
