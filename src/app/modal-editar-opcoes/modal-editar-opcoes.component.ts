@@ -101,6 +101,8 @@ export class ModalEditarOpcoesComponent implements OnInit {
     }
   }
 
+  teste = "ola"
+
   adicionarOrigem() : void {
     if(this.novaOrigem.title.length > 0) {
       if(this.origens.map(e => e.title).includes(this.novaOrigem.title)) {
