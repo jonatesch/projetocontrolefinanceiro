@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { WixApiService } from '../servico-teste.service';
 
 @Component({
   selector: 'app-testes',
@@ -6,6 +7,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./testes.component.css']
 })
 export class TestesComponent implements OnInit {
+
+  nome =  "nome"
+  email = 'email'
+  qtde = 0
 
   movimentacoes:any[] = [
     {
@@ -66,7 +71,18 @@ export class TestesComponent implements OnInit {
     }
   ]
 
-  constructor() { }
+  constructor(private _wixApiService:WixApiService) { 
+    _wixApiService.logou$.subscribe((dados:any) => {
+      if(dados.details){
+        alert(dados.details.applicationError.description)
+      }
+      
+      this.nome = dados.user.firstName
+      this.email = dados.user.loginEmail
+      this.qtde = dados.movs.length
+      
+    })
+  }
 
   ngOnInit(): void {
   }

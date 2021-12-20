@@ -21,3 +21,9 @@
     <div class="what col-valor" [ngClass]="{'verde':mov.natureza == 'C', 'valor-debito':mov.natureza == 'D', 'valor-credito':mov.natureza == 'C'}"> {{ mov.valor | currency:'BRL':'' }} </div>
     <div class="what col-orcamento"> {{ mov.orcamento }} </div>
 </div>
+
+<div>
+    <p>{{nome}}</p>
+    <p>{{email}}</p>
+    <p>Qtde de movimentações: {{qtde}}</p>
+</div>

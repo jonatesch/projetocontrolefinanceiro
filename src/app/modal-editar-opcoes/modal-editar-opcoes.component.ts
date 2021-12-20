@@ -4,8 +4,11 @@ import { excluirOpcao } from '../excluirOrigem';
 import { excluirCategoria } from '../excluirCategoria';
 
 import { WixApiService } from '../servico-teste.service';
+import { LocalStorageService } from '../local-storage.service';
 
 import { ToastrService } from 'ngx-toastr';
+
+
 
 
 
@@ -18,7 +21,7 @@ import { ToastrService } from 'ngx-toastr';
 
 export class ModalEditarOpcoesComponent implements OnInit {
 
-  constructor(private _wixApiService: WixApiService, private toastr:ToastrService) { }
+  constructor(private _wixApiService: WixApiService, private toastr:ToastrService, private _localStorage:LocalStorageService) { }
 
   @ViewChild('novaCategoriaInput') novaCategoriaInput : any
   @ViewChild('novaOrigemInput') novaOrigemInput : any
@@ -36,8 +39,8 @@ export class ModalEditarOpcoesComponent implements OnInit {
   categorias: any[] = []
   origens: any[] = []
  
-  novaCategoria = {"title": "", "icone":"fas fa-tag", "impedirExclusao":false}
-  novaOrigem = {"title": "","cartaoDeCredito":false}
+  novaCategoria = {"title": "", "icone":"fas fa-tag", "impedirExclusao":false, "proprietario":''}
+  novaOrigem = {"title": "","cartaoDeCredito":false, "proprietario":''}
 
   iconesArray:any[] = []
   
@@ -55,12 +58,29 @@ export class ModalEditarOpcoesComponent implements OnInit {
 
  }
 
+ userId:any = ''
+
+ getCategoriasTeste() : void {
+  this._wixApiService.getCategoriasFromUser(this.userId).then((data) => {
+    this.categorias = data
+    this.atualizouCategorias.emit(this.categorias)
+  })
+
+}
+
  getOrigens() : void {
    this._wixApiService.getOrigens().then((data) => {
      this.origens = data
      this.atualizouOrigens.emit(this.origens)
    })
  } 
+
+ getOrigensTeste() : void {
+  this._wixApiService.getOrigensFromUser(this.userId).then((data) => {
+    this.origens = data
+    this.atualizouOrigens.emit(this.origens)
+  })
+} 
 
   observarInputCategoria(evento:any) {    
     if(evento.keyCode == 13) {
@@ -83,12 +103,17 @@ export class ModalEditarOpcoesComponent implements OnInit {
 
   adicionarOrigem() : void {
     if(this.novaOrigem.title.length > 0) {
-
       if(this.origens.map(e => e.title).includes(this.novaOrigem.title)) {
         this.toastr.error("","já existe uma origem " + this.novaOrigem.title,{positionClass:"toast-top-center"})
       } else {
+        let userLoggedId = JSON.stringify(this._localStorage.get('userLoggedId'))
+        this.novaOrigem.proprietario = JSON.parse(userLoggedId)
         this._wixApiService.adicionarOrigem(this.novaOrigem).then((data:any) => {
-        this.origens = data.totais
+          this.getOrigensTeste()
+          this.novaOrigemInput.nativeElement.value = ''
+          this._wixApiService.opcoesAtualizadas('origem')
+          
+        /* this.origens = data.totais
         this.atualizouOrigens.emit(this.origens)
         this._wixApiService.opcoesAtualizadas('origem')
         this.novaOrigemInput.nativeElement.value = null
@@ -108,7 +133,7 @@ export class ModalEditarOpcoesComponent implements OnInit {
             this.liOrigens._results[indice].nativeElement.classList.remove("ressaltar")
             this.liOrigens._results[indice].nativeElement.children[2].textContent = ""
           },3000)
-        },500)
+        },500) */
       })
     }
       }
@@ -124,7 +149,22 @@ export class ModalEditarOpcoesComponent implements OnInit {
       if(this.categorias.map(e => e.title).includes(this.novaCategoria.title)) {
         this.toastr.error("","já existe uma categoria " + this.novaCategoria.title,{positionClass:"toast-top-center"})
       } else {
-         this._wixApiService.adicionarCategoria(this.novaCategoria).then((data) => {
+        let userLoggedId = JSON.stringify(this._localStorage.get('userLoggedId'))
+        this.novaCategoria.proprietario = JSON.parse(userLoggedId)
+       
+
+        this._wixApiService.adicionarCategoriaToUser(this.novaCategoria).then(data => {
+         // console.log(data)
+          this.getCategoriasTeste()
+          this.toastr.success("","categoria " + this.novaCategoria.title + " inserida", {positionClass:"toast-top-center"})
+          this.novaCategoria.title = ''
+          this._wixApiService.opcoesAtualizadas('categoria')
+
+        })
+
+
+
+         /* this._wixApiService.adicionarCategoria(this.novaCategoria).then((data) => {
         this._wixApiService.getCategorias().then(categorias => {
           this.categorias = categorias
           //console.log(this.categorias)
@@ -146,7 +186,7 @@ export class ModalEditarOpcoesComponent implements OnInit {
           },600)
 
         })
-      })
+      }) */
     }
       }
 
@@ -155,19 +195,18 @@ export class ModalEditarOpcoesComponent implements OnInit {
     }
   }
 
-  
 
-
-
-  excluirCategoria(objeto:excluirCategoria, index:number) {
+  excluirCategoria(objeto:any, index:number) {
+    objeto.proprietario = this._localStorage.get('userLoggedId')
     
     if(objeto.impedirExclusao){
       this.toastr.error("","não é permitido excluir essa categoria",{positionClass:"toast-top-center"})
     } else {
       this._wixApiService.excluirCategoria(objeto).then((data) => {
+        console.log(data)
         let excluiu = data.excluiu
         if(excluiu) {
-          this.getCategorias()
+          this.getCategoriasTeste()
           let mensagem = "categoria " + objeto.nome + " excluída"
           this.toastr.success("",mensagem,{positionClass:"toast-top-center"})
           this._wixApiService.opcoesAtualizadas('categoria')
@@ -186,11 +225,12 @@ export class ModalEditarOpcoesComponent implements OnInit {
     }
   }
 
-  excluirOrigem(objeto:excluirOpcao, index:number) {
+  excluirOrigem(objeto:any, index:number) {
+    objeto.proprietario = this._localStorage.get('userLoggedId')
     this._wixApiService.excluirOrigem(objeto).then((data) => {
       let excluiu = data.excluiu
       if(excluiu){
-        this.getOrigens()
+        this.getOrigensTeste()
         var mensagem = "origem " + objeto.nome + " excluída"
         this.toastr.success("",mensagem,{positionClass:"toast-top-center"})
         this._wixApiService.opcoesAtualizadas('origem')
@@ -236,16 +276,25 @@ export class ModalEditarOpcoesComponent implements OnInit {
   }
 
   ngOnInit() {
-   this.getCategorias()
-   this.getOrigens()
-   this.getIcones()
-   setTimeout(() => {
+  // this.getCategorias()
+  if(this._localStorage.get('userLoggedId') !== null) {
+    this.userId = this._localStorage.get('userLoggedId')
+    this.getCategoriasTeste()
+    this.getOrigensTeste()
+  }
+   //this.getOrigens()
+   //this.getIcones()
+  /*  setTimeout(() => {
      this.iconSelector.nativeElement.blur()
-   })
+   }) */
    
   }
 
   ngAfterViewInit() {
+    setTimeout(() => {
+      this.novaCategoriaInput.nativeElement.blur()
+    })
+    
   }
 
 

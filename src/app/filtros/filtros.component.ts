@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { WixApiService } from '../servico-teste.service';
+import { LocalStorageService } from '../local-storage.service';
 
 @Component({
   selector: 'filtros',
@@ -15,7 +16,14 @@ export class FiltrosComponent implements OnInit {
   @Output() setouFiltro:EventEmitter<any> = new EventEmitter()
 
 
-  constructor(private _WixApiService:WixApiService) { }
+  constructor(private _WixApiService:WixApiService, private _localStorage:LocalStorageService) {
+    _WixApiService.logou$.subscribe((dados:any) => {
+      console.log(dados)
+      this.user = dados.user.contactId
+      console.log(this.user)
+      this.getMovimentacoesTeste('')
+    })
+   }
 
   movimentacoesAll:any[] = []
   movimentacoesAtuais:any[] = []
@@ -481,10 +489,130 @@ export class FiltrosComponent implements OnInit {
     })
   })
   }
+
+  user:any = ''
+
+  getMovimentacoesTeste(dadosNovaMov:any) {
+    this._WixApiService.getMovimentacoesFromUser(this.user).then(data => {
+     
+      //SETAR VARIÁVEL LOCAL COM TODAS AS MOVIMENTAÇÕES QUE VIERAM DO BANCO DE DADOS:
+      let movimentacoes:any[] = data
+      this.movimentacoesAll = data
+      this.movimentacoesAtuais = data
+  
+      //SETAR VARIÁVEIS COM AS CATEGORIAS, ESTABELECIMENTOS, ORIGENS E ORCAMENTOS CONTIDOS NAS MOVIMENTAÇÕES
+        this.categoriasUtilizadas = this._WixApiService.sortByTitle(this._WixApiService.removerDuplicatas(movimentacoes.map(e => e.categoria)))
+        //this.filtro_categoriasSelecionadas = this.categoriasUtilizadas
+          this.categoriasUtilizadas.forEach((categoria) => { //para cada categoria no array de categorias utilizadas:
+            //this.ativados_Categorias.push(false)    //adicionar um "false" no array de filtros de categorias ativados
+            categoria.filtrar = false
+            categoria.naFrente = false
+          })
+        this.estabelecimentosUtilizados = this._WixApiService.removerIguaisEclassificar(movimentacoes.map(e => e.estabelecimentoPrestador)).map(e => ({'title':e}))
+         //this.filtro_estabelecimentosSelecionados = this.estabelecimentosUtilizados 
+        this.estabelecimentosUtilizados.forEach((estabelecimento) => { //para cada estabelecimento no array de estabelecimentos utilizadas:
+            //this.ativados_Estabelecimentos.push(false)    //adicionar um "false" no array de filtros de estabelecimento ativados
+            //this.temCoisa_Estabelecimentos.push(false)  
+            estabelecimento.filtrar = false
+            estabelecimento.naFrente = false
+          })
+        this.origensUtilizadas = this._WixApiService.sortByTitle(this._WixApiService.removerDuplicatas(movimentacoes.map(e => e.origem)))
+          this.origensUtilizadas.forEach((origem) => {
+            //this.ativados_Origens.push(false)
+            //this.temCoisa_Origens.push(false)
+            origem.filtrar = false
+          })
+        this.orcamentosUtilizados = this._WixApiService.sortByTitle(this._WixApiService.removerDuplicatas(movimentacoes.map(e => e.orcamento)))
+          this.orcamentosUtilizados.forEach((orcamento) => {
+            //this.ativados_Orcamentos.push(false)
+            //this.temCoisa_Orcamentos.push(false)
+            orcamento.filtrar = false
+           
+          })
+      ///////////////////
+      
+      //SETAR VARIÁVEL LOCAL COM OS CÓDIGOS DE MES DE REFERÊNCIA DAS MOVIMENTAÇÕES
+        let mesesTemp = this._WixApiService.removerIguaisEclassificar(movimentacoes.map(e => e.mesRef))
+          return mesesTemp // tal variável é passada adiante para o then
+      /////////////    
+    }).then(mesesRecebidos => {
+      this._WixApiService.getMesesDeReferencia().then(data => {
+        //SETAR VARIÁVEL LOCAL COM OS MESES DE REFERÊNCIA QUE VIERAM DA QUERY NO DATABASE **DE MESES**
+        let meses:any[] = data.items
+  
+        //SETAR VARIÁVEL COM OS OBJETOS DE MES DE REFERENCIA CONFORME MESES CONTIDOS NAS MOVIMENTAÇÕES
+        this.mesesUtilizados = meses.filter(e => mesesRecebidos.includes(e.codigoMesRef))
+        //e pra cada mês:
+        this.mesesUtilizados.forEach(mes => {
+          /* mes.label = mes.title.substring(0,3).toLowerCase() + "/" + mes.codigoMesRef.toString().substring(2,4) */ // adicionar uma propriedade chamada "label" para ser o rótulo das tags de filtro de mês
+          mes.label = mes.codigoMesRef.toString().substring(4,6) + "/" + mes.codigoMesRef.toString().substring(0,4) // output tipo "10/2021"
+          mes.filtrar = false
+          //this.ativados_Meses.push(false) // e inserir um 'false' no array de meses ativados para cada item no mesesUtilizados
+         // this.temCoisa_Meses.push(false)
+        })
+          if(dadosNovaMov !== '' && dadosNovaMov !== 'exclusao') {
+            this.estabelecimentosUtilizados.forEach(estab => estab.filtrar = false)
+            this.filtro_estabelecimentosSelecionados = this.estabelecimentosUtilizados.filter(e => e.filtrar == true)
+  
+            this.origensUtilizadas.forEach(orig => orig.filtrar = false)
+            this.filtro_origensSelecionadas = this.origensUtilizadas.filter(e => e.filtrar == true)
+  
+            this.orcamentosUtilizados.forEach(orc => orc.filtrar = false)
+            this.filtro_orcamentosSelecionados = this.orcamentosUtilizados.filter(e => e.filtrar == true)
+  
+            this.mesesUtilizados.forEach(mes => mes.filtrar = false)
+            this.filtro_mesesSelecionados = this.mesesUtilizados.filter(e => e.filtrar == true)
+  
+            this.ajustarEstabs()
+            this.ajustarCategs()
+            this.ajustarMeses()
+            this.ajustarOrigs()
+            this.ajustarOrcamentos()
+            
+            let categoriaIndex = this.categoriasUtilizadas.map(e => e._id).indexOf(this.categoriasUtilizadas.filter(e => e._id == dadosNovaMov.categoria)[0]._id)
+            this.setarFiltro_Categoria(categoriaIndex)
+  
+            let mesRefIndex = this.mesesUtilizados.map(e => e.codigoMesRef).indexOf(dadosNovaMov.mesRef)
+            this.setarFiltro_Meses(mesRefIndex)
+  
+            this.filtrarTabela()
+            this.done.emit()
+          }
+  
+          if(dadosNovaMov == 'exclusao') {
+            this.estabelecimentosUtilizados.forEach(estab => estab.filtrar = false)
+            this.filtro_estabelecimentosSelecionados = this.estabelecimentosUtilizados.filter(e => e.filtrar == true)
+  
+            this.categoriasUtilizadas.forEach(categ => categ.filtrar = false)
+            this.filtro_categoriasSelecionadas = this.categoriasUtilizadas.filter(e => e.filtrar == true)
+  
+            this.origensUtilizadas.forEach(orig => orig.filtrar = false)
+            this.filtro_origensSelecionadas = this.origensUtilizadas.filter(e => e.filtrar == true)
+  
+            this.orcamentosUtilizados.forEach(orc => orc.filtrar = false)
+            this.filtro_orcamentosSelecionados = this.orcamentosUtilizados.filter(e => e.filtrar == true)
+  
+            this.mesesUtilizados.forEach(mes => mes.filtrar = false)
+            this.filtro_mesesSelecionados = this.mesesUtilizados.filter(e => e.filtrar == true)
+  
+            this.ajustarEstabs()
+            this.ajustarCategs()
+            this.ajustarMeses()
+            this.ajustarOrigs()
+            this.ajustarOrcamentos()
+          }
+  
+      })
+    })
+    }
  
 
   ngOnInit(): void {
-    this.getMovimentacoes('')
+    //this.getMovimentacoes('')
+    if(this._localStorage.get('userLoggedId') !== null){
+      this.user = this._localStorage.get('userLoggedId')
+      this.getMovimentacoesTeste('')
+     }
     
   }
 

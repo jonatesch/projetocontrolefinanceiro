@@ -3,6 +3,8 @@ import { NgbDateStruct, NgbCalendar, NgbInputDatepickerConfig, NgbDateParserForm
 import { WixApiService } from '../servico-teste.service';
 import { CustomDateParserFormatter } from '../dateformat';
 
+import { LocalStorageService } from '../local-storage.service';
+
 @Component({
   selector: 'nova-movimentacao',
   templateUrl: './nova-movimentacao.component.html',
@@ -13,7 +15,7 @@ import { CustomDateParserFormatter } from '../dateformat';
 })
 export class NovaMovimentacaoComponent implements OnInit {
 
-  constructor(private calendar:NgbCalendar, config: NgbInputDatepickerConfig, private _wixApiService:WixApiService) { 
+  constructor(private calendar:NgbCalendar, config: NgbInputDatepickerConfig, private _wixApiService:WixApiService, private _localStorage:LocalStorageService) { 
     config.autoClose = "outside"
     _wixApiService.teste$.subscribe(algo => {
       if(algo == 'categoria') {this.getCategorias()}
@@ -61,7 +63,8 @@ export class NovaMovimentacaoComponent implements OnInit {
     'orcamento': '',
     'natureza': 'D',
     'efetuada': true,
-    'parcela': ''
+    'parcela': '',
+    'proprietario': ''
   }
 
   validationCounter:number =  Object.values(this.novaMovimentacao).filter(e => e == 0 || e == 'selecione' || e == null).length - 1
@@ -129,14 +132,20 @@ export class NovaMovimentacaoComponent implements OnInit {
   }
 
   getOrigens() {
-    this._wixApiService.getOrigens().then(data => {
+    /* this._wixApiService.getOrigens().then(data => {
+      this.origensRegistradas = data
+    }) */
+    this._wixApiService.getOrigensFromUser(this.novaMovimentacao.proprietario).then(data => {
       this.origensRegistradas = data
     })
     
   }
 
   getCategorias() {
-    this._wixApiService.getCategorias().then(data => {
+   /*  this._wixApiService.getCategorias().then(data => {
+      this.categoriasRegistradas = data
+    }) */
+    this._wixApiService.getCategoriasFromUser(this.novaMovimentacao.proprietario).then(data => {
       this.categoriasRegistradas = data
     })
   }
@@ -295,9 +304,15 @@ export class NovaMovimentacaoComponent implements OnInit {
  
 
   ngOnInit(): void {
+    if(this._localStorage.get('userLoggedId') !== null) {
+      let userLoggedId = JSON.stringify(this._localStorage.get('userLoggedId'))
+      this.novaMovimentacao.proprietario = JSON.parse(userLoggedId)
+      this.getCategorias()
+    }    
+
     this.setarMeses()
     this.getOrigens()
-    this.getCategorias()
+    //this.getCategorias()
     this.getOrcamentos()
   }
 

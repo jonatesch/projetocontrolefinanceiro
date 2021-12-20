@@ -29,6 +29,7 @@
     padding: 9px 16px;
     text-decoration: none;
     color: #00b4c5;
+    cursor: pointer;
 }
 
 .actionlink-label {
@@ -118,3 +119,15 @@
     color: white;
 }
 
+.loginForm {
+    display: flex;
+}
+
+.hidden {
+    display: none;
+}
+
+.loginForm-inputs {
+    height: 65%;
+    margin: auto 0;
+}

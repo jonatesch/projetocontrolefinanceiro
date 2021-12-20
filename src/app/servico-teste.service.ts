@@ -24,7 +24,39 @@ export class WixApiService {
     }
   //////////////////////
 
-  
+
+  private loginSource = new Subject<string>();
+  logou$ = this.loginSource.asObservable();
+
+  logouUser(dados:any) {
+    this.loginSource.next(dados)
+  }
+
+  loginWixMembers(dados:any) {
+    let url = 'https://www.jonathanspinelli.com/_functions/logarFromExternal'
+    let info = JSON.stringify(dados)
+
+    return this.http.post(url,info).toPromise().then(resposta => {
+      return resposta
+    })
+  }
+
+
+  logarWix() {
+    let url = 'https://www.jonathanspinelli.com/_functions/logar'
+    let mensagem = "oi"
+    return this.http.post(url,JSON.stringify(mensagem)).toPromise().then(resposta => {
+      return resposta
+    })
+  }
+
+  logarWixDois() {
+    let url = 'https://www.jonathanspinelli.com/_functions/logarDois'
+    let mensagem = "oi"
+    return this.http.post(url,JSON.stringify(mensagem)).toPromise().then(resposta => {
+      return resposta
+    })
+  }
 
 
 
@@ -98,6 +130,22 @@ export class WixApiService {
     })
   }
 
+  getCategoriasFromUser(dados:any) {
+    let url = 'https://www.jonathanspinelli.com/_functions/categoriasFromUser'
+    let info = JSON.stringify(dados)
+    return this.http.post(url, info).toPromise().then((data:any) => {
+      return data
+    })
+  }
+
+  getOrigensFromUser(dados:any) {
+    let url = 'https://www.jonathanspinelli.com/_functions/origensFromUser'
+    let info = JSON.stringify(dados)
+    return this.http.post(url, info).toPromise().then((data:any) => {
+      return data
+    })
+  }
+
   getOrigens() {
     let url = 'https://www.jonathanspinelli.com/_functions/origens'
     return this.http.get(url).toPromise().then((data:any) => {
@@ -133,6 +181,15 @@ export class WixApiService {
     })
   }
 
+  getMovimentacoesFromUser(dados:any) { 
+    let url = 'https://www.jonathanspinelli.com/_functions/movimentacoesFromUser'
+    let user = JSON.stringify(dados)
+    return this.http.post(url,user).toPromise().then((data:any) => {
+      console.log(data)
+      return data
+    })
+  }
+
   novaMovimentacao(novaMovimentacao:any) {
     let url = 'https://www.jonathanspinelli.com/_functions/novaMovimentacao'
     let dados = JSON.stringify(novaMovimentacao)
@@ -149,27 +206,57 @@ export class WixApiService {
     })
   }
 
+  adicionarCategoriaToUser(novaCategoria:any){
+    let url = 'https://www.jonathanspinelli.com/_functions/adicionarCategoriaToUser'
+    let dados = JSON.stringify(novaCategoria)
+    return this.http.post(url,dados).toPromise().then((data:any) => {
+      if(data.criouNovaCategoria) {
+        let url = 'https://www.jonathanspinelli.com/_functions/adicionarUserToCategoria'
+        let dados = {"userId":novaCategoria.proprietario, "categoriaInserida": data.categoriaInserida._id}
+        let enviar = JSON.stringify(dados)
+        return this.http.post(url,enviar).toPromise().then((dataFinal:any) => {
+          return {resultado:data, resposta:dataFinal.resposta}
+        })
+      } else {
+        return data
+      }
+    })
+  }
+
   excluirCategoria(categoria:object){
     let url = 'https://www.jonathanspinelli.com/_functions/excluirCategoria'
+    let url2 = 'https://www.jonathanspinelli.com/_functions/excluirCategoriaFromUser'
     let dados = JSON.stringify(categoria)
-    return this.http.post(url,dados).toPromise().then((data:any) => {
+    return this.http.post(url2,dados).toPromise().then((data:any) => {
       return data
     })
   }
 
   excluirOrigem(origem:object) {
     let url = 'https://www.jonathanspinelli.com/_functions/excluirOrigem'
+    let url2 = 'https://www.jonathanspinelli.com/_functions/excluirOrigemFromUser'
     let dados = JSON.stringify(origem)
-    return this.http.post(url,dados).toPromise().then((data:any) => {
+    return this.http.post(url2,dados).toPromise().then((data:any) => {
       return data
     })
   }
 
-  adicionarOrigem(novaOrigem:object) {
+  adicionarOrigem(novaOrigem:any) {
     let url = 'https://www.jonathanspinelli.com/_functions/adicionarOrigem'
+    let url2 = 'https://www.jonathanspinelli.com/_functions/adicionarOrigemToUser'
     let dados = JSON.stringify(novaOrigem)
-    return this.http.post(url,dados).toPromise().then((data) => {
-      return data
+    return this.http.post(url2,dados).toPromise().then((data:any) => {
+      if(data.criouNovaOrigem) {
+        let url = 'https://www.jonathanspinelli.com/_functions/adicionarUserToOrigem'
+        let dados = {"userId":novaOrigem.proprietario, "origemInserida":data.origemInserida._id}
+        let enviar = JSON.stringify(dados)
+        console.log(dados)
+        return this.http.post(url,enviar).toPromise().then((dataFinal:any) => {
+          return {resultado:data, resultadoFinal:dataFinal.resposta}
+        })
+      } else {
+        return data
+      }
     })
   }
 
