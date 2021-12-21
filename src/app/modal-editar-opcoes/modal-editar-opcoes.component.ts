@@ -43,6 +43,9 @@ export class ModalEditarOpcoesComponent implements OnInit {
   novaOrigem = {"title": "","cartaoDeCredito":false, "proprietario":''}
 
   iconesArray:any[] = []
+
+  enviandoCategoria:boolean = false
+  enviandoOrigem:boolean = false
   
   getIcones() {
     this._wixApiService.getIcones().then((data) => {
@@ -108,10 +111,12 @@ export class ModalEditarOpcoesComponent implements OnInit {
       if(this.origens.map(e => e.title).includes(this.novaOrigem.title)) {
         this.toastr.error("","já existe uma origem " + this.novaOrigem.title,{positionClass:"toast-top-center"})
       } else {
+        this.enviandoOrigem = true
         let userLoggedId = JSON.stringify(this._localStorage.get('userLoggedId'))
         this.novaOrigem.proprietario = JSON.parse(userLoggedId)
         this._wixApiService.adicionarOrigem(this.novaOrigem).then((data:any) => {
           this.getOrigensTeste()
+          this.enviandoOrigem = false
           this.novaOrigemInput.nativeElement.value = ''
           this._wixApiService.opcoesAtualizadas('origem')
           
@@ -151,6 +156,7 @@ export class ModalEditarOpcoesComponent implements OnInit {
       if(this.categorias.map(e => e.title).includes(this.novaCategoria.title)) {
         this.toastr.error("","já existe uma categoria " + this.novaCategoria.title,{positionClass:"toast-top-center"})
       } else {
+        this.enviandoCategoria = true
         let userLoggedId = JSON.stringify(this._localStorage.get('userLoggedId'))
         this.novaCategoria.proprietario = JSON.parse(userLoggedId)
        
@@ -159,6 +165,7 @@ export class ModalEditarOpcoesComponent implements OnInit {
          // console.log(data)
           this.getCategoriasTeste()
           this.toastr.success("","categoria " + this.novaCategoria.title + " inserida", {positionClass:"toast-top-center"})
+          this.enviandoCategoria = false
           this.novaCategoria.title = ''
           this._wixApiService.opcoesAtualizadas('categoria')
 

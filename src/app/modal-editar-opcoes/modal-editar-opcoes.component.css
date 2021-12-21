@@ -48,3 +48,9 @@ li:hover {
     background-color: orange;
     border-color: orange;
 }
+
+.spinner-enviando-opcoes {
+    width: 40px;
+    text-align: center;
+    padding-top: 8px;
+}
