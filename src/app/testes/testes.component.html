@@ -27,3 +27,12 @@
     <p>{{email}}</p>
     <p>Qtde de movimentações: {{qtde}}</p>
 </div>
+
+<div>
+    <select name="" id="">
+        <optgroup *ngFor="let jord of temp" [label]="jord.um">
+          <option *ngFor="let ttt of jord.dois" [selected]="ttt.numero == 5"> {{ ttt.numero}}   </option>  
+        </optgroup>
+        
+    </select>
+</div>

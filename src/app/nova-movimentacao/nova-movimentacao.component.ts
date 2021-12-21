@@ -53,7 +53,7 @@ export class NovaMovimentacaoComponent implements OnInit {
 
   novaMovimentacao = {
     'date': new Date(''),
-    'mesRef':0,
+    'mesRef':1,
     'anoRef':1,
     'estabelecimentoPrestador':'',
     'descricao':'',
@@ -64,14 +64,20 @@ export class NovaMovimentacaoComponent implements OnInit {
     'natureza': 'D',
     'efetuada': true,
     'parcela': '',
-    'proprietario': ''
+    'proprietario': 'empty'
   }
 
   validationCounter:number =  Object.values(this.novaMovimentacao).filter(e => e == 0 || e == 'selecione' || e == null).length - 1
 
   enviandoNovaMov:boolean = false
 
- 
+  mesRefAtual = 202112
+ setarMesAtual() {
+  let hoje = this.calendar.getToday()
+  this.mesRefAtual = parseFloat('' + hoje.year + hoje.month)
+  console.log(this.mesRefAtual)
+
+ }
 
   anos:any[]
 
@@ -105,6 +111,7 @@ export class NovaMovimentacaoComponent implements OnInit {
         }
        
       })
+      console.log(this.mesesDeReferenciaFormatados)
     })
    /*  this.anos = this._wixApiService.removerIguaisEclassificar(this.mesesDeReferencia.map(e => e.codigoMesRef.toString().substring(0,4)))
   
@@ -308,10 +315,11 @@ export class NovaMovimentacaoComponent implements OnInit {
       let userLoggedId = JSON.stringify(this._localStorage.get('userLoggedId'))
       this.novaMovimentacao.proprietario = JSON.parse(userLoggedId)
       this.getCategorias()
+      this.getOrigens()
     }    
-
+    this.setarMesAtual()
     this.setarMeses()
-    this.getOrigens()
+    
     //this.getCategorias()
     this.getOrcamentos()
   }

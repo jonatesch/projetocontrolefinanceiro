@@ -71,6 +71,15 @@ export class TestesComponent implements OnInit {
     }
   ]
 
+  temp = [
+    {um:'um',
+    dois:[{numero: 1}, {numero: 2}, {numero: 3}, {numero: 4}],
+    },
+    {um:'dois',
+    dois:[{numero: 5}, {numero: 6}, {numero: 7}, {numero: 8}],
+    }
+  ]
+
   constructor(private _wixApiService:WixApiService) { 
     _wixApiService.logou$.subscribe((dados:any) => {
       if(dados.details){
