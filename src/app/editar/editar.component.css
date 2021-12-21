@@ -139,7 +139,7 @@
 
 .status-original::after {
     content: '*';
-    color: dodgerblue;
+    color: #fd820d;
 }
 
 /* .form-control:focus {

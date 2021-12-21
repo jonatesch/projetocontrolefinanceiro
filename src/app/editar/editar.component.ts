@@ -2,6 +2,7 @@ import { Component, OnInit, Output, ViewChild, EventEmitter } from '@angular/cor
 import { NgbDateStruct, NgbCalendar, NgbInputDatepickerConfig, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { CustomDateParserFormatter } from '../dateformat';
 import { WixApiService } from '../servico-teste.service';
+import { LocalStorageService } from '../local-storage.service';
 
 @Component({
   selector: 'app-editar',
@@ -21,7 +22,8 @@ export class EditarComponent implements OnInit {
   constructor(
     private calendar:NgbCalendar, 
     config: NgbInputDatepickerConfig, 
-    private _wixApiService:WixApiService) { config.autoClose = "outside" }
+    private _wixApiService:WixApiService,
+    private _localStorage:LocalStorageService) { config.autoClose = "outside" }
 
   @ViewChild('d') datepicker:any
   @ViewChild('parcela') parcelaInput: any
@@ -47,13 +49,13 @@ export class EditarComponent implements OnInit {
   dateModel:NgbDateStruct
 
   getOrigens() {
-    this._wixApiService.getOrigens().then(data => {
+    this._wixApiService.getOrigensFromUser(this._localStorage.get('userLoggedId')).then(data => {
       this.origensRegistradas = data
     })
   }
 
   getCategorias() {
-    this._wixApiService.getCategorias().then(data => {
+    this._wixApiService.getCategoriasFromUser(this._localStorage.get('userLoggedId')).then(data => {
       this.categoriasRegistradas = data
     })
   }

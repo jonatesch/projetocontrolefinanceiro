@@ -297,9 +297,9 @@ export class TabelaMovimentacoesComponent implements OnInit {
       this.modalRef = this.modalService.open(EditarComponent, {centered: true, windowClass: 'myCustomModalClass2'})
       this.modalRef.componentInstance.movimentacao = this.movimentacoes[indice]
       this.modalRef.componentInstance.editouMovimentacao.subscribe(() => {
-        this.filtrosComponent.getMovimentacoes('exclusao')
+        this.filtrosComponent.getMovimentacoesTeste('exclusao')
         this.limparFiltros()
-        this.getMovimentacoes()
+        this.getMovimentacoesTeste()
 
         this.modalRef?.close()
         
