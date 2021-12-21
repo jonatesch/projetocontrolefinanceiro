@@ -46,6 +46,9 @@ export class ModalEditarOpcoesComponent implements OnInit {
 
   enviandoCategoria:boolean = false
   enviandoOrigem:boolean = false
+
+  carregandoOrigens:boolean = false
+  carregandoCategorias:boolean = false
   
   getIcones() {
     this._wixApiService.getIcones().then((data) => {
@@ -64,9 +67,12 @@ export class ModalEditarOpcoesComponent implements OnInit {
  userId:any = ''
 
  getCategoriasTeste() : void {
+   this.carregandoCategorias = true
   this._wixApiService.getCategoriasFromUser(this.userId).then((data) => {
+    this.carregandoCategorias = false
     this.categorias = data
     this.atualizouCategorias.emit(this.categorias)
+    
   })
 
 }
@@ -79,7 +85,9 @@ export class ModalEditarOpcoesComponent implements OnInit {
  } 
 
  getOrigensTeste() : void {
+   this.carregandoOrigens = true
   this._wixApiService.getOrigensFromUser(this.userId).then((data) => {
+    this.carregandoOrigens = false
     this.origens = data
     this.atualizouOrigens.emit(this.origens)
   })

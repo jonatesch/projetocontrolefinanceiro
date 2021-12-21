@@ -24,6 +24,10 @@
                         <span class="spinner-border spinner-border-sm"></span>  
                     </div>
                </div>
+
+                <div *ngIf="carregandoCategorias" style="text-align: center;">
+                    <span class="spinner-border spinner-border-sm"></span>  
+                </div>
             
                 <ul class="list-group">
                 <li #liCategorias class="list-group-item opcoes" 
@@ -59,7 +63,9 @@
                 </label>
             </div>
 
-
+            <div *ngIf="carregandoOrigens" style="text-align: center;">
+                <span class="spinner-border spinner-border-sm"></span>  
+            </div>
 
             <ul class="list-group">
                 <li #liOrigens class="list-group-item opcoes" 
