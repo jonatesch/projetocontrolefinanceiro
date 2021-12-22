@@ -77,6 +77,9 @@ export class NovaMovimentacaoComponent implements OnInit {
   this.mesRefAtual = parseFloat('' + hoje.year + hoje.month)
   console.log(this.mesRefAtual)
 
+  this.novaMovimentacao.mesRef = this.mesRefAtual
+  this.novaMovimentacao.anoRef = parseFloat(this.mesRefAtual.toString().substring(0,4))
+
  }
 
   anos:any[]
@@ -232,8 +235,8 @@ export class NovaMovimentacaoComponent implements OnInit {
   }
 
   setarMesRef(evento:any) {
-    this.novaMovimentacao.mesRef = parseFloat(evento)
-    this.novaMovimentacao.anoRef = parseFloat(evento.substring(0,4))
+    this.novaMovimentacao.mesRef = parseFloat(evento.target.value)
+    this.novaMovimentacao.anoRef = parseFloat(evento.target.value.substring(0,4))
     this.validacao()
   }
 

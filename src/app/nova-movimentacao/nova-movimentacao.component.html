@@ -30,7 +30,7 @@
             <div class="col novamov-cols">
 
                 <div class="form-floating novamov-cols">
-                    <select #mesRef (ngModelChange)="setarMesRef($event)" class="form-control inputs-nova-mov" name="" id="novamovMesRef" [ngClass]="{'validation-warning':mesRef.value == '0'}">
+                    <select #mesRef (change)="setarMesRef($event)" class="form-control inputs-nova-mov" name="" id="novamovMesRef" [ngClass]="{'validation-warning':mesRef.value == '0'}">
                        <!-- <option selected hidden disabled value="0">selecione</option> -->
                         <optgroup *ngFor="let anos of mesesDeReferenciaFormatados" [label]="anos.ano">   
                             <option *ngFor="let mes of anos.meses" [value]="mes.codigo" [selected]="mes.codigo == mesRefAtual"> {{ mes.rotulo }} </option>
