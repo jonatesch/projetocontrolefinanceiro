@@ -81,6 +81,11 @@ registerLocaleData(localePt);
   ],
   providers: [{provide: LOCALE_ID, useValue: 'pt-BR'}],
   bootstrap: [AppComponent],
-  entryComponents:[ModalEditarOpcoesComponent, ConfirmarExclusaoComponent, ConfirmarExclusaoTodasComponent, EditarComponent]
+  entryComponents:[
+    ModalEditarOpcoesComponent, 
+    ConfirmarExclusaoComponent, 
+    ConfirmarExclusaoTodasComponent, 
+    EditarComponent, 
+    MarcarEfetuadasComponent]
 })
 export class AppModule { }
