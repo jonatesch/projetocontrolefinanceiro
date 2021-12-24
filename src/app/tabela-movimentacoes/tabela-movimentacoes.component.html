@@ -129,6 +129,8 @@
         <div class="col-1 col-icones" ><i *ngIf="!esconderLixeira[i]" (click)="confirmarExclusao(i)" class="fas fa-trash lixeira" ngbTooltip="excluir movimentação" [ngClass]="{'hidden':modoEdicao}"></i></div>
     </div>
 
+    <p *ngIf="movimentacoes.length == 0 && !carregandoMovimentacoes">Nenhuma movimentação encontrada.</p>
+
 
     <!-- PAGINAÇÃO: -->
     <div class="pagination">
