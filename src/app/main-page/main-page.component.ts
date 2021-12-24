@@ -5,6 +5,7 @@ import { WixApiService } from '../servico-teste.service';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { LocalStorageService } from '../local-storage.service';
+import { ToastrService } from 'ngx-toastr';
 
 
 
@@ -17,7 +18,7 @@ export class MainPageComponent implements OnInit {
 
   @ViewChild('sb') sidebar:any
 
-  constructor(private elementRef:ElementRef, private modalService:NgbModal, private _wix:WixApiService, private router:Router, private http:HttpClient, private _localStorage:LocalStorageService) {
+  constructor(private elementRef:ElementRef, private modalService:NgbModal, private _wix:WixApiService, private router:Router, private http:HttpClient, private _localStorage:LocalStorageService, private toastr:ToastrService) {
     _wix.teste$.subscribe(algo => {
       if(algo == 'movimentacoesComponent') {
         this.ativar(1)
@@ -56,9 +57,10 @@ export class MainPageComponent implements OnInit {
       this.logando = true
       
       this._wix.loginWixMembers(this.userForLogin).then((res:any) => {
-        //console.log(res)
+        console.log(res)
         if(res.details) {
           this.logando = false
+          this.toastr.error("","usuário e/ou senha incorretos", {positionClass:'toast-top-center'})
         } else {
           this.router.navigate(['/paginaprincipal/movimentacoes'])
           this.linkAtivo[1] = true
