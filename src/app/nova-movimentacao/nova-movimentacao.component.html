@@ -43,7 +43,7 @@
 
             <div class="col novamov-cols">
                 <div class="form-floating novamov-cols">
-                    <select #origem [ngModel]="novaMovimentacao.origem" (ngModelChange)="setarOrigem($event)" class="form-control inputs-nova-mov" name="" id="novamovOrigem" [ngClass]="{'validation-warning':origem.value == 'selecione'}">
+                    <select #origem [ngModel]="novaMovimentacao.origem" (click)="dicaSeVazio('Origem')" (ngModelChange)="setarOrigem($event)" class="form-control inputs-nova-mov" name="" id="novamovOrigem" [ngClass]="{'validation-warning':origem.value == 'selecione'}">
                         <option selected disabled hidden value="selecione">selecione</option>
                         <option *ngFor="let origem of origensRegistradas" [value]="origem._id"> {{ origem.title }} </option>
                     </select>
@@ -54,7 +54,7 @@
 
             <div class="col novamov-cols">
                 <div class="form-floating novamov-cols">
-                    <select #categoria [(ngModel)]="novaMovimentacao.categoria" (ngModelChange)="setarCategoria($event)" class="form-control inputs-nova-mov" name="" id="novamovCategoria" [ngClass]="{'validation-warning':categoria.value == 'selecione'}">
+                    <select #categoria [(ngModel)]="novaMovimentacao.categoria" (ngModelChange)="setarCategoria($event)" (click)="dicaSeVazio('Categoria')" class="form-control inputs-nova-mov" name="" id="novamovCategoria" [ngClass]="{'validation-warning':categoria.value == 'selecione'}">
                         <option selected disabled hidden value="selecione">selecione</option>
                         <option *ngFor="let categ of categoriasRegistradas" [value]="categ._id"> {{ categ.title }} </option>
                     </select>

@@ -5,6 +5,9 @@ import { CustomDateParserFormatter } from '../dateformat';
 
 import { LocalStorageService } from '../local-storage.service';
 
+import { DicasComponent } from '../dicas/dicas.component';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+
 @Component({
   selector: 'nova-movimentacao',
   templateUrl: './nova-movimentacao.component.html',
@@ -15,7 +18,7 @@ import { LocalStorageService } from '../local-storage.service';
 })
 export class NovaMovimentacaoComponent implements OnInit {
 
-  constructor(private calendar:NgbCalendar, config: NgbInputDatepickerConfig, private _wixApiService:WixApiService, private _localStorage:LocalStorageService) { 
+  constructor(private calendar:NgbCalendar, config: NgbInputDatepickerConfig, private _wixApiService:WixApiService, private _localStorage:LocalStorageService, private modalService:NgbModal) { 
     config.autoClose = "outside"
     _wixApiService.teste$.subscribe(algo => {
       if(algo == 'categoria') {this.getCategorias()}
@@ -308,6 +311,26 @@ export class NovaMovimentacaoComponent implements OnInit {
     let descClicada = evento.target.textContent
     this.novaMovimentacao.descricao = descClicada
     this.esconderDescAutocomplete = true
+    
+  }
+
+  modalRef:NgbModalRef | undefined
+
+  dicaSeVazio(data:string) {
+    if(this.origensRegistradas.length == 0 && data == 'Origem') {
+      this.modalRef = this.modalService.open(DicasComponent, {windowClass:'myCustomModalClass'})
+      this.modalRef.componentInstance.campo = data
+      this.modalRef.componentInstance.fecharDicas.subscribe(() => {
+        this.modalRef?.close()
+      })
+    }
+    if(this.categoriasRegistradas.length == 0 && data == 'Categoria') {
+      this.modalRef = this.modalService.open(DicasComponent, {windowClass:'myCustomModalClass'})
+      this.modalRef.componentInstance.campo = data
+      this.modalRef.componentInstance.fecharDicas.subscribe(() => {
+        this.modalRef?.close()
+      })
+    }
     
   }
 

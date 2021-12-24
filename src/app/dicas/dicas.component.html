@@ -1,0 +1,13 @@
+<div class="modal-header">
+    <h5>Dica</h5>
+</div>
+
+<div class="modal-body">
+    <p>Você ainda não possui nenhuma <strong>{{campo}}</strong> registrada.</p>
+    <br>
+    <p>Utilize o menu vertical à esquerda (Editar opções) para adicionar <span *ngIf="campo == 'Categoria'">categorias</span> <span *ngIf="campo == 'Origem'">origens</span>.</p>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-outline-primary" (click)="closeModal()">OK</button>
+</div>

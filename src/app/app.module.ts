@@ -38,7 +38,8 @@ import { ConfirmarExclusaoComponent } from './confirmar-exclusao/confirmar-exclu
 import { EditarComponent } from './editar/editar.component';
 import { TestesComponent } from './testes/testes.component';
 import { EditarOpcoesComponent } from './editar-opcoes/editar-opcoes.component';
-import { LoginComponent } from './login/login.component'
+import { LoginComponent } from './login/login.component';
+import { DicasComponent } from './dicas/dicas.component'
 
 registerLocaleData(localePt);
 
@@ -65,7 +66,8 @@ registerLocaleData(localePt);
     EditarComponent,
     TestesComponent,
     EditarOpcoesComponent,
-    LoginComponent
+    LoginComponent,
+    DicasComponent
  
   ],
   imports: [
@@ -89,7 +91,8 @@ registerLocaleData(localePt);
     ConfirmarExclusaoTodasComponent, 
     EditarComponent, 
     MarcarEfetuadasComponent,
-    LoginComponent
+    LoginComponent,
+    DicasComponent
   ]
 })
 export class AppModule { }
