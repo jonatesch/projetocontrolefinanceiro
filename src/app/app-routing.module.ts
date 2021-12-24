@@ -26,7 +26,8 @@ const routes: Routes = [
     {path: 'testes', component:TestesComponent},
     {path: 'relatoriomensal', component:RelatoriosComponent}
   ]},
-  { path: 'tabelanova', component: TabelaMovimentacoesComponent}
+  { path: 'tabelanova', component: TabelaMovimentacoesComponent},
+  {path: '', component:MainPageComponent}
 ];
 
 @NgModule({
