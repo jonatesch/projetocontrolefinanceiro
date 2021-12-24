@@ -145,15 +145,21 @@ export class NovaMovimentacaoComponent implements OnInit {
   
   }
 
+  carregouOrigens:boolean = false
+
   getOrigens() {
     /* this._wixApiService.getOrigens().then(data => {
       this.origensRegistradas = data
     }) */
+    
     this._wixApiService.getOrigensFromUser(this.novaMovimentacao.proprietario).then(data => {
       this.origensRegistradas = data
+      this.carregouOrigens = true
     })
     
   }
+
+  carregouCategorias:boolean = false
 
   getCategorias() {
    /*  this._wixApiService.getCategorias().then(data => {
@@ -161,6 +167,7 @@ export class NovaMovimentacaoComponent implements OnInit {
     }) */
     this._wixApiService.getCategoriasFromUser(this.novaMovimentacao.proprietario).then(data => {
       this.categoriasRegistradas = data
+      this.carregouCategorias = true
     })
   }
 
@@ -318,7 +325,7 @@ export class NovaMovimentacaoComponent implements OnInit {
   modalRef:NgbModalRef | undefined
 
   dicaSeVazio(data:string) {
-    if(this.origensRegistradas.length == 0 && data == 'Origem') {
+    if(this.carregouOrigens && this.origensRegistradas.length == 0 && data == 'Origem') {
       this.modalRef = this.modalService.open(DicasComponent, {windowClass:'myCustomModalClass'})
       this.modalRef.componentInstance.campo = data
       this.modalRef.componentInstance.fecharDicas.subscribe((info:string) => {
@@ -328,7 +335,7 @@ export class NovaMovimentacaoComponent implements OnInit {
         }
       })
     }
-    if(this.categoriasRegistradas.length == 0 && data == 'Categoria') {
+    if(this.carregouCategorias && this.categoriasRegistradas.length == 0 && data == 'Categoria') {
       this.modalRef = this.modalService.open(DicasComponent, {windowClass:'myCustomModalClass'})
       this.modalRef.componentInstance.campo = data
       this.modalRef.componentInstance.fecharDicas.subscribe((info:string) => {
