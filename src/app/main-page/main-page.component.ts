@@ -58,6 +58,7 @@ export class MainPageComponent implements OnInit {
           this.logando = false
         } else {
           this.router.navigate(['/paginaprincipal/movimentacoes'])
+          this.linkAtivo[1] = true
           this.logando = false
           setTimeout(() => {
           this._wix.logouUser({user: res.user, movs: res.movs})
