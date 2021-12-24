@@ -15,7 +15,12 @@ export class DicasComponent implements OnInit {
   constructor() { }
 
   closeModal() {
-    this.fecharDicas.emit()
+    this.fecharDicas.emit('')
+  }
+
+  redirect_modalEditarOpcoes() {
+    this.fecharDicas.emit('redirect')
+
   }
 
   ngOnInit(): void {

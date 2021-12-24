@@ -7,6 +7,7 @@ import { LocalStorageService } from '../local-storage.service';
 
 import { DicasComponent } from '../dicas/dicas.component';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ModalEditarOpcoesComponent } from '../modal-editar-opcoes/modal-editar-opcoes.component';
 
 @Component({
   selector: 'nova-movimentacao',
@@ -320,15 +321,21 @@ export class NovaMovimentacaoComponent implements OnInit {
     if(this.origensRegistradas.length == 0 && data == 'Origem') {
       this.modalRef = this.modalService.open(DicasComponent, {windowClass:'myCustomModalClass'})
       this.modalRef.componentInstance.campo = data
-      this.modalRef.componentInstance.fecharDicas.subscribe(() => {
+      this.modalRef.componentInstance.fecharDicas.subscribe((info:string) => {
         this.modalRef?.close()
+        if(info == 'redirect'){
+          this.modalService.open(ModalEditarOpcoesComponent, {windowClass:'myCustomModalClass'})
+        }
       })
     }
     if(this.categoriasRegistradas.length == 0 && data == 'Categoria') {
       this.modalRef = this.modalService.open(DicasComponent, {windowClass:'myCustomModalClass'})
       this.modalRef.componentInstance.campo = data
-      this.modalRef.componentInstance.fecharDicas.subscribe(() => {
+      this.modalRef.componentInstance.fecharDicas.subscribe((info:string) => {
         this.modalRef?.close()
+        if(info == 'redirect'){
+          this.modalService.open(ModalEditarOpcoesComponent, {windowClass:'myCustomModalClass'})
+        }
       })
     }
     
