@@ -17,10 +17,8 @@ const routes: Routes = [
   { path: 'tabela', component: TabelaComponent },
   { path: 'relatoriosmensais', component: RelatoriosMensaisComponent},
   { path: 'relatoriomensal', component: RelatorioMensalComponent},
-  { path: 'editaropcoes', component: ModalEditarOpcoesComponent},
   { path: 'paginaprincipal', component: MainPageComponent, children:[
     {path: 'tabela', component:TabelaComponent},
-    {path: 'editaropcoes', component: EditarOpcoesComponent},
     {path: 'relatoriomensalantigo', component: RelatorioMensalComponent},
     {path: 'movimentacoes', component:TabelaMovimentacoesComponent},
     {path: 'enviarcsv', component: InserirCsvComponent},

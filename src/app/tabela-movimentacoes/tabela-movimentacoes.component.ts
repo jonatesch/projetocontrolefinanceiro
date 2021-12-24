@@ -11,6 +11,8 @@ import { ConfirmarExclusaoTodasComponent } from '../confirmar-exclusao-todas/con
 import { MarcarEfetuadasComponent } from '../marcar-efetuadas/marcar-efetuadas.component';
 import { LocalStorageService } from '../local-storage.service';
 
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-tabela-movimentacoes',
   templateUrl: './tabela-movimentacoes.component.html',
@@ -104,7 +106,7 @@ export class TabelaMovimentacoesComponent implements OnInit {
 
   userId:any = ''
 
-  constructor(private _WixApiService:WixApiService, private modalService: NgbModal, private clipboardService:ClipboardService, private toastr:ToastrService, private _localStorage:LocalStorageService) { 
+  constructor(private _WixApiService:WixApiService, private modalService: NgbModal, private clipboardService:ClipboardService, private toastr:ToastrService, private _localStorage:LocalStorageService, private router:Router) { 
     _WixApiService.logou$.subscribe((dados:any) => {
       //this.movimentacoes = dados.movs
       this.userId = dados.user.contactId
@@ -400,8 +402,8 @@ export class TabelaMovimentacoesComponent implements OnInit {
    if(this._localStorage.get('userLoggedId') !== null){
     this.userId = this._localStorage.get('userLoggedId')
     this.getMovimentacoesTeste()
-     
-
+   } else {
+     this.router.navigate(['/paginaprincipal'])
    }
    
    

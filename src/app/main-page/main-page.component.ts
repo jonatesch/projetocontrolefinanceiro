@@ -89,6 +89,7 @@ export class MainPageComponent implements OnInit {
     this.router.navigate(['/paginaprincipal'])
     this.userIsLogged = false
     this.loginEsconder = true
+    this.usuario = ''
   }
 
   logarWix() {
