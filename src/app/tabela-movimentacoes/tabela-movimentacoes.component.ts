@@ -380,8 +380,8 @@ export class TabelaMovimentacoesComponent implements OnInit {
     let naoEfetuadas = this.movimentacoes.filter(e => e.efetuada == false)
     this.modalRef.componentInstance.movsNaoEfetuadas = naoEfetuadas
     this.modalRef.componentInstance.atualizouEfetuadas.subscribe(() => {
-      this.getMovimentacoes()
-      this.filtrosComponent.getMovimentacoes()
+      this.getMovimentacoesTeste()
+      this.filtrosComponent.getMovimentacoesTeste()
       this.filtrosComponent.ajustarCategs()
       this.filtrosComponent.ajustarEstabs()
       this.filtrosComponent.ajustarMeses()
