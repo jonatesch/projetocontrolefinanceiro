@@ -119,6 +119,12 @@ export class MainPageComponent implements OnInit {
     })
   }
 
+  limparSidebar(){
+    for(var i = 0; i < this.linkAtivo.length; i++) {
+      this.linkAtivo[i] = false
+    }
+  }
+
   ngOnInit(): void {
     if(this._localStorage.get('userLoggedId') !== null){
       this.userIsLogged = true
