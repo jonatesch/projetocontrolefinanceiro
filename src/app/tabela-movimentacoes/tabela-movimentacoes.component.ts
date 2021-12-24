@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild, ViewChildren } from '@angular/core';
+import { Component, Output, OnInit, ViewChild, ViewChildren, EventEmitter } from '@angular/core';
 import { WixApiService } from '../servico-teste.service';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmarExclusaoComponent } from '../confirmar-exclusao/confirmar-exclusao.component';
@@ -20,7 +20,7 @@ import { Router } from '@angular/router';
 })
 export class TabelaMovimentacoesComponent implements OnInit {
 
-
+  
 
   @ViewChild(FiltrosComponent) filtrosComponent:any;
   @ViewChild(NovaMovimentacaoComponent) novamovComponent:any;
@@ -401,6 +401,7 @@ export class TabelaMovimentacoesComponent implements OnInit {
 
    if(this._localStorage.get('userLoggedId') !== null){
     this.userId = this._localStorage.get('userLoggedId')
+    this._WixApiService.abriuMovimentacoesComponent()
     this.getMovimentacoesTeste()
    } else {
      this.router.navigate(['/paginaprincipal'])

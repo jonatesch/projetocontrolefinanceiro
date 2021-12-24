@@ -32,6 +32,18 @@ export class WixApiService {
     this.loginSource.next(dados)
   }
 
+
+
+////OBSERVABLE PARA a MainPage marcar o sidebar se entrar direto na pagina de movimentações (quando logado)  
+ private abriuMovimentacoesSource = new Subject<string>();
+ abriuMovs$ = this.abriuMovimentacoesSource.asObservable();
+
+ abriuMovimentacoesComponent(){
+   this.abriuMovimentacoesSource.next()
+ }
+/////////////////////////////////
+
+
   loginWixMembers(dados:any) {
     let url = 'https://www.jonathanspinelli.com/_functions/logarFromExternal'
     let info = JSON.stringify(dados)

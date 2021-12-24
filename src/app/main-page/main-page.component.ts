@@ -23,6 +23,9 @@ export class MainPageComponent implements OnInit {
         this.ativar(1)
       }
     })
+    _wix.abriuMovs$.subscribe(data => {
+      this.linkAtivo[1] = true
+    })
    }
 
   ativar(indice:number) {
