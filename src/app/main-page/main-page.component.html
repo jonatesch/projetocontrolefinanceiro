@@ -23,10 +23,11 @@
             <div class="loginForm" *ngIf="userIsLogged == false" [ngClass]="{'hidden':loginEsconder}">
                 <input class="loginForm-inputs" type="text" placeholder="email" [(ngModel)]="userForLogin.email">
                 <input class="loginForm-inputs" type="password" placeholder="senha" [(ngModel)]="userForLogin.senha">
-                <button class="loginForm-inputs" (click)="logarWixMembers()">enviar</button>
+                <button class="loginForm-inputs loginForm-envio" (click)="logarWixMembers()"> <span *ngIf="!logando">enviar</span> <span *ngIf="logando" class="spinner-border spinner-border-sm"></span> </button>
             </div>
             <a *ngIf="userIsLogged" disabled class="actionlink">{{usuario}}</a>
             <a *ngIf="userIsLogged" disabled class="actionlink" (click)="deslogarWixMembers()">sair</a>
+                   
             
             
         </div>

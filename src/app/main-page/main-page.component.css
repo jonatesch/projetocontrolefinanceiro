@@ -129,5 +129,18 @@
 
 .loginForm-inputs {
     height: 65%;
-    margin: auto 0;
+    margin: auto 3px;
+    border-radius: 5px;
+    border: 1px solid darkgray;
+    padding: 5px;
+
+}
+
+.loginForm-envio {
+    width: 70px;
+}
+
+.loginForm-envio:hover {
+    background-color: #00b4c5;
+    color: white;
 }

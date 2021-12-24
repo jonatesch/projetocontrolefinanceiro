@@ -37,7 +37,8 @@ import { NovaMovimentacaoComponent } from './nova-movimentacao/nova-movimentacao
 import { ConfirmarExclusaoComponent } from './confirmar-exclusao/confirmar-exclusao.component';
 import { EditarComponent } from './editar/editar.component';
 import { TestesComponent } from './testes/testes.component';
-import { EditarOpcoesComponent } from './editar-opcoes/editar-opcoes.component'
+import { EditarOpcoesComponent } from './editar-opcoes/editar-opcoes.component';
+import { LoginComponent } from './login/login.component'
 
 registerLocaleData(localePt);
 
@@ -63,7 +64,8 @@ registerLocaleData(localePt);
     ConfirmarExclusaoComponent,
     EditarComponent,
     TestesComponent,
-    EditarOpcoesComponent
+    EditarOpcoesComponent,
+    LoginComponent
  
   ],
   imports: [
@@ -86,6 +88,8 @@ registerLocaleData(localePt);
     ConfirmarExclusaoComponent, 
     ConfirmarExclusaoTodasComponent, 
     EditarComponent, 
-    MarcarEfetuadasComponent]
+    MarcarEfetuadasComponent,
+    LoginComponent
+  ]
 })
 export class AppModule { }

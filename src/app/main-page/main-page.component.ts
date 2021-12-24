@@ -42,19 +42,23 @@ export class MainPageComponent implements OnInit {
   userIsLogged:boolean = false
   usuario:string = ''
 
+  logando:boolean = false
+
   openModalOpcoes() {
     this.modalService.open(ModalEditarOpcoesComponent, {windowClass:'myCustomModalClass'})
   }
 
   logarWixMembers() {
     if(this.userForLogin.senha !== '' && this.userForLogin.email !== '') {
+      this.logando = true
       
       this._wix.loginWixMembers(this.userForLogin).then((res:any) => {
         //console.log(res)
         if(res.details) {
-
+          this.logando = false
         } else {
           this.router.navigate(['/paginaprincipal/movimentacoes'])
+          this.logando = false
           setTimeout(() => {
           this._wix.logouUser({user: res.user, movs: res.movs})
           })
