@@ -110,7 +110,7 @@ export class TabelaMovimentacoesComponent implements OnInit {
     _WixApiService.logou$.subscribe((dados:any) => {
       //this.movimentacoes = dados.movs
       this.userId = dados.user.contactId
-      this.getMovimentacoesTeste()
+      this.getMovimentacoesTeste('')
     })
   }
 
@@ -192,10 +192,13 @@ export class TabelaMovimentacoesComponent implements OnInit {
     })
   }
 
-  getMovimentacoesTeste() {
+  getMovimentacoesTeste(comando:string) {
     this.carregandoMovimentacoes = true
     this._WixApiService.getMovimentacoesFromUser(this.userId).then(data => {
       this.movimentacoes = data
+      if(comando == 'filtrar'){
+        this.filtrosComponent.filtrarTabela()
+      }
       this.movimentacoes.forEach(() => {
       })
       this.descricoes = this._WixApiService.removerIguaisEclassificar(this.movimentacoes.map(e => e.descricao)) 
@@ -273,7 +276,7 @@ export class TabelaMovimentacoesComponent implements OnInit {
         this.carregandoExclusao = false
         this.modalRef?.close()
         this.filtrosComponent.getMovimentacoesTeste('exclusao')
-        this.getMovimentacoesTeste()
+        this.getMovimentacoesTeste('')
 
       })
     })
@@ -301,7 +304,7 @@ export class TabelaMovimentacoesComponent implements OnInit {
       this.modalRef.componentInstance.editouMovimentacao.subscribe(() => {
         this.filtrosComponent.getMovimentacoesTeste('exclusao')
         this.limparFiltros()
-        this.getMovimentacoesTeste()
+        this.getMovimentacoesTeste('')
 
         this.modalRef?.close()
         
@@ -348,10 +351,10 @@ export class TabelaMovimentacoesComponent implements OnInit {
       this.salvandoEdicoes = false
       this.edicaoPendente = false
       this.modoEdicao = false
-     /*  movimentacoes.forEach((mov) => {
+      movimentacoes.forEach((mov) => {
         mov.pendente = false
-      }) */
-      this.getMovimentacoes()
+      })
+      this.getMovimentacoesTeste('filtrar')     
     })
   }
 
@@ -363,7 +366,7 @@ export class TabelaMovimentacoesComponent implements OnInit {
     })
     this.modalRef.componentInstance.exclusoesRealizadas.subscribe((data:any) => {
       
-      this.getMovimentacoesTeste()
+      this.getMovimentacoesTeste('')
       this.filtrosComponent.getMovimentacoesTeste()
       this.filtrosComponent.ajustarCategs()
       this.filtrosComponent.ajustarEstabs()
@@ -382,7 +385,7 @@ export class TabelaMovimentacoesComponent implements OnInit {
     let naoEfetuadas = this.movimentacoes.filter(e => e.efetuada == false)
     this.modalRef.componentInstance.movsNaoEfetuadas = naoEfetuadas
     this.modalRef.componentInstance.atualizouEfetuadas.subscribe(() => {
-      this.getMovimentacoesTeste()
+      this.getMovimentacoesTeste('')
       this.filtrosComponent.getMovimentacoesTeste()
       this.filtrosComponent.ajustarCategs()
       this.filtrosComponent.ajustarEstabs()
@@ -402,7 +405,7 @@ export class TabelaMovimentacoesComponent implements OnInit {
    if(this._localStorage.get('userLoggedId') !== null){
     this.userId = this._localStorage.get('userLoggedId')
     this._WixApiService.abriuMovimentacoesComponent()
-    this.getMovimentacoesTeste()
+    this.getMovimentacoesTeste('')
    } else {
      this.router.navigate(['/paginaprincipal'])
    }
