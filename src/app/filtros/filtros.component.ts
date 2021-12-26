@@ -569,8 +569,11 @@ export class FiltrosComponent implements OnInit {
             this.ajustarOrigs()
             this.ajustarOrcamentos()
             
-            let categoriaIndex = this.categoriasUtilizadas.map(e => e._id).indexOf(this.categoriasUtilizadas.filter(e => e._id == dadosNovaMov.categoria)[0]._id)
-            this.setarFiltro_Categoria(categoriaIndex)
+            /* let categoriaIndex = this.categoriasUtilizadas.map(e => e._id).indexOf(this.categoriasUtilizadas.filter(e => e._id == dadosNovaMov.categoria)[0]._id)
+            this.setarFiltro_Categoria(categoriaIndex) */
+
+            let origemIndex:number = this.origensUtilizadas.map(e => e._id).indexOf(this.origensUtilizadas.filter(e => e._id == dadosNovaMov.origem)[0]._id)
+            this.setarFiltro_Origem(origemIndex)
   
             let mesRefIndex = this.mesesUtilizados.map(e => e.codigoMesRef).indexOf(dadosNovaMov.mesRef)
             this.setarFiltro_Meses(mesRefIndex)
