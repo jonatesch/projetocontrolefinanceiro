@@ -12,6 +12,7 @@ import { MarcarEfetuadasComponent } from '../marcar-efetuadas/marcar-efetuadas.c
 import { LocalStorageService } from '../local-storage.service';
 
 import { Router } from '@angular/router';
+import { ModalAguardarComponent } from '../modal-aguardar/modal-aguardar.component';
 
 @Component({
   selector: 'app-tabela-movimentacoes',
@@ -110,7 +111,7 @@ export class TabelaMovimentacoesComponent implements OnInit {
     _WixApiService.logou$.subscribe((dados:any) => {
       //this.movimentacoes = dados.movs
       this.userId = dados.user.contactId
-      this.getMovimentacoesTeste('')
+      this.getMovimentacoesTeste('','')
     })
   }
 
@@ -192,12 +193,18 @@ export class TabelaMovimentacoesComponent implements OnInit {
     })
   }
 
-  getMovimentacoesTeste(comando:string) {
+  getMovimentacoesTeste(comando:string, atualizadas:any) {
     this.carregandoMovimentacoes = true
     this._WixApiService.getMovimentacoesFromUser(this.userId).then(data => {
       this.movimentacoes = data
       if(comando == 'filtrar'){
-        this.filtrosComponent.filtrarTabela()
+        let dados = {
+          mesesSelecionados: atualizadas[0].mesRef,
+          origensSelecionadas: atualizadas[0].origem,
+        }
+
+
+        this.filtrosComponent.getMovimentacoesTeste('atualizar',dados)
       }
       this.movimentacoes.forEach(() => {
       })
@@ -275,8 +282,9 @@ export class TabelaMovimentacoesComponent implements OnInit {
       this._WixApiService.excluirMovimentacao(id).then((data) => {
         this.carregandoExclusao = false
         this.modalRef?.close()
-        this.filtrosComponent.getMovimentacoesTeste('exclusao')
-        this.getMovimentacoesTeste('')
+        this.filtrosComponent.getMovimentacoesTeste('exclusao','')
+        this.getMovimentacoesTeste('','')
+        this.limparFiltros()
 
       })
     })
@@ -286,7 +294,7 @@ export class TabelaMovimentacoesComponent implements OnInit {
   //quando emitido o evento 'novaMovimentacaoInserida' pela NovaMovimentacaoComponent:
   teste(evento:any) {
     this.limparFiltros()
-    this.filtrosComponent.getMovimentacoesTeste(evento)
+    this.filtrosComponent.getMovimentacoesTeste(evento,'')
     
   }
 
@@ -302,9 +310,9 @@ export class TabelaMovimentacoesComponent implements OnInit {
       this.modalRef = this.modalService.open(EditarComponent, {centered: true, windowClass: 'myCustomModalClass2'})
       this.modalRef.componentInstance.movimentacao = this.movimentacoes[indice]
       this.modalRef.componentInstance.editouMovimentacao.subscribe(() => {
-        this.filtrosComponent.getMovimentacoesTeste('exclusao')
+        this.filtrosComponent.getMovimentacoesTeste('exclusao','')
         this.limparFiltros()
-        this.getMovimentacoesTeste('')
+        this.getMovimentacoesTeste('','')
 
         this.modalRef?.close()
         
@@ -324,7 +332,7 @@ export class TabelaMovimentacoesComponent implements OnInit {
     this.movimentacoes.filter(e => e.pendente == true).forEach((mov) => {
       delete mov.pendente
     })
-    this.getMovimentacoesTeste('filtrar')
+    this.getMovimentacoesTeste('filtrar','')
     this.edicaoPendente = false
     this.modoEdicao = false
     
@@ -348,14 +356,20 @@ export class TabelaMovimentacoesComponent implements OnInit {
     let movimentacoes = this.movimentacoes.filter(e => e.pendente == true)
 
     this._WixApiService.atualizarMovimentacoes(movimentacoes).then((data) => {
+      //console.log(data)
       this.salvandoEdicoes = false
+      this.modalRef = this.modalService.open(ModalAguardarComponent,{centered:true, backdrop:'static'})
       this.edicaoPendente = false
       this.modoEdicao = false
       movimentacoes.forEach((mov) => {
         mov.pendente = false
       })
-      this.getMovimentacoesTeste('filtrar')     
+      this.getMovimentacoesTeste('filtrar',movimentacoes)     
     })
+  }
+
+  fecharAguarde(){
+    this.modalRef?.close()
   }
 
   openModal_Exclusao() {
@@ -366,8 +380,8 @@ export class TabelaMovimentacoesComponent implements OnInit {
     })
     this.modalRef.componentInstance.exclusoesRealizadas.subscribe((data:any) => {
       
-      this.getMovimentacoesTeste('')
-      this.filtrosComponent.getMovimentacoesTeste()
+      this.getMovimentacoesTeste('','')
+      this.filtrosComponent.getMovimentacoesTeste('','')
       this.filtrosComponent.ajustarCategs()
       this.filtrosComponent.ajustarEstabs()
       this.filtrosComponent.ajustarMeses()
@@ -385,8 +399,8 @@ export class TabelaMovimentacoesComponent implements OnInit {
     let naoEfetuadas = this.movimentacoes.filter(e => e.efetuada == false)
     this.modalRef.componentInstance.movsNaoEfetuadas = naoEfetuadas
     this.modalRef.componentInstance.atualizouEfetuadas.subscribe(() => {
-      this.getMovimentacoesTeste('')
-      this.filtrosComponent.getMovimentacoesTeste()
+      this.getMovimentacoesTeste('','')
+      this.filtrosComponent.getMovimentacoesTeste('','')
       this.filtrosComponent.ajustarCategs()
       this.filtrosComponent.ajustarEstabs()
       this.filtrosComponent.ajustarMeses()
@@ -401,11 +415,10 @@ export class TabelaMovimentacoesComponent implements OnInit {
   ngOnInit(): void {
    //this._WixApiService.opcoesAtualizadas('movimentacoesComponent')
    // this.getMovimentacoes()
-
    if(this._localStorage.get('userLoggedId') !== null){
     this.userId = this._localStorage.get('userLoggedId')
     this._WixApiService.abriuMovimentacoesComponent()
-    this.getMovimentacoesTeste('')
+    this.getMovimentacoesTeste('','')
    } else {
      this.router.navigate(['/paginaprincipal'])
    }

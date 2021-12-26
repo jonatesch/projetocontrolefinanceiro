@@ -14,6 +14,7 @@ export class FiltrosComponent implements OnInit {
   @Input() dadosNovaMovimentacao: {}
   @Output() done:EventEmitter<any> = new EventEmitter()
   @Output() setouFiltro:EventEmitter<any> = new EventEmitter()
+  @Output() fecharAguarde:EventEmitter<any> = new EventEmitter()
 
 
   constructor(private _WixApiService:WixApiService, private _localStorage:LocalStorageService) {
@@ -21,7 +22,7 @@ export class FiltrosComponent implements OnInit {
       console.log(dados)
       this.user = dados.user.contactId
       console.log(this.user)
-      this.getMovimentacoesTeste('')
+      this.getMovimentacoesTeste('','')
     })
    }
 
@@ -492,7 +493,7 @@ export class FiltrosComponent implements OnInit {
 
   user:any = ''
 
-  getMovimentacoesTeste(dadosNovaMov:any) {
+  getMovimentacoesTeste(dadosNovaMov:any, filtros:any) {
     this._WixApiService.getMovimentacoesFromUser(this.user).then(data => {
      
       //SETAR VARIÁVEL LOCAL COM TODAS AS MOVIMENTAÇÕES QUE VIERAM DO BANCO DE DADOS:
@@ -550,7 +551,7 @@ export class FiltrosComponent implements OnInit {
           //this.ativados_Meses.push(false) // e inserir um 'false' no array de meses ativados para cada item no mesesUtilizados
          // this.temCoisa_Meses.push(false)
         })
-          if(dadosNovaMov !== '' && dadosNovaMov !== 'exclusao') {
+          if(dadosNovaMov !== '' && dadosNovaMov !== 'exclusao' && dadosNovaMov !== 'atualizar') {
             this.estabelecimentosUtilizados.forEach(estab => estab.filtrar = false)
             this.filtro_estabelecimentosSelecionados = this.estabelecimentosUtilizados.filter(e => e.filtrar == true)
   
@@ -572,11 +573,11 @@ export class FiltrosComponent implements OnInit {
             /* let categoriaIndex = this.categoriasUtilizadas.map(e => e._id).indexOf(this.categoriasUtilizadas.filter(e => e._id == dadosNovaMov.categoria)[0]._id)
             this.setarFiltro_Categoria(categoriaIndex) */
 
-            let origemIndex:number = this.origensUtilizadas.map(e => e._id).indexOf(this.origensUtilizadas.filter(e => e._id == dadosNovaMov.origem)[0]._id)
-            this.setarFiltro_Origem(origemIndex)
-  
             let mesRefIndex = this.mesesUtilizados.map(e => e.codigoMesRef).indexOf(dadosNovaMov.mesRef)
             this.setarFiltro_Meses(mesRefIndex)
+
+            let origemIndex:number = this.origensUtilizadas.map(e => e._id).indexOf(this.origensUtilizadas.filter(e => e._id == dadosNovaMov.origem)[0]._id)
+            this.setarFiltro_Origem(origemIndex)
   
             this.filtrarTabela()
             this.done.emit()
@@ -604,6 +605,43 @@ export class FiltrosComponent implements OnInit {
             this.ajustarOrigs()
             this.ajustarOrcamentos()
           }
+
+          if(dadosNovaMov == 'atualizar'){
+            console.log(filtros)            
+
+            this.mesesUtilizados.forEach(mes => {
+              if(filtros.mesesSelecionados == mes.codigoMesRef) {
+                mes.filtrar = true
+              } else {
+                mes.filtrar = false
+              }
+            })
+
+            this.origensUtilizadas.forEach(origem => {
+              if(filtros.origensSelecionadas.title == origem.title) {
+                origem.filtrar = true
+              } else {
+                origem.filtrar = false
+              }
+            })
+
+            this.filtro_mesesSelecionados = this.mesesUtilizados.filter(e => e.filtrar == true)
+            this.filtro_origensSelecionadas = this.origensUtilizadas.filter(e => e.filtrar == true)
+
+            this.filtrarTabela()
+
+            this.ajustarMeses()
+            this.ajustarOrigs()
+
+            let filtrosTags = {origens:this.filtro_origensSelecionadas, meses:this.filtro_mesesSelecionados, categorias:'', estabelecimentos:'', orcamentos:''}
+
+            this.setouFiltro.emit(filtrosTags)
+
+            this.fecharAguarde.emit()
+            
+           
+
+          }
   
       })
     })
@@ -614,7 +652,7 @@ export class FiltrosComponent implements OnInit {
     //this.getMovimentacoes('')
     if(this._localStorage.get('userLoggedId') !== null){
       this.user = this._localStorage.get('userLoggedId')
-      this.getMovimentacoesTeste('')
+      this.getMovimentacoesTeste('','')
      }
     
   }
