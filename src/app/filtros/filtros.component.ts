@@ -632,6 +632,7 @@ export class FiltrosComponent implements OnInit {
 
             this.ajustarMeses()
             this.ajustarOrigs()
+            this.ajustarEstabs()
 
             let filtrosTags = {origens:this.filtro_origensSelecionadas, meses:this.filtro_mesesSelecionados, categorias:'', estabelecimentos:'', orcamentos:''}
 
