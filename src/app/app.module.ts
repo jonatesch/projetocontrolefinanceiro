@@ -94,7 +94,8 @@ registerLocaleData(localePt);
     EditarComponent, 
     MarcarEfetuadasComponent,
     LoginComponent,
-    DicasComponent
+    DicasComponent,
+    RecuperarSenhaComponent
   ]
 })
 export class AppModule { }
