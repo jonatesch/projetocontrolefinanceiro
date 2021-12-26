@@ -19,7 +19,10 @@
                 <i class="fas fas fa-id-card"></i>
                 <span class="actionlink-label">MINHAS MOVIMENTAÇÕES</span>
             </a> -->
-            <a *ngIf="userIsLogged == false" disabled class="actionlink" (click)="loginEsconder = !loginEsconder">entrar</a>
+
+
+            <!-- <a *ngIf="userIsLogged == false" disabled class="actionlink" (click)="loginEsconder = !loginEsconder">entrar</a> -->
+            <a *ngIf="userIsLogged == false" disabled class="actionlink" routerLink="/paginaprincipal/login">entrar</a>
             <div class="loginForm" *ngIf="userIsLogged == false" [ngClass]="{'hidden':loginEsconder}">
                 <input class="loginForm-inputs" type="text" placeholder="email" [(ngModel)]="userForLogin.email">
                 <input class="loginForm-inputs" type="password" placeholder="senha" [(ngModel)]="userForLogin.senha">

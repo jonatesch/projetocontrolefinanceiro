@@ -39,7 +39,8 @@ import { EditarComponent } from './editar/editar.component';
 import { TestesComponent } from './testes/testes.component';
 import { EditarOpcoesComponent } from './editar-opcoes/editar-opcoes.component';
 import { LoginComponent } from './login/login.component';
-import { DicasComponent } from './dicas/dicas.component'
+import { DicasComponent } from './dicas/dicas.component';
+import { RecuperarSenhaComponent } from './recuperar-senha/recuperar-senha.component'
 
 registerLocaleData(localePt);
 
@@ -67,7 +68,8 @@ registerLocaleData(localePt);
     TestesComponent,
     EditarOpcoesComponent,
     LoginComponent,
-    DicasComponent
+    DicasComponent,
+    RecuperarSenhaComponent
  
   ],
   imports: [

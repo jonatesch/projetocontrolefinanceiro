@@ -1,0 +1,102 @@
+.container {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    min-height: 50vh;
+    margin-left: -70px;
+}
+
+.login-cols {
+    width: 30%;
+    background-color: white;
+    padding: 20px;
+    margin: 0 10px;
+}
+
+.titles {
+    text-align: center;
+}
+
+.login-inputs {
+    width: 100%;
+    margin-bottom: 10px;
+    border: 1px solid lightgray;
+    border-radius: 6px;
+    padding: 4px;
+}
+
+.entrar-button {
+    width: 100%;
+    background-color: #00b4c5;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    height: 40px;
+}
+
+.disabled {
+    background-color: #00b5c552;
+    color: rgb(255, 255, 255);
+}
+
+.info-icon {
+    padding-top: 9px;
+    font-size: 18px;
+}
+
+.shake-it {
+    animation: shake 0.5s;
+    animation-iteration-count: 1;
+}
+
+.info-container {
+    position: absolute ;
+    display: flex;
+    background-color: white;
+    top: 52px;
+    left: 70%;
+    padding: 10px;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.hidden {
+    display: none;
+}
+
+.info-close-icon {
+    text-align: right;
+    margin: 0;
+    padding: 2px 4px;
+}
+
+.info-close-icon:hover {
+    background-color: lightgray;
+}
+
+@keyframes shake {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    10% { transform: translate(-1px, -2px) rotate(-1deg); }
+    20% { transform: translate(-3px, 0px) rotate(1deg); }
+    30% { transform: translate(3px, 2px) rotate(0deg); }
+    40% { transform: translate(1px, -1px) rotate(1deg); }
+    50% { transform: translate(-1px, 2px) rotate(-1deg); }
+    60% { transform: translate(-3px, 1px) rotate(0deg); }
+    70% { transform: translate(3px, 1px) rotate(-1deg); }
+    80% { transform: translate(-1px, -1px) rotate(1deg); }
+    90% { transform: translate(1px, 2px) rotate(0deg); }
+    100% { transform: translate(1px, -2px) rotate(-1deg); }
+  }
+
+  .recupera-senha {
+      font-size: 13px;
+      text-align: right;
+      margin-top: 10px;
+      color: rgb(83, 83, 83);
+      cursor: pointer;
+  }
+
+  .recupera-senha:hover {
+      text-decoration: underline;
+  }

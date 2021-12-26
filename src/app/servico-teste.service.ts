@@ -70,6 +70,21 @@ export class WixApiService {
     })
   }
 
+  
+  registerWixMember(dados:any) {
+    let url = 'https://www.jonathanspinelli.com/_functions/registerWixMember'
+    return this.http.post(url,JSON.stringify(dados)).toPromise().then(resposta => {
+      return resposta
+    })
+  }
+
+  verifyLoginEmail(email:string) {
+    let url = 'https://www.jonathanspinelli.com/_functions/verifyLoginEmail'
+    return this.http.post(url, JSON.stringify(email)).toPromise().then(resposta => {
+      return resposta
+    })
+
+  }
 
 
   removerIguaisEclassificar(array:any[]) {
@@ -197,7 +212,7 @@ export class WixApiService {
     let url = 'https://www.jonathanspinelli.com/_functions/movimentacoesFromUser'
     let user = JSON.stringify(dados)
     return this.http.post(url,user).toPromise().then((data:any) => {
-      console.log(data)
+      //console.log(data)
       return data
     })
   }
@@ -262,7 +277,7 @@ export class WixApiService {
         let url = 'https://www.jonathanspinelli.com/_functions/adicionarUserToOrigem'
         let dados = {"userId":novaOrigem.proprietario, "origemInserida":data.origemInserida._id}
         let enviar = JSON.stringify(dados)
-        console.log(dados)
+        //console.log(dados)
         return this.http.post(url,enviar).toPromise().then((dataFinal:any) => {
           return {resultado:data, resultadoFinal:dataFinal.resposta}
         })

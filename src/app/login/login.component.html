@@ -1,1 +1,55 @@
-<p>login works!</p>
+
+<div class="container" [ngClass]="{'hidden':redirectingAfterRegistration}">
+    <div class="login-cols">
+        <h3 class="titles">Já tenho conta</h3>
+
+
+        <input [(ngModel)]="userForLogin.email" class="login-inputs" type="text" placeholder="email">
+
+        <input [(ngModel)]="userForLogin.senha" class="login-inputs" type="password" placeholder="senha">
+
+        <button class="entrar-button" (click)="logarWixMembers()"> <span *ngIf="!logando">entrar</span> <span *ngIf="logando" class="spinner-border"></span> </button>
+   
+        <p class="recupera-senha" (click)="openRecuperarSenha()">esqueci minha senha</p>
+    </div>
+
+    <div class="login-cols">
+
+        <div style="display: flex; justify-content: space-evenly;">
+           <h3 class="titles">Quero me cadastrar</h3> <i class="fas fa-info-circle info-icon" [ngClass]="{'shake-it':shakeInfo}" (click)="hideInfo = !hideInfo"></i> 
+
+           <div class="info-container" [ngClass]="{'hidden':hideInfo,'shake-it':shakeInfo }">
+               <div style="margin-top: 10px;">
+                    <p>Email deve ter formato válido</p>
+                    <p>Senha deve ter ao menos 4 caracteres</p>
+               </div>
+               <div>
+                    <p class="info-close-icon" (click)="hideInfo = true"><i class="fas fa-times"></i></p>   
+               </div>
+           
+            
+           </div>
+
+        </div>
+        
+
+        <input [(ngModel)]="userForRegistration.name" class="login-inputs" type="text" placeholder="nome completo" (keyup)="validation()">
+
+        <input [(ngModel)]="userForRegistration.email" class="login-inputs" type="text" placeholder="email" (keyup)="validation()">
+
+        <input [(ngModel)]="userForRegistration.senha" class="login-inputs" type="password" placeholder="senha" (keyup)="validation()">
+
+        <button class="entrar-button" (click)="registerWixMember()" [disabled]="disableRegisterButton" [ngClass]="{'disabled':disableRegisterButton}"> <span *ngIf="!registrando">criar conta</span> <span *ngIf="registrando" class="spinner-border"></span> </button>
+    
+        
+    
+    </div>
+</div>
+
+
+<div *ngIf="redirectingAfterRegistration">
+    <h5>estamos logando e redirecionando para sua página de movimentações . . .</h5>
+    <div>
+        <span class="spinner-border"></span>
+    </div>
+</div>

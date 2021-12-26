@@ -27,6 +27,10 @@ export class MainPageComponent implements OnInit {
     _wix.abriuMovs$.subscribe(data => {
       this.linkAtivo[1] = true
     })
+    _wix.logou$.subscribe((data:any) => {
+      this.usuario = data.user.firstName
+      this.userIsLogged = true
+    })
    }
 
   ativar(indice:number) {
@@ -57,7 +61,7 @@ export class MainPageComponent implements OnInit {
       this.logando = true
       
       this._wix.loginWixMembers(this.userForLogin).then((res:any) => {
-        console.log(res)
+        //console.log(res)
         if(res.details) {
           this.logando = false
           this.toastr.error("","usuário e/ou senha incorretos", {positionClass:'toast-top-center'})
