@@ -324,7 +324,7 @@ export class TabelaMovimentacoesComponent implements OnInit {
     this.movimentacoes.filter(e => e.pendente == true).forEach((mov) => {
       delete mov.pendente
     })
-    this.getMovimentacoes()
+    this.getMovimentacoesTeste('filtrar')
     this.edicaoPendente = false
     this.modoEdicao = false
     
