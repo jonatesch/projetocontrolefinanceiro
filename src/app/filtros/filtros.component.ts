@@ -573,6 +573,7 @@ export class FiltrosComponent implements OnInit {
             /* let categoriaIndex = this.categoriasUtilizadas.map(e => e._id).indexOf(this.categoriasUtilizadas.filter(e => e._id == dadosNovaMov.categoria)[0]._id)
             this.setarFiltro_Categoria(categoriaIndex) */
 
+            console.log(dadosNovaMov)
             let mesRefIndex = this.mesesUtilizados.map(e => e.codigoMesRef).indexOf(dadosNovaMov.mesRef)
             this.setarFiltro_Meses(mesRefIndex)
 
@@ -581,6 +582,8 @@ export class FiltrosComponent implements OnInit {
   
             this.filtrarTabela()
             this.done.emit()
+
+            this.fecharAguarde.emit()
           }
   
           if(dadosNovaMov == 'exclusao') {
@@ -607,9 +610,11 @@ export class FiltrosComponent implements OnInit {
           }
 
           if(dadosNovaMov == 'atualizar'){
-            console.log(filtros)            
+            console.log(filtros)   
+            
+            
 
-            this.mesesUtilizados.forEach(mes => {
+           /*  this.mesesUtilizados.forEach(mes => {
               if(filtros.mesesSelecionados == mes.codigoMesRef) {
                 mes.filtrar = true
               } else {
@@ -638,7 +643,7 @@ export class FiltrosComponent implements OnInit {
 
             this.setouFiltro.emit(filtrosTags)
 
-            this.fecharAguarde.emit()
+            this.fecharAguarde.emit() */
             
            
 

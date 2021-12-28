@@ -203,8 +203,10 @@ export class TabelaMovimentacoesComponent implements OnInit {
           origensSelecionadas: atualizadas[0].origem,
         }
 
+        atualizadas[0].origem = atualizadas[0].origem._id
 
-        this.filtrosComponent.getMovimentacoesTeste('atualizar',dados)
+
+        this.filtrosComponent.getMovimentacoesTeste(atualizadas[0],dados)
       }
       this.movimentacoes.forEach(() => {
       })
