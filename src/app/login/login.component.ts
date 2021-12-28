@@ -61,12 +61,19 @@ export class LoginComponent implements OnInit {
 
   disableRegisterButton:boolean = true
 
-  validation() {
-    if(this.userForRegistration.senha.length > 3 && this.userForRegistration.name !== '' && this.userForRegistration.email !== ''){
+  validation(campo:string) {
+    if(this.userForRegistration.senha.length > 3 && this.userForRegistration.name !== '' && this.userForRegistration.email !== '' && this.userForRegistration.senha.match(/^\w+$/) !== null){
       this.disableRegisterButton = false
     } else {
       this.disableRegisterButton = true
     }
+    if(campo == 'senha') {
+      if(this.userForRegistration.senha.match(/^\w+$/) == null){
+      this.hideInfo = false
+      this.shakeInfo = true
+    }
+    }
+    
   }
 
   shakeInfo:boolean = false
