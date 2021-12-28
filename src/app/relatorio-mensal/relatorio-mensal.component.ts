@@ -1,6 +1,8 @@
-import { Component, OnInit, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, ViewChildren } from '@angular/core';
 
 import { WixApiService } from '../servico-teste.service';
+
+import { LocalStorageService } from '../local-storage.service';
 
 @Component({
   selector: 'app-relatorio-mensal',
@@ -27,7 +29,7 @@ export class RelatorioMensalComponent implements OnInit {
 
   carregandoMeses:boolean = true
 
-  constructor(private _WixApiService:WixApiService) { }
+  constructor(private _WixApiService:WixApiService, private _localStorage:LocalStorageService) { }
 
   removerDuplicatas(arr:any[]) {
     return arr.reduce((p, c) => {
@@ -69,7 +71,7 @@ export class RelatorioMensalComponent implements OnInit {
   }
 
   getMovimentacoes() {
-    this._WixApiService.getMovimentacoes().then(movimentacoes => {
+    this._WixApiService.getMovimentacoesFromUser(this._localStorage.get('userLoggedId')).then(movimentacoes => {
       this.movimentacoes = movimentacoes
      this.categoriasDebitos = this.removerDuplicatas(this.movimentacoes.filter(mov => mov.natureza == "D").map(e => e.categoria))
      this.categoriasCreditos = this.removerDuplicatas(this.movimentacoes.filter(mov => mov.natureza == "C").map(e => e.categoria))
@@ -94,7 +96,7 @@ export class RelatorioMensalComponent implements OnInit {
   }
 
   getResumosMensais() {
-    this._WixApiService.setarResumosMensais().then(retorno => {
+    this._WixApiService.setarResumosMensais(this._localStorage.get('userLoggedId')).then(retorno => {
       this.resumosMensais = retorno
       console.log(retorno)
       this.carregandoMeses = false

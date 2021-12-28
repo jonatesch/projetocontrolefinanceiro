@@ -327,8 +327,8 @@ export class WixApiService {
     })
   }
 
-  setarResumosMensais() {
-    return this.getMovimentacoes().then(movimentacoesRegistradas => {
+  setarResumosMensais(userId:any) {
+    return this.getMovimentacoesFromUser(userId).then(movimentacoesRegistradas => {
       return this.getMesesDeReferencia().then(mesesDeRef => {
         let mesesDeReferencia:any[] = mesesDeRef.items
         let movimentacoes:any[] = movimentacoesRegistradas

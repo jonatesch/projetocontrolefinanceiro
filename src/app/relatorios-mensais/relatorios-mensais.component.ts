@@ -148,6 +148,7 @@ export class RelatoriosMensaisComponent implements OnInit {
   ngOnInit(): void {
     console.log(this.images)
    this.setarResumosMensais().then(retorno => {
+     console.log(retorno)
     this.meses.forEach((mes) => {
       this.categoriasDebitos.forEach((item) => {
         this.isCollapsed.push(true)

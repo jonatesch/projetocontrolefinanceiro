@@ -19,7 +19,7 @@ export class RelatoriosComponent {
   constructor(private _wix: WixApiService) { }
    
   getResumosMensais() {
-    this._wix.setarResumosMensais().then(data => {
+    this._wix.setarResumosMensais('').then(data => {
       this.resumosMensais = data
 
       this.resumosMensais.forEach(mes => {

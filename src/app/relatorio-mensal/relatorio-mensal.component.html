@@ -27,7 +27,7 @@
     <div class="row" style="height: 90%; margin: 0;">
         
 
-        <div #testanders class="col" *ngFor="let mes of mesesSelecionados;  let a = index" style="height: 100%; overflow-y: auto;">
+        <div #testanders class="col" *ngFor="let mes of mesesSelecionados;  let a = index" style="height: 100%; overflow-y: auto;" [ngClass]="{'centralizar':mesesSelecionados.length == 1}">
             
             <div *ngFor="let resumo of resumosMensais;">
                     
