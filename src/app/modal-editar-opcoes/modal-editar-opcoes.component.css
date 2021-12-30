@@ -54,3 +54,27 @@ li:hover {
     text-align: center;
     padding-top: 8px;
 }
+
+.linha {
+    border-bottom: 1px solid rgb(219, 219, 219);
+    max-width: 50%;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+
+.infos-new-user {
+    margin: 20px auto;
+    width: 80%;
+    padding: 20px;
+    background-color: #00b4c50f;
+    border-radius: 11px;
+    border: 1px solid #00b4c5;
+}
+
+.infos-new-user p {
+    font-size: 14px;
+}
+
+.infos-new-user ul {
+    font-size: 14px;
+}

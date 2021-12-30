@@ -71,6 +71,8 @@
 
             <p style="font-size: 13px;" *ngIf="!carregandoOrigens && origens.length == 0">Não há origens registradas.</p>
 
+    
+
             <ul class="list-group">
                 <li #liOrigens class="list-group-item opcoes" 
                     *ngFor="let orig of origens; let i = index"
@@ -81,6 +83,34 @@
             <span class="verde" #mensagemOrigemExcluida></span><span class="vermelho" #mensagemOrigemErro></span>
         </div>
 
+    </div>
+    
+    <div class="linha" *ngIf="!carregandoCategorias && (categorias.length == 0 || origens.length == 0)"></div>
+    
+    <div *ngIf="!carregandoCategorias && (categorias.length == 0 || origens.length == 0)" class="infos-new-user">
+        
+        
+        <br>
+       <p><i class="fas fa-info-circle"></i> Utilize as caixas de entrada acima para adicionar suas primeiras <strong>Categorias</strong> e <strong>Origens</strong>.</p> 
+
+       <br>
+
+       <p><strong>Categorias</strong> são "etiquetas" para separar as movimentações em diferentes grupos, tais como:</p>
+       <ul>
+            <li>Mercado</li>
+            <li>Compras</li>
+            <li>Saúde</li>
+            <li>Casa</li>
+       </ul>
+
+       <p><strong>Origens</strong> identificam <span style="text-decoration: underline;">onde</span> a movimentação ocorreu (contas bancárias ou outros), tais como:</p>
+       <ul>
+           <li>Banco do Brasil</li>
+           <li>Nubank</li>
+           <li>Itaú</li>
+           <li>Espécie</li>
+           <li>Previsão</li>
+       </ul>
     </div>
 
 </div>
