@@ -78,7 +78,8 @@ export class NovaMovimentacaoComponent implements OnInit {
   mesRefAtual = 202112
  setarMesAtual() {
   let hoje = this.calendar.getToday()
-  this.mesRefAtual = parseFloat('' + hoje.year + hoje.month)
+  console.log(hoje)
+  this.mesRefAtual = parseFloat('' + hoje.year + hoje.month.toLocaleString('pt-BR',{minimumIntegerDigits:2}))
   console.log(this.mesRefAtual)
 
   this.novaMovimentacao.mesRef = this.mesRefAtual
