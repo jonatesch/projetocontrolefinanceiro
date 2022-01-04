@@ -306,6 +306,20 @@ export class TabelaMovimentacoesComponent implements OnInit {
     this.escondido = false
   }
 
+  resetMovs(){
+    /* this.limparFiltros()
+    this.filtrosComponent.getMovimentacoesTeste('atualizar','') */
+    this.getMovimentacoesTeste('','')
+    this.filtrosComponent.getMovimentacoesTeste('','')
+    this.filtrosComponent.ajustarCategs()
+    this.filtrosComponent.ajustarEstabs()
+    this.filtrosComponent.ajustarMeses()
+    this.filtrosComponent.ajustarOrcamentos()
+    this.filtrosComponent.ajustarOrigs()
+    this.limparFiltros()
+    this.novamovComponent.enviandoNovaMov = false
+  }
+
   editarMovimentacao(index:number) {
     if(this.modoEdicao) {
       let indice = index + ((this.page -1) * this.pageSize)

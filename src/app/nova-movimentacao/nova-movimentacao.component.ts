@@ -8,6 +8,8 @@ import { LocalStorageService } from '../local-storage.service';
 import { DicasComponent } from '../dicas/dicas.component';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ModalEditarOpcoesComponent } from '../modal-editar-opcoes/modal-editar-opcoes.component';
+import { templateJitUrl } from '@angular/compiler';
+import { isDate } from 'moment';
 
 @Component({
   selector: 'nova-movimentacao',
@@ -30,8 +32,10 @@ export class NovaMovimentacaoComponent implements OnInit {
 
   @ViewChild('d') datepicker:any
   @ViewChild('parcela') parcelaInput: any
+  @ViewChild('totalParcelas') totalParcelas: any
 
-  @Output() novaMovimentacaoInserida: EventEmitter<any> = new EventEmitter()
+  @Output() novasMovimentacoesInseridas: EventEmitter<any> = new EventEmitter();
+  @Output() novaMovimentacaoInserida: EventEmitter<any> = new EventEmitter();
   @Input() estabelecimentos:string[] = []
   estabelecimentosFiltrados:string[] = []
   @Input() descricoes:string[] = []
@@ -71,16 +75,18 @@ export class NovaMovimentacaoComponent implements OnInit {
     'proprietario': 'empty'
   }
 
-  validationCounter:number =  Object.values(this.novaMovimentacao).filter(e => e == 0 || e == 'selecione' || e == null).length - 1
 
+  vazios = [this.novaMovimentacao.origem, this.novaMovimentacao.categoria, this.novaMovimentacao.descricao, this.novaMovimentacao.estabelecimentoPrestador, this.novaMovimentacao.valor]
+  validationCounter:number =  this.vazios.filter(e => e == 'selecione' || e == null || e == '').length
+  
   enviandoNovaMov:boolean = false
 
   mesRefAtual = 202112
  setarMesAtual() {
   let hoje = this.calendar.getToday()
-  console.log(hoje)
+  //console.log(hoje)
   this.mesRefAtual = parseFloat('' + hoje.year + hoje.month.toLocaleString('pt-BR',{minimumIntegerDigits:2}))
-  console.log(this.mesRefAtual)
+  //console.log(this.mesRefAtual)
 
   this.novaMovimentacao.mesRef = this.mesRefAtual
   this.novaMovimentacao.anoRef = parseFloat(this.mesRefAtual.toString().substring(0,4))
@@ -98,6 +104,7 @@ export class NovaMovimentacaoComponent implements OnInit {
   setarMeses() {
     this._wixApiService.getMesesDeReferencia().then(data => {
       this.mesesDeReferencia = data.items
+      //console.log(this.mesesDeReferencia)
       this.anos = this._wixApiService.removerIguaisEclassificar(this.mesesDeReferencia.map(e => e.codigoMesRef.toString().substring(0,4)))
       this.anos.forEach((ano) => {
         this.mesesDeReferenciaFormatados.push(
@@ -119,7 +126,7 @@ export class NovaMovimentacaoComponent implements OnInit {
         }
        
       })
-      console.log(this.mesesDeReferenciaFormatados)
+      //console.log(this.mesesDeReferenciaFormatados)
     })
    /*  this.anos = this._wixApiService.removerIguaisEclassificar(this.mesesDeReferencia.map(e => e.codigoMesRef.toString().substring(0,4)))
   
@@ -212,6 +219,8 @@ export class NovaMovimentacaoComponent implements OnInit {
     if(infoViaBotaoHoje !== '') {
       let date = new Date(infoViaBotaoHoje.year + '/' + infoViaBotaoHoje.month + '/' + infoViaBotaoHoje.day)
       this.novaMovimentacao.date = date
+      //this.setarMultiploEnvio()
+      this.setarMultiploEnvio_Datas()
 
   /*     let mesRef = '' + infoViaBotaoHoje.year + infoViaBotaoHoje.month.toLocaleString('pt-BR',{minimumIntegerDigits:2})
       this.novaMovimentacao.mesRef = parseFloat(mesRef)
@@ -293,20 +302,253 @@ export class NovaMovimentacaoComponent implements OnInit {
  
   enviarNovaMov() {
     this.enviandoNovaMov = true
-    this._wixApiService.novaMovimentacao(this.novaMovimentacao).then(data => {
+    if(this.replicarParcelas){
+      //let teste = {novaMov:this.novaMovimentacao, replicas:this.envioMultiplo}
+      let array:any[] = Object.assign([],this.envioMultiplo)
+      array.push(this.novaMovimentacao)
+      this._wixApiService.novasMovimentacoes(array).then(retorno => {
+        //console.log(retorno)
+        this.novasMovimentacoesInseridas.emit(retorno)
+      })
+
+    } else {
+      this._wixApiService.novaMovimentacao(this.novaMovimentacao).then(data => {
        this.novaMovimentacaoInserida.emit(data.res)
     })
+    }
+    
    
   }
 
+ 
+
+  setarNatureza(evento:any){
+    this.novaMovimentacao.natureza = evento.target.value
+  }
+
+
   validacao() {
-    let vazios:number = Object.values(this.novaMovimentacao).filter(e => e === 0 || e === '' || e == 'selecione' || e == null).length
-    this.validationCounter = vazios
-    if(vazios < 2) {
+    //let vazios:number = Object.values(this.novaMovimentacao).filter(e => e === 0 || e === '' || e == 'selecione' || e == null).length
+    let temp = [this.novaMovimentacao.origem, this.novaMovimentacao.categoria, this.novaMovimentacao.descricao, this.novaMovimentacao.estabelecimentoPrestador, this.novaMovimentacao.valor]
+    let vaziosQtde:number = temp.filter(e => e === '' || e == 'selecione' || e == null).length
+    //console.log(vaziosQtde)
+    this.validationCounter = vaziosQtde
+    if(vaziosQtde < 1) {
       this.disableEnviarButton = false
     } else {
       this.disableEnviarButton = true
     }   
+  }
+
+ envioMultiplo:any[] = []
+ replicarParcelas:boolean = false
+ totalCompraParcelada:number = 0
+
+  setarMultiploEnvio() {
+    this.replicarParcelas = true
+    if(this.novaMovimentacao.parcela !== ''){
+      this.envioMultiplo = []
+      let qtdeParcelas = this.totalParcelas.nativeElement.valueAsNumber
+      let parcelaSelecionada = parseFloat(this.novaMovimentacao.parcela.substring(0,this.novaMovimentacao.parcela.indexOf("/"))) 
+      //console.log("qtdeTotal:", qtdeParcelas, "selecionada:",parcelaSelecionada)
+      let diferenca = qtdeParcelas - parcelaSelecionada + 1
+ 
+      let meses = this.mesesDeReferencia.map(e => e.codigoMesRef)
+      //console.log(meses)
+
+      let isValidDate:boolean = this.novaMovimentacao.date instanceof Date && !isNaN(this.novaMovimentacao.date.valueOf())
+      
+      let tempDate = new Date(this.novaMovimentacao.mesRef.toString().substring(4,6) + '/02/' + this.novaMovimentacao.mesRef.toString().substring(0,4))
+
+      for(var i = 1; i <= diferenca; i++) {
+        
+        let temp:any = {}
+        Object.assign(temp,this.novaMovimentacao)
+        temp.parcela = (parcelaSelecionada + i - 1) + "/" + qtdeParcelas
+        if(i > 1 ){
+          if(isValidDate){
+            let dataNova = new Date(JSON.parse(JSON.stringify(this.novaMovimentacao.date)))
+            dataNova.setMonth(dataNova.getMonth()+(i-1))
+            temp.date = dataNova
+          }
+          
+       /*    if(isValidDate){
+            let dataNova = new Date(JSON.parse(JSON.stringify(this.novaMovimentacao.date)))
+          dataNova.setMonth(dataNova.getMonth()+(i-1))
+          temp.date = dataNova
+          temp.mesRef = parseFloat('' + temp.date.getFullYear().toString() + (temp.date.getMonth()+1).toLocaleString('pt-BR',{minimumIntegerDigits:2}))
+          temp.anoRef = parseFloat(temp.mesRef.toString().substring(0,4))
+          temp.mesRefLabel = temp.date.toLocaleDateString('pt-BR',{month:"long"}).substring(0,1).toUpperCase() + temp.date.toLocaleDateString('pt-BR',{month:"long"}).substring(1,temp.date.toLocaleDateString('pt-BR',{month:"long"}).length)  + "/" + temp.date.getFullYear().toString().substring(2,4)
+
+          } else { */
+           // let tempDate = new Date((parseFloat(temp.mesRef.toString().substring(4,6)) +(i-1)) + '/02' + '/' + temp.mesRef.toString().substring(0,4))
+            let dataNova = new Date(JSON.parse(JSON.stringify(tempDate)))
+            dataNova.setMonth(dataNova.getMonth()+(i-1))
+            temp.mesRef = parseFloat('' + dataNova.getFullYear().toString() + (dataNova.getMonth()+1).toLocaleString('pt-BR',{minimumIntegerDigits:2}))
+            temp.anoRef = parseFloat(temp.mesRef.toString().substring(0,4))
+            temp.mesRefLabel = dataNova.toLocaleDateString('pt-BR',{month:"long"}).substring(0,1).toUpperCase() + dataNova.toLocaleDateString('pt-BR',{month:"long"}).substring(1,dataNova.toLocaleDateString('pt-BR',{month:"long"}).length)  + "/" + dataNova.getFullYear().toString().substring(2,4)
+          /* } */
+          
+          
+          temp.efetuada = false
+          //temp.mesRef = meses[meses.indexOf(temp.mesRef)+(i-1)]
+         /*  if(temp.mesRef == undefined){
+            temp.mesRef = meses[meses.length - 1]
+          } */
+         //temp.mesRefLabel = this.mesesDeReferencia[this.mesesDeReferencia.map(e => e.codigoMesRef).indexOf(temp.mesRef)].rotulo 
+          
+           this.envioMultiplo.push(temp)
+        }
+        
+
+       
+        
+      }
+      this.valorParaReplicas = this.envioMultiplo[0].valor
+      //console.log(this.envioMultiplo)
+      //console.log(this.novaMovimentacao)
+      let valor:any = this.novaMovimentacao.valor
+      this.totalCompraParcelada = valor * qtdeParcelas
+      
+    } else {
+      this.envioMultiplo = []
+      this.replicarParcelas = false
+    }
+  }
+
+  setarMultiploEnvio_Datas() {
+    if(this.envioMultiplo.length > 0 && this.novaMovimentacao.date instanceof Date && !isNaN(this.novaMovimentacao.date.valueOf())){
+      for(var i = 1; i <=this.envioMultiplo.length; i++) {
+        let dataNova = new Date(JSON.parse(JSON.stringify(this.novaMovimentacao.date)))
+        dataNova.setMonth(dataNova.getMonth()+(i))
+        this.envioMultiplo[i-1].date = dataNova
+      }
+    }
+
+  }
+
+  setarMultiploEnvio_MesRef(data:any){
+    if(this.envioMultiplo.length > 0){
+      let ano = data.target.value.substring(0,4)
+      let mes = data.target.value.substring(4,6)
+      let tempData = new Date(mes + '/02/' + ano)
+
+      for(var i = 1; i <= this.envioMultiplo.length; i++){
+        tempData.setMonth(tempData.getMonth()+1)
+      
+        this.envioMultiplo[i-1].mesRef = parseFloat('' + tempData.getFullYear().toString() + (tempData.getMonth()+1).toLocaleString('pt-BR',{minimumIntegerDigits:2})) 
+        this.envioMultiplo[i-1].mesRefLabel = tempData.toLocaleDateString('pt-BR',{month:"long"}).substring(0,1).toUpperCase() + tempData.toLocaleDateString('pt-BR',{month:"long"}).substring(1,tempData.toLocaleDateString('pt-BR',{month:"long"}).length)  + "/" + tempData.getFullYear().toString().substring(2,4)
+        this.envioMultiplo[i-1].anoRef = parseFloat(this.envioMultiplo[i-1].mesRef.toString().substring(0,4))
+        //console.log(this.envioMultiplo[i-1])
+      }
+
+
+    }
+    
+
+  }
+
+  setarMultiploEnvio_Origem(origem:string){
+    if(this.envioMultiplo.length > 0){
+      this.envioMultiplo.forEach(item => {
+        item.origem = origem
+      })
+    }
+
+  }
+
+  setarMultiploEnvio_Categoria(categoria:string){
+    if(this.envioMultiplo.length > 0){
+      this.envioMultiplo.forEach(item => {
+        item.categoria = categoria
+      })
+      console.log(this.envioMultiplo)
+    }
+  }
+
+  setarMultiploEnvio_Estabelecimento(estabelecimento:string) {
+    if(this.envioMultiplo.length > 0){
+      this.envioMultiplo.forEach(item => {
+        item.estabelecimentoPrestador = this.novaMovimentacao.estabelecimentoPrestador
+      })
+    }
+  }
+
+  setarMultiploEnvio_Orcamento(orcamento:any){
+    if(this.envioMultiplo.length > 0) {
+      this.envioMultiplo.forEach(item => {
+        item.orcamento = orcamento.target.value
+      })
+
+    }
+  }
+
+  setarMultiploEnvio_Natureza(){
+    if(this.envioMultiplo.length > 0) {
+      this.envioMultiplo.forEach(item => {
+        item.natureza = this.novaMovimentacao.natureza
+      })
+
+    }
+  }
+
+  setarMultiploEnvio_ValorDasReplicas(valor:any){
+    if(this.envioMultiplo.length == (this.totalParcelas.nativeElement.valueAsNumber-1)){
+      this.envioMultiplo.forEach(item => {
+        item.valor = valor
+      })
+      this.totalCompraParcelada = this.envioMultiplo.map(e => e.valor).reduce((sum, current) => sum + current) + this.novaMovimentacao.valor
+    } else {
+      this.envioMultiplo.forEach(item => {
+        item.valor = valor
+      })
+      let parcelaInicial = parseFloat(this.novaMovimentacao.parcela.split('/')[0])
+      let valorNovaMov:any = this.novaMovimentacao.valor
+      this.totalCompraParcelada = (parcelaInicial*valorNovaMov) + (this.envioMultiplo.map(e => e.valor).reduce((sum, current) => sum + current))
+    }
+
+   
+    
+  }
+
+  valorParaReplicas:number = 0
+
+  setTotal() {
+    if(this.envioMultiplo.length == (this.totalParcelas-1)){
+      this.totalCompraParcelada = this.envioMultiplo.map(e => e.valor).reduce((sum, current) => sum + current) + this.novaMovimentacao.valor
+    } else {
+      let parcelaInicial = parseFloat(this.novaMovimentacao.parcela.split('/')[0])
+      let valorNovaMov:any = this.novaMovimentacao.valor
+      this.totalCompraParcelada = (parcelaInicial*valorNovaMov) + (this.envioMultiplo.map(e => e.valor).reduce((sum, current) => sum + current))
+    }
+    
+  }
+
+  setarMultiploEnvio_Descricoes(descricao:string) {
+    if(this.envioMultiplo.length > 0) {
+      this.envioMultiplo.forEach(item => {
+        item.descricao = descricao
+      })
+    }
+  }
+
+  openModal(modalData:any){
+    this.setarMultiploEnvio_ValorDasReplicas(this.valorParaReplicas)
+    this.modalRef = this.modalService.open(modalData, {centered:true})
+  }
+
+  closeModal(){
+    this.modalRef?.close()
+  }
+
+  getDates(data:any) {
+    
+    if(data instanceof Date && !isNaN(data.valueOf())){
+      return true
+    } else {
+      return false
+    }
+    
   }
   
   estabsAutocompletar (evento:any) {
@@ -366,6 +608,7 @@ export class NovaMovimentacaoComponent implements OnInit {
   }
 
 
+  
 
 
 }

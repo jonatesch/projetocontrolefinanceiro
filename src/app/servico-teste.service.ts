@@ -225,6 +225,14 @@ export class WixApiService {
     })
   }
 
+  novasMovimentacoes(arrayDeMovs:any){
+    let url = 'https://www.jonathanspinelli.com/_functions/novasMovimentacoes'
+    let dados = JSON.stringify(arrayDeMovs)
+    return this.http.post(url,dados).toPromise().then((data:any) => {
+      return data
+    })
+  }
+
   adicionarCategoria(novaCategoria:object){
     let url = 'https://www.jonathanspinelli.com/_functions/adicionarCategoria'
     let dados = JSON.stringify(novaCategoria)

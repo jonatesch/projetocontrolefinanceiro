@@ -611,6 +611,8 @@ export class FiltrosComponent implements OnInit {
 
           if(dadosNovaMov == 'atualizar'){
             console.log(filtros)   
+            this.filtrarTabela()
+            this.done.emit()
             
             
 
@@ -650,6 +652,7 @@ export class FiltrosComponent implements OnInit {
           }
   
       })
+      
     })
     }
  

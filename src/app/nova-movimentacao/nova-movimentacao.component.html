@@ -8,7 +8,7 @@
                         <div class="input-group full-height">
                             <div class="form-floating novamov-cols flexed">
                                 <input class="form-control inputs-nova-mov" placeholder="dd/mm/aaaa"
-                                name="dp" [ngModel]="dateModel" (ngModelChange)="setarData($event,'')" id="novamovDate" [footerTemplate]="t"  ngbDatepicker #d="ngbDatepicker">
+                                name="dp" [ngModel]="dateModel" (ngModelChange)="setarData($event,''); setarMultiploEnvio_Datas()" id="novamovDate" [footerTemplate]="t"  ngbDatepicker #d="ngbDatepicker">
                                 <label for="novamovDate">Data</label>
                             <div class="input-group-append">
                                 <button class="btn btn-outline-secondary full-height" (click)="d.toggle()" type="button"><i class="far fa-calendar-alt calendar-icon"></i></button>
@@ -30,7 +30,7 @@
             <div class="col novamov-cols">
 
                 <div class="form-floating novamov-cols">
-                    <select #mesRef (change)="setarMesRef($event)" class="form-control inputs-nova-mov" name="" id="novamovMesRef" [ngClass]="{'validation-warning':mesRef.value == '0'}">
+                    <select #mesRef (change)="setarMesRef($event); setarMultiploEnvio_MesRef($event)" class="form-control inputs-nova-mov" name="" id="novamovMesRef" [ngClass]="{'validation-warning':mesRef.value == '0'}">
                        <!-- <option selected hidden disabled value="0">selecione</option> -->
                         <optgroup *ngFor="let anos of mesesDeReferenciaFormatados" [label]="anos.ano">   
                             <option *ngFor="let mes of anos.meses" [value]="mes.codigo" [selected]="mes.codigo == mesRefAtual"> {{ mes.rotulo }} </option>
@@ -43,7 +43,7 @@
 
             <div class="col novamov-cols">
                 <div class="form-floating novamov-cols">
-                    <select #origem [ngModel]="novaMovimentacao.origem" (click)="dicaSeVazio('Origem')" (ngModelChange)="setarOrigem($event)" class="form-control inputs-nova-mov" name="" id="novamovOrigem" [ngClass]="{'validation-warning':origem.value == 'selecione'}">
+                    <select #origem [ngModel]="novaMovimentacao.origem" (click)="dicaSeVazio('Origem')" (ngModelChange)="setarOrigem($event); setarMultiploEnvio_Origem($event)" class="form-control inputs-nova-mov" name="" id="novamovOrigem" [ngClass]="{'validation-warning':origem.value == 'selecione'}">
                         <option selected disabled hidden value="selecione">selecione</option>
                         <option *ngFor="let origem of origensRegistradas" [value]="origem._id"> {{ origem.title }} </option>
                     </select>
@@ -54,7 +54,7 @@
 
             <div class="col novamov-cols">
                 <div class="form-floating novamov-cols">
-                    <select #categoria [(ngModel)]="novaMovimentacao.categoria" (ngModelChange)="setarCategoria($event)" (click)="dicaSeVazio('Categoria')" class="form-control inputs-nova-mov" name="" id="novamovCategoria" [ngClass]="{'validation-warning':categoria.value == 'selecione'}">
+                    <select #categoria [(ngModel)]="novaMovimentacao.categoria" (ngModelChange)="setarCategoria($event); setarMultiploEnvio_Categoria($event)" (click)="dicaSeVazio('Categoria')" class="form-control inputs-nova-mov" name="" id="novamovCategoria" [ngClass]="{'validation-warning':categoria.value == 'selecione'}">
                         <option selected disabled hidden value="selecione">selecione</option>
                         <option *ngFor="let categ of categoriasRegistradas" [value]="categ._id"> {{ categ.title }} </option>
                     </select>
@@ -64,7 +64,7 @@
 
             <div class="col novamov-cols">
                 <div class="form-floating novamov-cols">
-                    <select [(ngModel)]="novaMovimentacao.orcamento" class="form-control inputs-nova-mov" name="" id="novamovOrcamento">
+                    <select [(ngModel)]="novaMovimentacao.orcamento" (change)="setarMultiploEnvio_Orcamento($event)" class="form-control inputs-nova-mov" name="" id="novamovOrcamento">
                         <option *ngFor="let orc of orcamentosRegistrados" [selected]="orc.title == 'Normal'" [value]="orc._id"> {{ orc.title }} </option>
                     </select>
                     <label for="novamovOrcamento">Orçamento</label>
@@ -76,13 +76,13 @@
 
             <div class="col-1 novamov-cols col-natureza">
                 <div class="form-check">
-                    <input [(ngModel)]="novaMovimentacao.natureza" class="form-check-input" type="radio" name="novamovNatureza" id="credito" value="C">
+                    <input (change)="setarNatureza($event); setarMultiploEnvio_Natureza()" class="form-check-input" type="radio" name="novamovNatureza" id="credito" value="C">
                     <label class="form-check-label" for="credito">
                     Crédito
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="novamovNatureza" id="debito" value="D" checked>
+                    <input (change)="setarNatureza($event); setarMultiploEnvio_Natureza()" class="form-check-input" type="radio" name="novamovNatureza" id="debito" value="D" checked>
                     <label class="form-check-label" for="debito">
                     Débito
                     </label>
@@ -98,7 +98,7 @@
 
             <div class="col novamov-cols">
                 <div class="form-floating novamov-cols">
-                    <input #estabelecimento [ngModel]="novaMovimentacao.estabelecimentoPrestador" (ngModelChange)="setarEstab($event)" class="form-control inputs-nova-mov input-novamov-estab" id="novaMovEstabelecimento" type="text" placeholder="ESTABELECIMENTO" [ngClass]="{'validation-warning':estabelecimento.value == '', 'autocompleting':!esconderEstabsAutocomplete}" autocomplete="new-password">
+                    <input #estabelecimento [ngModel]="novaMovimentacao.estabelecimentoPrestador" (ngModelChange)="setarEstab($event); setarMultiploEnvio_Estabelecimento($event)" class="form-control inputs-nova-mov input-novamov-estab" id="novaMovEstabelecimento" type="text" placeholder="ESTABELECIMENTO" [ngClass]="{'validation-warning':estabelecimento.value == '', 'autocompleting':!esconderEstabsAutocomplete}" autocomplete="new-password">
                     <label for="novaMovEstabelecimento">Estabelecimento/Prestador*</label>
                 </div>
                 <div *ngIf="!esconderEstabsAutocomplete" class="estabs-autocomplete">
@@ -115,7 +115,7 @@
             <div class="col novamov-cols">
 
                 <div class="form-floating novamov-cols">
-                    <input #descricao class="form-control inputs-nova-mov" [ngModel]="novaMovimentacao.descricao" (ngModelChange)="setarDescricao($event)" id="novamovDescricao" type="text" placeholder="Descrição" [ngClass]="{'validation-warning':descricao.value == '','autocompleting':!esconderDescAutocomplete}" autocomplete="new-password">
+                    <input #descricao class="form-control inputs-nova-mov" [ngModel]="novaMovimentacao.descricao" (ngModelChange)="setarDescricao($event); setarMultiploEnvio_Descricoes($event)" id="novamovDescricao" type="text" placeholder="Descrição" [ngClass]="{'validation-warning':descricao.value == '','autocompleting':!esconderDescAutocomplete}" autocomplete="new-password">
                     <label for="novamovDescricao">Descrição*</label>
                 </div>
                 <div *ngIf="!esconderDescAutocomplete" class="estabs-autocomplete">
@@ -131,7 +131,7 @@
 
             <div class="col-2 novamov-cols">
                 <div class="form-floating novamov-cols">
-                    <input #valor [ngModel]="novaMovimentacao.valor" (ngModelChange)="setarValor($event)" id="novamovValor" class="form-control inputs-nova-mov" currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }" type="text" placeholder="R$ 0,00" [ngClass]="{'validation-warning':this.novaMovimentacao.valor == 0 || this.novaMovimentacao.valor == null}">
+                    <input #valor [ngModel]="novaMovimentacao.valor" (ngModelChange)="setarValor($event); setarMultiploEnvio()" id="novamovValor" class="form-control inputs-nova-mov" currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }" type="text" placeholder="R$ 0,00" [ngClass]="{'validation-warning':this.novaMovimentacao.valor == 0 || this.novaMovimentacao.valor == null}">
                     <label for="novamovValor">Valor*</label>
                 </div>
             </div>
@@ -141,14 +141,14 @@
 
                     <div class="col novamov-parcelaQtde">
                         <div class="form-floating novamov-cols">
-                            <input (change)="setarParcelas($event)" placeholder="total" id="novamovQtdeParcelas" class="form-control" type="number" min="2" max="36">
+                            <input #totalParcelas (change)="setarParcelas($event); setarMultiploEnvio()" placeholder="total" id="novamovQtdeParcelas" class="form-control" type="number" min="2" max="48">
                             <label for="novamovQtdeParcelas">total de parcelas</label>
                         </div>
                     </div>
 
                     <div class="col novamov-cols">
                         <div class="form-floating novamov-cols">
-                            <select #parcela [(ngModel)] ="novaMovimentacao.parcela" [disabled]="desativarParcela" class="form-control" name="" id="novamovParcela">
+                            <select #parcela [(ngModel)] ="novaMovimentacao.parcela" (change)="setarMultiploEnvio()" [disabled]="desativarParcela" class="form-control" name="" id="novamovParcela">
                                 <option *ngIf="!desativarParcela" disabled selected hidden>selecione</option>
                                 <option *ngFor="let parcela of parcelas" [value]="parcela"> {{ parcela }} </option>
                             </select>
@@ -174,7 +174,7 @@
     <div class="col-1 coluna-botaoenviar">
         <span class="botao-enviar-disabled" *ngIf="disableEnviarButton" ngbTooltip="verifique os campos obrigatórios (*)">
              <button  class="btn btn-outline-primary botao-enviar" [disabled]="disableEnviarButton">
-               <span *ngIf="validationCounter > 1">{{ validationCounter - 1 }}(*)</span>
+               <span *ngIf="validationCounter > 0">{{ validationCounter }}(*)</span>
                 ENVIAR
             </button>
         </span>
@@ -185,6 +185,60 @@
              </button>
             
     </div>
+
+</div>
+
+<div *ngIf="envioMultiplo.length > 0" class="container-multiplo-envio">
+
+    <div class="form-check form-switch" style="margin-bottom: 10px;">
+        <input [(ngModel)]="replicarParcelas" class="form-check-input" type="checkbox" id="replicar-input">
+        <label for="replicar-input">Replicar parcelas ({{envioMultiplo.length}})</label>
+    </div>
+
+  <!--   <ul [ngClass]="{'desativado':!replicarParcelas}">
+        <li *ngFor="let mov of envioMultiplo">{{mov.date | date : 'dd/MM/YYYY'}} | {{mov.mesRefLabel}} | {{mov.descricao}} {{mov.parcela}} | {{mov.valor | currency : 'BRL'}}</li>
+    </ul> -->
+    <div *ngFor="let mov of envioMultiplo" class="replicas-row" [ngClass]="{'desativado':!replicarParcelas, 'ativado':replicarParcelas}">
+        <div class="replicar-item" style="text-align: center;"> <span *ngIf="getDates(mov.date)">{{mov.date | date : 'dd/MM/YYYY'}}</span>  </div>
+        <div class="replicar-item"> {{mov.mesRefLabel}} </div>
+        <div class="replicar-item" style="flex-grow: 2;"> <span class="replica-desc">{{mov.descricao}}</span> <span class="replica-parcela">{{mov.parcela}}</span>  </div>
+        <!-- <div class="replicar-item" style="text-align: center;"> {{mov.valor | currency : 'BRL'}} </div> -->
+        <div class="replicar-item" style="text-align: center;"> <input class="replica-valor-input" currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }" type="text" [(ngModel)]="mov.valor" (keyup)="setTotal()" [ngClass]="{'desativado':!replicarParcelas}"> </div>
+    </div>
+
+    <div style="text-align: right;">
+<!--         <input [ngModel]="valorParaReplicas" (ngModelChange)="setarMultiploEnvio_ValorDasReplicas($event)" type="text" currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }" >
+ -->    
+            <a class="link-style" (click)="openModal(modalValorReplicas)">Configurar valor de todas as Réplicas</a>
+    </div>
+
+    <div *ngIf="envioMultiplo.length > 0" style="margin-top: 10px; font-size: 14px;">
+        <span>Total da transação: {{totalCompraParcelada | currency : 'BRL'}}</span>
+        
+    </div>
+
+    <ng-template #modalValorReplicas let-modal>
+        <div class="modal-header">
+            <h6>Configurar valor</h6>
+        </div>
+
+        <div class="modal-body">
+            <div style="display: flex; justify-content: center;">
+                <p style="margin: 0; padding-top: 3px;">Replicar {{this.envioMultiplo.length}} parcelas de:</p>
+                <input class="input-valor-replicas" [ngModel]="valorParaReplicas" (ngModelChange)="setarMultiploEnvio_ValorDasReplicas($event)" type="text" currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }">
+            </div>
+            
+        
+            <p style="margin-top: 20px; text-align: center;">Total da transação: <strong>{{totalCompraParcelada | currency : 'BRL'}}</strong> </p>
+        
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn btn-outline-primary" style="width: 90px;" (click)="closeModal()">OK</button>
+        </div>
+    </ng-template>
+
+
 </div>
 
 

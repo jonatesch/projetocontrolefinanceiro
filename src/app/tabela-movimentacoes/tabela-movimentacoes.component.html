@@ -78,7 +78,7 @@
     </div>
 
     <!-- <nova-movimentacao [mesesDeReferencia]="mesesDeReferencia" *ngIf="!esconderNovaMov"></nova-movimentacao> -->
-    <nova-movimentacao [estabelecimentos]="estabelecimentosUtilizados" [descricoes]="descricoes" (novaMovimentacaoInserida)="teste($event)" *ngIf="!esconderNovaMov"></nova-movimentacao>
+    <nova-movimentacao [estabelecimentos]="estabelecimentosUtilizados" [descricoes]="descricoes" (novaMovimentacaoInserida)="teste($event)" (novasMovimentacoesInseridas)="resetMovs()" *ngIf="!esconderNovaMov"></nova-movimentacao>
 
 
     <!-- CABEÇALHO DA TABELA DE MOVIMENTAÇÕES: -->
