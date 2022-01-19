@@ -11,6 +11,7 @@ import { NovaMovimentacaoComponent } from './nova-movimentacao/nova-movimentacao
 import { TestesComponent } from './testes/testes.component';
 import { RelatoriosComponent } from './relatorios/relatorios.component';
 import { LoginComponent } from './login/login.component';
+import { EnviarArquivosComponent } from './enviar-arquivos/enviar-arquivos.component';
 
 const routes: Routes = [
   { path: 'tabela', component: TabelaComponent },
@@ -24,7 +25,8 @@ const routes: Routes = [
     {path: 'novamovimentacao', component: NovaMovimentacaoComponent},
     {path: 'testes', component:TestesComponent},
     {path: 'relatoriomensal', component:RelatoriosComponent},
-    {path: 'login', component:LoginComponent}
+    {path: 'login', component:LoginComponent},
+    {path: 'enviararquivos', component: EnviarArquivosComponent}
   ]},
   { path: 'tabelanova', component: TabelaMovimentacoesComponent},
   {path: '', component:MainPageComponent}

@@ -43,6 +43,13 @@ export class WixApiService {
  }
 /////////////////////////////////
 
+private entradaDiretaSource = new Subject<number>();
+abriuDireto$ = this.entradaDiretaSource.asObservable();
+
+abriuDireto(index:number){
+  this.entradaDiretaSource.next(index)
+}
+
 
   loginWixMembers(dados:any) {
     let url = 'https://www.jonathanspinelli.com/_functions/logarFromExternal'

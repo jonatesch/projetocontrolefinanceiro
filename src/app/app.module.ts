@@ -41,7 +41,8 @@ import { EditarOpcoesComponent } from './editar-opcoes/editar-opcoes.component';
 import { LoginComponent } from './login/login.component';
 import { DicasComponent } from './dicas/dicas.component';
 import { RecuperarSenhaComponent } from './recuperar-senha/recuperar-senha.component';
-import { ModalAguardarComponent } from './modal-aguardar/modal-aguardar.component'
+import { ModalAguardarComponent } from './modal-aguardar/modal-aguardar.component';
+import { EnviarArquivosComponent } from './enviar-arquivos/enviar-arquivos.component'
 
 registerLocaleData(localePt);
 
@@ -71,7 +72,8 @@ registerLocaleData(localePt);
     LoginComponent,
     DicasComponent,
     RecuperarSenhaComponent,
-    ModalAguardarComponent
+    ModalAguardarComponent,
+    EnviarArquivosComponent
  
   ],
   imports: [

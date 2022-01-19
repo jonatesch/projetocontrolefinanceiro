@@ -31,6 +31,9 @@ export class MainPageComponent implements OnInit {
       this.usuario = data.user.firstName
       this.userIsLogged = true
     })
+    _wix.abriuDireto$.subscribe(data => {
+      this.linkAtivo[data] = true
+    })
    }
 
   ativar(indice:number) {
