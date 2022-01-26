@@ -25,7 +25,8 @@ export class HelpEnviarArquivoXlsComponent implements OnInit {
   baixarTemplate(){
     let link = document.createElement('a');
     link.setAttribute('target','_self')
-    link.setAttribute('href','/assets/template.xlsx')
+    //link.setAttribute('href','/assets/template.xlsx')
+    link.setAttribute('href','https://eff258ee-313c-48b4-9ab7-34badb888525.usrfiles.com/ugd/eff258_6808d696b3c84472955940ee894d4e3b.xlsx')
     link.setAttribute('download', 'template.xlsx')
     document.body.appendChild(link);
     link.click();
