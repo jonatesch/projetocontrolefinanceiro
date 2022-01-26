@@ -143,6 +143,7 @@ export class TabelaMovimentacoesComponent implements OnInit {
   modoEdicao:boolean = false
 
   tooltipDescricao:boolean[] = []
+  tessdsdte=9
   
   cbDescricao(index:number, descricao:string) {
     this.clipboardService.copy(descricao)

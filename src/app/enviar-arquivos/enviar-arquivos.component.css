@@ -15,6 +15,7 @@
     padding: 10px;
     max-width: 500px;
     /* border-radius: 10px; */
+    position: relative;
 }
 
 .files-titles {
@@ -116,4 +117,23 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.absolute {
+    position: absolute;
+    right: -0.80rem;
+    background-color: dodgerblue; 
+    padding: 12px;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    cursor: pointer;
+    color: white;
+    transition: .3s;
+}
+
+.absolute:hover {
+    background-color: rgb(25, 115, 204);
+    transition: .3s;
 }

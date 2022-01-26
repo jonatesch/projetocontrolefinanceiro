@@ -1,0 +1,26 @@
+.modal-header {
+    background-color: #545454;
+    color: white;
+}
+
+.fa-copy:hover {
+    color: dodgerblue;
+    transition: .3s;
+}
+
+.download-button {
+    background-color: dodgerblue;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.download-button:hover {
+    background-color: rgb(25, 109, 194);
+}
+
+.download-button:focus-visible{
+    outline: none;
+}

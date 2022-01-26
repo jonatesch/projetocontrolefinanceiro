@@ -12,6 +12,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalEditarOpcoesComponent } from '../modal-editar-opcoes/modal-editar-opcoes.component';
 
 import { ToastrService } from 'ngx-toastr';
+import { HelpEnviarArquivoXlsComponent } from '../help-enviar-arquivo-xls/help-enviar-arquivo-xls.component';
 
 @Component({
   selector: 'app-enviar-arquivos',
@@ -89,7 +90,7 @@ export class EnviarArquivosComponent implements OnInit {
       headers = headers.join(',')
       console.log(headers)
 
-      if(headers == 'data,mês de ref,estabelecimento,descrição,categoria,origem,valor,orcamento,natureza'){
+      if(headers == 'data,mês de ref,estabelecimento,descrição,categoria,origem,valor,orçamento,natureza'){
        
         for(var i = 1; i < JSONws.length; i++) {
         let currentMov = new MovimentacaoImportada()
@@ -417,6 +418,10 @@ export class EnviarArquivosComponent implements OnInit {
     }
     
     
+  }
+
+  openInstrucoes(){
+    this.modal.open(HelpEnviarArquivoXlsComponent,{windowClass:'myCustomModalClass'})
   }
 
   ngOnInit(): void {

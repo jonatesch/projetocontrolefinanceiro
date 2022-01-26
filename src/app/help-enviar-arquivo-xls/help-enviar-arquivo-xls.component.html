@@ -1,0 +1,70 @@
+<div class="modal-header">
+    <h4 class="modal-title">Instruções para envio de arquivo</h4>
+</div>
+
+<div class="modal-body">
+    Envie um arquivo .xls ou .xlsx que contenha o seguinte cabeçalho:
+
+    <br><br>
+
+    <img src="https://static.wixstatic.com/media/eff258_a774b6f3927a4a8eb95b60820aa58e25~mv2.png" style="max-width: 100%;" alt="">
+
+    <br><br>
+
+    <div (click)="expandirInfo1 = !expandirInfo1" style="cursor: pointer; border: 1px solid gainsboro; padding:5px; margin-bottom: 4px;">
+        <i *ngIf="!expandirInfo1" class="fas fa-plus"></i> <i *ngIf="expandirInfo1" class="fas fa-minus"></i> A última coluna, <strong>efetuada</strong>, é opcional.
+        <p style="padding-left: 25px; font-size: 14px;" *ngIf="expandirInfo1">Caso o arquivo não contenha essa coluna, todas as movimentações serão inseridas como <strong>efetuadas</strong>.</p>
+    </div>
+
+    <div (click)="expandirInfo3 = !expandirInfo3" style="cursor: pointer; border: 1px solid gainsboro; padding:5px; margin-bottom: 4px;">
+        <i *ngIf="!expandirInfo3" class="fas fa-plus"></i> <i *ngIf="expandirInfo3" class="fas fa-minus"></i> As colunas, <strong>categoria, origem</strong> e <strong>orçamento</strong> são obrigatórias, mas as linhas podem estar em branco.
+        <p style="padding-left: 25px; font-size: 14px;" *ngIf="expandirInfo3">Caso o arquivo não contenha informação nessas colunas, todas as movimentações serão inseridas com valores padrão para essas colunas:</p>
+        <ul *ngIf="expandirInfo3" style="font-size: 14px; ">
+            <li>Categoria: outros</li>
+            <li>Origem: Padrão</li>
+            <li>Orçamento: Normal</li>
+        </ul>
+    </div>
+
+    <div style="border: 1px solid gainsboro; padding:5px; margin-bottom: 4px;">
+        <div (click)="expandirInfo2 = !expandirInfo2" style="cursor: pointer;">
+            <i *ngIf="!expandirInfo2" class="fas fa-plus"></i> <i *ngIf="expandirInfo2" class="fas fa-minus"></i> A coluna <strong>mês de ref </strong>deve conter informação no formato YYYY/MM, por exemplo: 202201 para indicar Janeiro de 2022.
+            <p style="padding-left: 25px; font-size: 14px;" *ngIf="expandirInfo2">Se o mês de ref das suas movimentações sempre coincide com o mês da data, você pode utilizar a seguinte fórmula para <strong>gerar automaticamente</strong>  o mês de ref:</p>
+        </div>
+        
+        
+        <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 10px;" *ngIf="expandirInfo2">
+            <div style="border: 1px solid gainsboro; padding: 10px;">=IF(A2;YEAR(A2)&TEXT(A2;"MM");"")</div>
+            <div style="margin-left: 10px; cursor: pointer; font-size: 22px;" (click)="copiar(excelFormula1)"><i class="fas fa-copy"></i> </div>
+        </div>
+
+        <div style="display: flex; justify-content: center; align-items: center;" *ngIf="expandirInfo2">
+            <div style="border: 1px solid gainsboro; padding: 10px;">=SE(A2;ANO(A2)&TEXTO(A2;"MM");"")</div>
+            <div style="margin-left: 10px; cursor: pointer; font-size: 22px;" (click)="copiar(excelFormula2)"><i class="fas fa-copy"></i> </div>
+        </div>
+        
+
+        <p style="padding-left: 25px; font-size: 14px; margin: 10px 0; text-align: center;" *ngIf="expandirInfo2">Copie de acordo com o idioma do seu sistema operacional.</p>
+    </div>
+
+
+    <div style="margin-top: 20px; text-align: center; padding: 15px;">
+        Se preferir, baixe o <strong style="color:dodgerblue">arquivo template</strong>  através do ícone abaixo e organize suas movimentações nele:
+
+        <div>
+            <button class="download-button" (click)="baixarTemplate()"><i class="fas fa-download"></i> <span style="margin-left: 5px; font-size: 17px;"></span> Baixar</button>
+        </div>
+        
+        
+    
+
+
+        
+
+    </div>
+
+   
+    
+
+
+</div>

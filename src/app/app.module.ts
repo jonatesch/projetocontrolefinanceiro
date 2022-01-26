@@ -42,7 +42,8 @@ import { LoginComponent } from './login/login.component';
 import { DicasComponent } from './dicas/dicas.component';
 import { RecuperarSenhaComponent } from './recuperar-senha/recuperar-senha.component';
 import { ModalAguardarComponent } from './modal-aguardar/modal-aguardar.component';
-import { EnviarArquivosComponent } from './enviar-arquivos/enviar-arquivos.component'
+import { EnviarArquivosComponent } from './enviar-arquivos/enviar-arquivos.component';
+import { HelpEnviarArquivoXlsComponent } from './help-enviar-arquivo-xls/help-enviar-arquivo-xls.component'
 
 registerLocaleData(localePt);
 
@@ -73,7 +74,8 @@ registerLocaleData(localePt);
     DicasComponent,
     RecuperarSenhaComponent,
     ModalAguardarComponent,
-    EnviarArquivosComponent
+    EnviarArquivosComponent,
+    HelpEnviarArquivoXlsComponent
  
   ],
   imports: [
