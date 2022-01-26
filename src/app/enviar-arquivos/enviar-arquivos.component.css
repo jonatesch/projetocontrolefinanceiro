@@ -1,0 +1,116 @@
+.files-container {
+    background-color: white;
+    margin: 0;
+}
+
+.files-row {
+    display: flex;
+    justify-content: space-around;
+    padding:15px 0;
+}
+
+.files-options {
+   /*  background-color: rgb(228, 242, 255); */
+   border: 1px solid rgb(238, 238, 238);
+    padding: 10px;
+    max-width: 500px;
+    /* border-radius: 10px; */
+}
+
+.files-titles {
+    text-align: center;
+}
+
+.files-info {
+    font-size: 15px;
+    margin: 20px 0;
+}
+
+.files-inputs {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    align-items: center;
+}
+
+.center {
+    text-align: center;
+}
+
+.files-error-info {
+    color: rgb(200, 14, 59);
+    background-color: rgb(252, 226, 231);
+    padding: 5px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.movs-rows {
+    display: flex;
+}
+
+.movs-items {
+    flex-basis: 0;
+    height: 50px;
+}
+
+.flex-1 {
+    flex-grow: 1;
+}
+
+.flex-2 {
+    flex-grow: 2;
+}
+
+.flex-3 {
+    flex-grow: 3;
+}
+
+.not-found::after {
+    content: '*';
+    color: red;
+}
+
+.green {
+    color: green;
+}
+
+.marcato {
+    font-weight: 100;
+}
+
+.warning {
+    color: #e51616;
+    font-weight: 600;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.container-movimentacoes {
+    padding: 10px;
+}
+
+.expandable-card {
+    border: 1px solid #e9e9e9;
+    padding: 10px;
+    margin-bottom: 35px;
+}
+
+.container-opcoes-info {
+    font-size: 15px;
+    padding: 10px;
+}
+
+.highlight-hover:hover {
+    background-color: #e2f1ff;
+}
+
+.blue-box {
+    background-color: #e2f1ff;
+    margin-bottom: 20px;
+    padding: 10px;
+}

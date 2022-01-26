@@ -265,6 +265,22 @@ abriuDireto(index:number){
     })
   }
 
+  adicionarCategorias(categorias:any) {
+    let url = 'https://www.jonathanspinelli.com/_functions/adicionarCategorias'
+    let dados = JSON.stringify(categorias)
+    return this.http.post(url, dados).toPromise().then(resposta => {
+      return resposta
+    })
+  }
+
+  adicionarOrigens(origens:any) {
+    let url = 'https://www.jonathanspinelli.com/_functions/adicionarOrigens'
+    let dados = JSON.stringify(origens)
+    return this.http.post(url, dados).toPromise().then(resposta => {
+      return resposta
+    })
+  }
+
   excluirCategoria(categoria:object){
     let url = 'https://www.jonathanspinelli.com/_functions/excluirCategoria'
     let url2 = 'https://www.jonathanspinelli.com/_functions/excluirCategoriaFromUser'

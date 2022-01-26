@@ -77,7 +77,7 @@
                 <li #liOrigens class="list-group-item opcoes" 
                     *ngFor="let orig of origens; let i = index"
                     (mouseover)="mostrarLixeiraOrigens(i)" (mouseleave)="esconderLixeiraOrigens(i)"> 
-                    <span (click)="excluirOrigem({'nome':orig.title, 'id':orig._id}, i)" class="trash-icon"><i id="lixeiraCategoria" class="fas fa-trash transparente"></i></span> {{ orig.title }} <span class="vermelho"></span> <span class="verde"></span> 
+                    <span (click)="excluirOrigem({'nome':orig.title, 'id':orig._id, 'impedirExclusao':orig.impedirExclusao}, i)" class="trash-icon"><i id="lixeiraCategoria" class="fas fa-trash transparente"></i></span> {{ orig.title }} <span class="vermelho"></span> <span class="verde"></span> 
                 </li>
             </ul>
             <span class="verde" #mensagemOrigemExcluida></span><span class="vermelho" #mensagemOrigemErro></span>

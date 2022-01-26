@@ -244,7 +244,11 @@ export class ModalEditarOpcoesComponent implements OnInit {
 
   excluirOrigem(objeto:any, index:number) {
     objeto.proprietario = this._localStorage.get('userLoggedId')
-    this._wixApiService.excluirOrigem(objeto).then((data) => {
+
+    if(objeto.impedirExclusao){
+      this.toastr.error("","não é permitido excluir essa origem",{positionClass:"toast-top-center"})
+    } else {
+      this._wixApiService.excluirOrigem(objeto).then((data) => {
       let excluiu = data.excluiu
       if(excluiu){
         this.getOrigensTeste()
@@ -266,6 +270,8 @@ export class ModalEditarOpcoesComponent implements OnInit {
         },2000)
       }
     })
+    }
+    
   }
 
   mostrarLixeira(index:number) {

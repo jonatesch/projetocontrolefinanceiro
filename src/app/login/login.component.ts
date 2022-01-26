@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
       this.logando = true
       
       this._wix.loginWixMembers(this.userForLogin).then((res:any) => {
-        console.log(res)
+        //console.log(res)
         if(res.details) {
           this.logando = false
           this.toastr.error("","usuário e/ou senha incorretos", {positionClass:'toast-top-center'})
@@ -94,7 +94,7 @@ export class LoginComponent implements OnInit {
                     this.registrando = false */
 
                     this._wix.registerWixMember(this.userForRegistration).then((data:any) => {
-                  
+                      console.log(data)
                       if(!data.errorDetails) {
                         this.redirectingAfterRegistration = true
                         this.registrando = false

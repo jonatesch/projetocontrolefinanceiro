@@ -1,1 +1,191 @@
-<p>enviar-arquivos works!</p>
+<h1>Enviar arquivos</h1>
+
+
+<div class="files-container">
+   
+
+    <div class="files-row">
+        <div class="files-options">
+            <h4 class="files-titles">Arquivo Excel</h4>
+            <div class="files-info">
+                Envie arquivo do Excel com movimentações que você queira importar para o seu Controle Financeiro.
+            </div>
+
+            <div class="center">
+                <strong>Extensão:</strong>  .xls ou .xlsx
+            </div>
+
+            <div class="files-inputs">
+                <div *ngIf="carregando"><span class="spinner-border spinner-border-sm"></span></div>
+                
+                <input *ngIf="!carregando" #excelInput type="file" (change)="analyzeData($event)">
+                <div style="padding: 2px;" *ngIf="temArquivoExcel" class="highlight-hover" (click)="resetExcelInput()"><i class="fas fa-times"></i></div>
+               
+                
+            </div>
+            <div *ngIf="showExcelFileError" class="files-error-info">
+                <div> 
+                    <i class="fas fa-info-circle"></i>  
+                    {{errorMessage}}
+                </div>
+                <div style="padding: 2px;" (click)="resetExcelInput()" class="highlight-hover">
+                    <i class="fas fa-times"></i>  
+                </div>
+       
+            </div>
+
+            <div *ngIf="showExcelFileError">
+                {{errorMessageDesciption}}
+            </div>
+
+        
+            
+
+        </div>
+        <div class="files-options">
+            <h4 class="files-titles">Arquivo CSV-Nubank</h4>
+            <div class="files-info">
+                Envie arquivo com as movimentações da fatura do seu cartão de crédito Nubank para importá-las para o seu Controle Financeiro.
+            </div>
+            <div class="center">
+                <strong>Extensão:</strong>  .csv
+            </div>
+            <div class="files-inputs">
+               <!--  <input type="file"> -->
+               EM BREVE!!
+            </div>
+            <div *ngIf="showCSVNubankFileError" class="files-error-info">
+                <div> 
+                    <i class="fas fa-info-circle"></i>  
+                    Arquivo não suportado
+                </div>
+                <div>
+                    <i class="fas fa-times"></i>  
+                </div>
+               
+                
+                
+            </div>
+        </div>
+
+
+    </div>
+    
+
+    <div *ngIf="data.length >= 0 && temArquivoExcel" class="container-movimentacoes">
+
+        
+        <div class="blue-box"> <strong>{{data.length}} </strong>  <span *ngIf="data.length > 1 || data.length == 0">movimentações encontradas.</span> <span *ngIf="data.length == 1">movimentação encontrada.</span> </div>
+
+
+        <div class="expandable-card" *ngIf="categoriasNaoEncontradas.length > 0 || origensNaoEncontradas.length > 0">
+            <div class="warning clickable" (click)="mostrarOpcoesNaoEncontradas = !mostrarOpcoesNaoEncontradas" *ngIf="categoriasNaoEncontradas.length > 0 || origensNaoEncontradas.length > 0"> <i class="fas fa-chevron-down" *ngIf="!mostrarOpcoesNaoEncontradas"></i> <i class="fas fa-chevron-up" *ngIf="mostrarOpcoesNaoEncontradas"></i> Há opções não encontradas!</div>
+            
+            <div *ngIf="mostrarOpcoesNaoEncontradas" class="container-opcoes-info">
+                <p style="margin: 0;">Revise estas opções pois serão automaticamente criadas ao confirmar o envio.</p> 
+                <p style="margin: 0;">Ex.: procure por duplicações não intencionais tais como "mercado" e "mrcado" e corrija seu arquivo antes de enviá-lo.</p>   
+            </div>
+
+
+            <div *ngIf="mostrarOpcoesNaoEncontradas" style="display: flex; justify-content: space-evenly;">
+                <div *ngIf="categoriasNaoEncontradas.length > 0">
+                    <h6>Categorias:</h6>
+                    <ul>
+                        <li *ngFor="let categ of categoriasNaoEncontradas"> {{categ}} </li>
+                    </ul>
+                </div>
+
+                <div *ngIf="origensNaoEncontradas.length > 0">
+                    <h6>Origens:</h6>
+                    <ul>
+                        <li *ngFor="let orig of origensNaoEncontradas"> {{orig}} </li>
+                    </ul>
+                </div>
+
+            </div> 
+
+            
+        
+        </div>
+
+        
+
+    
+
+      
+
+        
+
+        <div class="movs-rows" *ngFor="let mov of data | slice:(page-1) * pageSize : page * pageSize; let i = index" [ngClass]="{'marcato':!mov.efetuada}">
+
+            <div class="movs-items flex-1"> {{formatDate(mov.date) | date : 'dd/MM/YY'}} </div>
+
+            <div class="movs-items flex-1"> {{mov.mesRefLabel}} </div>
+
+            <div class="movs-items flex-3"> {{mov.estabelecimento}} </div>
+
+            <div class="movs-items flex-3"> {{mov.descricao}} </div>
+
+            <div class="movs-items flex-2" [ngClass]="{'not-found':!mov.categoria.found}"> {{mov.categoria.title}} </div>
+
+            <div class="movs-items flex-2" [ngClass]="{'not-found':!mov.origem.found}"> {{mov.origem.title}} </div>
+
+            <div class="movs-items flex-1" [ngClass]="{'green':mov.natureza == 'C'}"> {{mov.valor | currency: 'BRL'}} </div>
+
+            <div class="movs-items flex-2"> {{mov.orcamento.title}} </div>
+
+            <div class="movs-items flex-1"> {{mov.natureza}} </div>
+
+            <div class="movs-items flex-1"> 
+                <div class="form-check form-switch">
+                    <input disabled [ngModel]="mov.efetuada" class="form-check-input" type="checkbox">
+                </div> 
+            </div>
+
+        </div>   
+
+        <!-- PAGINAÇÃO: -->
+        <div class="pagination">
+            <ngb-pagination
+                [(page)]="page"
+                [pageSize]="pageSize"
+                [collectionSize]="data.length">
+    
+                <ng-template ngbPaginationPages let-page let-pages="pages" >
+                    <li class="ngb-custom-pages-item" *ngIf="pages.length > 0">
+                        <div class="form-group d-flex flex-nowrap px-2">
+                            <label for="paginationInput" id="paginationInputLabel" class="col-form-label mr-2 ml-1">
+                                Página
+                            </label>
+                            <input #i 
+                                type="text"
+                                inputmode="numeric"
+                                pattern="[0-9]*"
+                                class="form-control custom-pages-input"
+                                id="paginationInput"
+                                [value]="page"
+                                (keyup.enter)="selectPage(i.value)"
+                                style="width: 2.5rem"
+                            >
+                            <span id="paginationDescription" class="col-form-label text-nowrap px-2">
+                                de {{ pages.length }}
+                            </span>
+                        </div>
+                    </li>
+                </ng-template>
+    
+            </ngb-pagination>  
+        </div>
+
+        <div style="text-align: right;">
+            <button *ngIf="data.length > 0" (click)="enviarMovs()">Enviar</button> 
+        </div>
+
+        
+
+    </div>
+
+    
+   
+   
+</div>
