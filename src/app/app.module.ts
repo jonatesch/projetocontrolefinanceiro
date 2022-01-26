@@ -102,7 +102,8 @@ registerLocaleData(localePt);
     LoginComponent,
     DicasComponent,
     RecuperarSenhaComponent,
-    ModalAguardarComponent
+    ModalAguardarComponent,
+    HelpEnviarArquivoXlsComponent
   ]
 })
 export class AppModule { }
