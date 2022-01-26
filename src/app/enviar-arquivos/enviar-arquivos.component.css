@@ -113,4 +113,7 @@
     background-color: #e2f1ff;
     margin-bottom: 20px;
     padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }

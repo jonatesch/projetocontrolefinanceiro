@@ -11,6 +11,8 @@ import * as XLSX from 'xlsx';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalEditarOpcoesComponent } from '../modal-editar-opcoes/modal-editar-opcoes.component';
 
+import { ToastrService } from 'ngx-toastr';
+
 @Component({
   selector: 'app-enviar-arquivos',
   templateUrl: './enviar-arquivos.component.html',
@@ -18,10 +20,11 @@ import { ModalEditarOpcoesComponent } from '../modal-editar-opcoes/modal-editar-
 })
 export class EnviarArquivosComponent implements OnInit {
 
-  constructor(private _wix:WixApiService, private router:Router, private localStorage:LocalStorageService, private modal:NgbModal) {
+  constructor(private _wix:WixApiService, private router:Router, private localStorage:LocalStorageService, private modal:NgbModal, private toastr:ToastrService) {
     _wix.teste$.subscribe((opcao) => {
       if(opcao == 'categoria') {this.getCategorias()}
       if(opcao == 'origem') {this.getOrigens()}
+      this.resetExcelInput()
     })
    }
 
@@ -31,7 +34,7 @@ export class EnviarArquivosComponent implements OnInit {
   showExcelFileError:boolean = false
   showCSVNubankFileError:boolean = false
 
-  data: any[] = []
+  data: MovimentacaoImportada[] = []
 
   categoriasRegistradas:any[] = []
   categoriasNaoEncontradas:any[] = []
@@ -52,6 +55,8 @@ export class EnviarArquivosComponent implements OnInit {
 
   carregando:boolean = true
   temArquivoExcel:boolean = false
+
+  enviandoMovs:boolean = false
 
   selectPage(page:string) {
     this.page = parseInt(page, 10) || 1;
@@ -90,6 +95,8 @@ export class EnviarArquivosComponent implements OnInit {
         let currentMov = new MovimentacaoImportada()
         if(JSONws[i][0] !== ''){
           currentMov.date = new Date((JSONws[i][0] - (25567+1))*86400*1000) //essa lógica transforma a data serial do excel (um número) em data do Javascript
+        } else {
+          currentMov.date = new Date('')
         }
         
         let mesRefYear = JSONws[i][1].toString().substring(0,4)
@@ -99,7 +106,7 @@ export class EnviarArquivosComponent implements OnInit {
         currentMov.mesRefLabel = JSONws[i][1].toString().substring(4,6) + '/' + JSONws[i][1].toString().substring(0,4)
         currentMov.mesRef = parseFloat(JSONws[i][1])
         currentMov.anoRef = parseFloat(JSONws[i][1].toString().substring(0,4))
-        currentMov.estabelecimento = JSONws[i][2].toUpperCase()
+        currentMov.estabelecimentoPrestador = JSONws[i][2].toUpperCase()
         currentMov.descricao = JSONws[i][3].substring(0,1).toUpperCase() + JSONws[i][3].substring(1,JSONws[i][3].length)
         if(JSONws[i][4] !== ''){
           currentMov.categoria = {
@@ -176,31 +183,20 @@ export class EnviarArquivosComponent implements OnInit {
       }
 
       this.data.sort((a:any,b:any) => (a.mesRef < b.mesRef) ? 1 : (a.date < b.date) ? 0 : -1 )
+      console.log(this.data)
       
     } else {
         this.showExcelFileError = true
         this.errorMessage = "Revisar formato da tabela."
         this.temArquivoExcel = false
       }
-
-      
-      
-      
+    
     }
-
-
 
     } else {
       this.showExcelFileError = true
       this.errorMessage = "Arquivo não suportado"
     }
-
-    
-    
-
-    
-
-   
 
   }
 
@@ -253,6 +249,7 @@ export class EnviarArquivosComponent implements OnInit {
   }
 
   enviarMovs() {
+    this.enviandoMovs = true
     let categoriasParaCriar = {
       items:this.categoriasNaoEncontradas.map(e => {return {
         title: e,
@@ -278,18 +275,145 @@ export class EnviarArquivosComponent implements OnInit {
 
 
 
-    if(categoriasParaCriar.items.length > 0){
-     this._wix.adicionarCategorias(categoriasParaCriar).then(retornoDoServer => {
+    if(categoriasParaCriar.items.length > 0){ // SE TIVER CATEGORIAS PARA CRIAR...
+     this._wix.adicionarCategorias(categoriasParaCriar).then(retornoDoServer => { //enviar array de categorias para o server
       console.log(retornoDoServer)
-      if(origensParaCriar.items.length > 0){
-        this._wix.adicionarOrigens(origensParaCriar).then(retornoDoServer => {
-          console.log(retornoDoServer)
+      if(origensParaCriar.items.length > 0){ // ...E TB TIVER ORIGENS PARA CRIAR
+        this._wix.adicionarOrigens(origensParaCriar).then(retornoDoServer => { //enviar array de origens para o server
+          console.log('retorno do server:' + retornoDoServer)
+
+          let movimentacoes = this.data.map(e => Object.assign({},e))
+      
+          movimentacoes.forEach((mov:any) => {
+          delete mov.mesRefLabel
+          })
+
+          let user = this.localStorage.get('userLoggedId')
+          this._wix.getCategoriasFromUser(user).then(retorno => { // RETOMAR CATEGORIAS FROM SERVER
+            this.categoriasRegistradas = retorno
+           
+            this._wix.getOrigensFromUser(user).then(data => {
+              this.origensRegistradas = data
+
+              movimentacoes.forEach((mov:any) => {
+                mov.categoria = this.categoriasRegistradas.filter(e => e.title == mov.categoria.title)[0]._id
+                mov.origem = this.origensRegistradas.filter(e => e.title == mov.origem.title)[0]._id
+                mov.orcamento = this.orcamentos.filter(e => e.title == mov.orcamento.title)[0]._id
+                mov.proprietario = user
+              })
+
+              this._wix.novasMovimentacoes(movimentacoes).then(respostaFinal => {
+                console.log(respostaFinal)
+                this.enviandoMovs = false
+                this.toastr.success('','Movimentações enviadas!',{positionClass:"toast-top-center"})
+                this.router.navigate(['/paginaprincipal/movimentacoes'])
+
+              })
+
+            })
+           
+          })
+
         })
+      } else { //MAS NAO TIVER ORIGENS PARA CRIAR:
+
+        let movimentacoes = this.data.map(e => Object.assign({},e))
+      
+        movimentacoes.forEach((mov:any) => {
+        delete mov.mesRefLabel
+        })
+
+        let user = this.localStorage.get('userLoggedId')
+
+        this._wix.getCategoriasFromUser(user).then(retorno => { // RETOMAR CATEGORIAS FROM SERVER
+          this.categoriasRegistradas = retorno
+
+          movimentacoes.forEach((mov:any) => {
+            mov.categoria = this.categoriasRegistradas.filter(e => e.title == mov.categoria.title)[0]._id
+            mov.origem = this.origensRegistradas.filter(e => e.title == mov.origem.title)[0]._id
+            mov.orcamento = this.orcamentos.filter(e => e.title == mov.orcamento.title)[0]._id
+            mov.proprietario = user
+          })
+
+          this._wix.novasMovimentacoes(movimentacoes).then(respostaFinal => {
+            console.log(respostaFinal)
+            this.enviandoMovs = false
+            this.toastr.success('','Movimentações enviadas!',{positionClass:"toast-top-center"})
+            this.router.navigate(['/paginaprincipal/movimentacoes'])
+
+          })          
+          
+        })
+
       }
     }) 
     //console.log(categoriasParaCriar)
-    } else {
+    } else { // (SE NÃO TIVER CATEGORIAS PARA CRIAR)
+      if(origensParaCriar.items.length > 0){ // MAS TIVER ORIGENS PARA CRIAR:
+        this._wix.adicionarOrigens(origensParaCriar).then(retornoDoServer => { //enviar as origens para o server
+          console.log(retornoDoServer)
 
+          let movimentacoes = this.data.map(e => Object.assign({},e))
+      
+          movimentacoes.forEach((mov:any) => {
+          delete mov.mesRefLabel
+          })
+
+          let user = this.localStorage.get('userLoggedId')
+          this._wix.getCategoriasFromUser(user).then(retorno => { // RETOMAR CATEGORIAS FROM SERVER
+            this.categoriasRegistradas = retorno
+           
+            this._wix.getOrigensFromUser(user).then(data => {
+              this.origensRegistradas = data
+
+              movimentacoes.forEach((mov:any) => {
+                mov.categoria = this.categoriasRegistradas.filter(e => e.title == mov.categoria.title)[0]._id
+                mov.origem = this.origensRegistradas.filter(e => e.title == mov.origem.title)[0]._id
+                mov.orcamento = this.orcamentos.filter(e => e.title == mov.orcamento.title)[0]._id
+                mov.proprietario = user
+              })
+
+              this._wix.novasMovimentacoes(movimentacoes).then(respostaFinal => {
+                console.log(respostaFinal)
+                this.enviandoMovs = false
+                this.toastr.success('','Movimentações enviadas!',{positionClass:"toast-top-center"})
+                this.router.navigate(['/paginaprincipal/movimentacoes'])
+
+              })
+
+            })
+           
+          })
+          
+          
+        })
+      } else { // (SE NÃO TIVER NEM CATEGORIAS NEM ORIGENS PARA CRIAR)
+        
+        let movimentacoes = this.data.map(e => Object.assign({},e))
+      
+          movimentacoes.forEach((mov:any) => {
+          delete mov.mesRefLabel
+          })
+
+          let user = this.localStorage.get('userLoggedId')
+
+          movimentacoes.forEach((mov:any) => {
+            mov.categoria = this.categoriasRegistradas.filter(e => e.title == mov.categoria.title)[0]._id
+            mov.origem = this.origensRegistradas.filter(e => e.title == mov.origem.title)[0]._id
+            mov.orcamento = this.orcamentos.filter(e => e.title == mov.orcamento.title)[0]._id
+            mov.proprietario = user
+          })
+
+          this._wix.novasMovimentacoes(movimentacoes).then(respostaFinal => {
+            console.log(respostaFinal)
+            this.enviandoMovs = false
+            this.toastr.success('','Movimentações enviadas!',{positionClass:"toast-top-center"})
+            this.router.navigate(['/paginaprincipal/movimentacoes'])
+
+          })
+
+
+      }
     }
     
     

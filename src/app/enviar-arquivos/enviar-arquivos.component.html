@@ -75,7 +75,14 @@
     <div *ngIf="data.length >= 0 && temArquivoExcel" class="container-movimentacoes">
 
         
-        <div class="blue-box"> <strong>{{data.length}} </strong>  <span *ngIf="data.length > 1 || data.length == 0">movimentações encontradas.</span> <span *ngIf="data.length == 1">movimentação encontrada.</span> </div>
+        <div class="blue-box"> 
+            <div><strong>{{data.length}} </strong>  <span *ngIf="data.length > 1 || data.length == 0">movimentações encontradas.</span> <span *ngIf="data.length == 1">movimentação encontrada.</span> </div>
+            <div (click)="enviarMovs()"><button class="btn btn-outline-primary"><span *ngIf="!enviandoMovs">Enviar movimentações</span> <span class="spinner-border spinner-border-sm" *ngIf="enviandoMovs"></span> </button></div>
+            
+        </div>
+
+        
+        
 
 
         <div class="expandable-card" *ngIf="categoriasNaoEncontradas.length > 0 || origensNaoEncontradas.length > 0">
@@ -122,7 +129,7 @@
 
             <div class="movs-items flex-1"> {{mov.mesRefLabel}} </div>
 
-            <div class="movs-items flex-3"> {{mov.estabelecimento}} </div>
+            <div class="movs-items flex-3"> {{mov.estabelecimentoPrestador}} </div>
 
             <div class="movs-items flex-3"> {{mov.descricao}} </div>
 
@@ -177,9 +184,9 @@
             </ngb-pagination>  
         </div>
 
-        <div style="text-align: right;">
+        <!-- <div style="text-align: right;">
             <button *ngIf="data.length > 0" (click)="enviarMovs()">Enviar</button> 
-        </div>
+        </div> -->
 
         
 

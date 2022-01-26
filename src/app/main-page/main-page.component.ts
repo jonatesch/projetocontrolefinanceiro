@@ -24,8 +24,9 @@ export class MainPageComponent implements OnInit {
         this.ativar(1)
       }
     })
-    _wix.abriuMovs$.subscribe(data => {
-      this.linkAtivo[1] = true
+    _wix.abriuMovs$.subscribe(data => { 
+     this.ativar(1)
+
     })
     _wix.logou$.subscribe((data:any) => {
       this.usuario = data.user.firstName

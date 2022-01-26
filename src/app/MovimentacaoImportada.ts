@@ -3,7 +3,7 @@ export class MovimentacaoImportada {
    mesRef:number
    mesRefLabel:string
    anoRef:number
-   estabelecimento:string
+   estabelecimentoPrestador:string
    categoria:any
    descricao:string
    valor:number
