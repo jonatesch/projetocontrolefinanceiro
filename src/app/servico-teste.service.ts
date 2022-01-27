@@ -12,6 +12,7 @@ export class WixApiService {
 
   constructor(private http: HttpClient) { }
 
+
   //OBSERVABLE PARA A NovaMovimentacaoComponent DAR SUBSCRIBE
           //no subscribe ela busca novamente no database as categorias ou origens, dependendo do que for enviado no 'algo'
 
@@ -216,7 +217,7 @@ abriuDireto(index:number){
   }
 
   getMovimentacoesFromUser(dados:any) { 
-    let url = 'https://www.jonathanspinelli.com/_functions/movimentacoesFromUser'
+    let url = 'https://www.jonathanspinelli.com/_functions/getMovimentacoesFromUser'
     let user = JSON.stringify(dados)
     return this.http.post(url,user).toPromise().then((data:any) => {
       //console.log(data)

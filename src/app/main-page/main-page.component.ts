@@ -138,12 +138,14 @@ export class MainPageComponent implements OnInit {
     }
   }
 
+
   ngOnInit(): void {
     if(this._localStorage.get('userLoggedId') !== null){
       this.userIsLogged = true
       this.getUserName(this._localStorage.get('userLoggedId'))
       
     }
+
   }
 
   ngAfterViewInit() {
