@@ -28,7 +28,7 @@
 
     <div style="border: 1px solid gainsboro; padding:5px; margin-bottom: 4px;">
         <div (click)="expandirInfo2 = !expandirInfo2" style="cursor: pointer;">
-            <i *ngIf="!expandirInfo2" class="fas fa-plus"></i> <i *ngIf="expandirInfo2" class="fas fa-minus"></i> A coluna <strong>mês de ref </strong>deve conter informação no formato YYYY/MM, por exemplo: 202201 para indicar Janeiro de 2022.
+            <i *ngIf="!expandirInfo2" class="fas fa-plus"></i> <i *ngIf="expandirInfo2" class="fas fa-minus"></i> A coluna <strong>mês de ref </strong>deve conter informação no formato YYYYMM, por exemplo: 202201 para indicar Janeiro de 2022.
             <p style="padding-left: 25px; font-size: 14px;" *ngIf="expandirInfo2">Se o mês de ref das suas movimentações sempre coincide com o mês da data, você pode utilizar a seguinte fórmula para <strong>gerar automaticamente</strong>  o mês de ref:</p>
         </div>
         

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { isInteger } from '@ng-bootstrap/ng-bootstrap/util/util';
 import { WixApiService } from '../servico-teste.service';
 
 @Component({
@@ -7,6 +8,34 @@ import { WixApiService } from '../servico-teste.service';
   styleUrls: ['./testes.component.css']
 })
 export class TestesComponent implements OnInit {
+
+  numberArray:number[] = []
+
+  userData:number
+
+  teste() {
+    if(this.numberArray.length > 0) {
+      this.numberArray = []
+    } else {
+      let i = 0
+      while(i < this.userData){
+        this.numberArray.push(i)
+        i = i + 6
+      }
+
+      
+    }
+    
+  }
+
+  teste2(){
+    this.numberArray = []
+    let i = 0
+      while(i <= this.userData){
+        this.numberArray.push(i)
+        i = i + 6
+      }
+  }
 
   nome =  "nome"
   email = 'email'

@@ -36,3 +36,25 @@
         
     </select>
 </div>
+<br><br>
+
+<div style="display: flex; justify-content:space-around">
+    <div>
+        <input [(ngModel)]="userData" (ngModelChange)="teste2()" type="number">
+
+    </div>
+
+    <div>
+        <button (click)="teste()">Go!</button>
+    </div>
+
+</div>
+
+<div>
+    <ul>
+        <li *ngFor="let number of numberArray"> {{ number }} </li>
+    </ul>
+</div>
+
+
+
