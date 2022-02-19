@@ -146,6 +146,8 @@ export class MainPageComponent implements OnInit {
       
     }
 
+    alert("Olá, pessoa")
+
   }
 
   ngAfterViewInit() {
