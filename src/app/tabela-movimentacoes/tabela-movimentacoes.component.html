@@ -5,8 +5,20 @@
         </div>
 
         <div class="col">
-               <!-- COMPONENT DOS TOTAIS DE CRÉDITOS E DÉBITOS: -->
-        <totais class="col totais-container" [totalCreditos]="totalCreditos" [totalDebitos]="totalDebitos"></totais>
+            <!-- COMPONENT DOS TOTAIS DE CRÉDITOS E DÉBITOS: -->
+            <totais class="col totais-container" [totalCreditos]="totalCreditos" [totalDebitos]="totalDebitos"></totais>
+            
+            <div class="difbutton">
+                <div class="click-link" (click)="showTotalsDifference = !showTotalsDifference"> <span *ngIf="!showTotalsDifference">Ver diferença</span> <span *ngIf="showTotalsDifference">Ocultar diferença</span>    </div>
+            </div>
+
+            <div *ngIf="showTotalsDifference" class="info-difference" [ngClass]="{'bg-verde':totalCreditos-totalDebitos > 0}">
+                <div> 
+                   {{totalCreditos - totalDebitos | currency: 'BRL'}}
+
+                </div>
+            </div>
+    
         </div>
 
      

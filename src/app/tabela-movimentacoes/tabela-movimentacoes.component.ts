@@ -28,6 +28,8 @@ export class TabelaMovimentacoesComponent implements OnInit {
   @ViewChild(EditarComponent) editarComponent:any
   @ViewChildren('tr') tableRows:any
 
+  showTotalsDifference:boolean = false
+
   setarFiltro(evento:any) {
     if(evento !== 0) {
       if(evento.meses !== '') {

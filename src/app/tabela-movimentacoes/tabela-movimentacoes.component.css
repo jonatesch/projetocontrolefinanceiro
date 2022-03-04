@@ -197,7 +197,7 @@ ngb-pagination ::ng-deep .page-link {
 
 .movs-title {
     height: 70px;
-    margin-bottom: 20px;
+    margin-bottom: 45px;
     --bs-gutter-x:0
 }
 
@@ -656,4 +656,35 @@ ngb-pagination ::ng-deep .page-link {
 .col-borderboth {
     border-left: 1px solid gainsboro;
     border-right: 1px solid gainsboro;
+}
+
+.click-link {
+    max-width: fit-content;
+}
+
+.click-link:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.difbutton {
+    margin-top: 5px;
+    display: flex;
+    justify-content: center;
+    color: #58595b;
+}
+
+.info-difference {
+    background-color: rgb(255, 210, 210);
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    width: 50%;
+    left: 25%;
+}
+
+.bg-verde {
+    background-color: #a4ffaf;
 }
