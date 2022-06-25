@@ -43,7 +43,9 @@ import { DicasComponent } from './dicas/dicas.component';
 import { RecuperarSenhaComponent } from './recuperar-senha/recuperar-senha.component';
 import { ModalAguardarComponent } from './modal-aguardar/modal-aguardar.component';
 import { EnviarArquivosComponent } from './enviar-arquivos/enviar-arquivos.component';
-import { HelpEnviarArquivoXlsComponent } from './help-enviar-arquivo-xls/help-enviar-arquivo-xls.component'
+import { HelpEnviarArquivoXlsComponent } from './help-enviar-arquivo-xls/help-enviar-arquivo-xls.component';
+import { SaudacaoVisitanteComponent } from './saudacao-visitante/saudacao-visitante.component';
+import { LogoutInatividadeComponent } from './logout-inatividade/logout-inatividade.component'
 
 registerLocaleData(localePt);
 
@@ -75,7 +77,9 @@ registerLocaleData(localePt);
     RecuperarSenhaComponent,
     ModalAguardarComponent,
     EnviarArquivosComponent,
-    HelpEnviarArquivoXlsComponent
+    HelpEnviarArquivoXlsComponent,
+    SaudacaoVisitanteComponent,
+    LogoutInatividadeComponent
  
   ],
   imports: [

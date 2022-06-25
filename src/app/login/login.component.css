@@ -6,6 +6,11 @@
     margin-left: -70px;
 }
 
+.container-visit {
+    min-height: unset;
+    margin-bottom: 20px;
+}
+
 .login-cols {
     width: 30%;
     background-color: white;
@@ -34,9 +39,17 @@
     height: 40px;
 }
 
+.entrar-button:hover {
+    background-color: #098d99;
+}
+
 .disabled {
     background-color: #00b5c552;
     color: rgb(255, 255, 255);
+}
+
+.disabled:hover {
+    background-color: #00b5c552;
 }
 
 .info-icon {

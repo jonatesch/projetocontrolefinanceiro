@@ -11,8 +11,10 @@ import { ConfirmarExclusaoTodasComponent } from '../confirmar-exclusao-todas/con
 import { MarcarEfetuadasComponent } from '../marcar-efetuadas/marcar-efetuadas.component';
 import { LocalStorageService } from '../local-storage.service';
 
-import { Router } from '@angular/router';
+import { NavigationStart, Router } from '@angular/router';
 import { ModalAguardarComponent } from '../modal-aguardar/modal-aguardar.component';
+
+import { SaudacaoVisitanteComponent } from '../saudacao-visitante/saudacao-visitante.component';
 
 @Component({
   selector: 'app-tabela-movimentacoes',
@@ -110,11 +112,34 @@ export class TabelaMovimentacoesComponent implements OnInit {
   userId:any = ''
 
   constructor(private _WixApiService:WixApiService, private modalService: NgbModal, private clipboardService:ClipboardService, private toastr:ToastrService, private _localStorage:LocalStorageService, private router:Router) { 
-    _WixApiService.logou$.subscribe((dados:any) => {
+    /* _WixApiService.logou$.subscribe((dados:any) => {
+      console.log("AAAAA")
       //this.movimentacoes = dados.movs
       this.userId = dados.user.contactId
       this.getMovimentacoesTeste('','')
-    })
+    }) */
+ /*    _WixApiService.logouVis$.subscribe(() => {
+      let id = this._localStorage.get("userLoggedId")
+
+           
+      if(id){
+        this._WixApiService.visitor(id).then(data => {
+        console.log(data)
+        this.getMovimentacoesTeste('','')
+        this.filtrosComponent.getMovimentacoesTeste('','')
+        this.filtrosComponent.ajustarCategs()
+        this.filtrosComponent.ajustarEstabs()
+        this.filtrosComponent.ajustarMeses()
+        this.filtrosComponent.ajustarOrcamentos()
+        this.filtrosComponent.ajustarOrigs()
+        this.limparFiltros()
+        this.loadingVisitor = false
+        this._WixApiService.visitorFirstLogin = false
+        
+      })
+      }
+      
+    }) */
   }
 
   movimentacoes:any[] = []
@@ -131,6 +156,7 @@ export class TabelaMovimentacoesComponent implements OnInit {
   mesesDeReferencia:any[]
 
   carregandoMovimentacoes:boolean = false
+  loadingVisitor:boolean = false
 
   page = 1
 
@@ -431,14 +457,65 @@ export class TabelaMovimentacoesComponent implements OnInit {
     })
   
   }
-  
+
+  userIsVisitor:boolean = true
+
+   
   ngOnInit(): void {
    //this._WixApiService.opcoesAtualizadas('movimentacoesComponent')
    // this.getMovimentacoes()
+
    if(this._localStorage.get('userLoggedId') !== null){
+    this.carregandoMovimentacoes = true
+  
+    
     this.userId = this._localStorage.get('userLoggedId')
+
+    this._WixApiService.getUserName(this.userId).then(user => {
+
+      if(user.firstName == 'Visitante'){
+
+
+        //se for "false" é porque abriu via menu lateral
+        if(this._WixApiService.visitorFirstLogin == false){
+          this.getMovimentacoesTeste('','')
+
+        //se é "true" é pq veio da página de login; se é "undefined" é pq foi um refresh na página  
+        } else {
+
+          this.modalRef = this.modalService.open(SaudacaoVisitanteComponent, {centered: true, windowClass:"myCustomModalClass"})
+          this.modalRef.componentInstance.fecharSaudacao.subscribe(() => {
+            this.modalRef?.close()
+          })
+
+
+          let id = this._localStorage.get("userLoggedId")           
+          if(id){
+            this._WixApiService.visitor(id).then(data => {
+              this.getMovimentacoesTeste('','')
+              this.filtrosComponent.getMovimentacoesTeste('','')
+              this.filtrosComponent.ajustarCategs()
+              this.filtrosComponent.ajustarEstabs()
+              this.filtrosComponent.ajustarMeses()
+              this.filtrosComponent.ajustarOrcamentos()
+              this.filtrosComponent.ajustarOrigs()
+             // this.limparFiltros()
+              //this.loadingVisitor = false
+            
+            })
+          }
+        }
+
+      } else {
+        this.getMovimentacoesTeste('','')
+      }
+
+      this._WixApiService.visitorFirstLogin = false
+    })
+
     this._WixApiService.abriuMovimentacoesComponent()
-    this.getMovimentacoesTeste('','')
+    
+
    } else {
      this.router.navigate(['/paginaprincipal'])
    }

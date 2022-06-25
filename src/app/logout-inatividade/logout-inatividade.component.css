@@ -1,0 +1,9 @@
+.container {
+    padding: 10px;
+}
+
+.btn {
+    background-color: #00b4c5;
+    color: white;
+    width: 100%;
+}

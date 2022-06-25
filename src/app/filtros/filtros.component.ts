@@ -19,9 +19,9 @@ export class FiltrosComponent implements OnInit {
 
   constructor(private _WixApiService:WixApiService, private _localStorage:LocalStorageService) {
     _WixApiService.logou$.subscribe((dados:any) => {
-      console.log(dados)
+      //console.log(dados)
       this.user = dados.user.contactId
-      console.log(this.user)
+      //console.log(this.user)
       this.getMovimentacoesTeste('','')
     })
    }
@@ -280,7 +280,7 @@ export class FiltrosComponent implements OnInit {
         this.isFiltered_EstabelecimentoSlicer = false
       }
 
-      console.log(this.isFiltered_EstabelecimentoSlicer)
+      //console.log(this.isFiltered_EstabelecimentoSlicer)
     //REORDENAR SLICER DE ESTABELECIMENTOS:
     let movsAtuais_Estabelecimentos:any[] = this._WixApiService.sortByTitle(this.estabelecimentosUtilizados.filter(e => this._WixApiService.removerIguaisEclassificar(this.movimentacoesAtuais.map(e => e.estabelecimentoPrestador)).includes(e.title))) 
     let movsAtuais_EstabelecimentosResto:any[] = this._WixApiService.sortByTitle(this.estabelecimentosUtilizados.filter(e => !this._WixApiService.removerIguaisEclassificar(this.movimentacoesAtuais.map(e => e.estabelecimentoPrestador)).includes(e.title))) 
@@ -573,7 +573,7 @@ export class FiltrosComponent implements OnInit {
             /* let categoriaIndex = this.categoriasUtilizadas.map(e => e._id).indexOf(this.categoriasUtilizadas.filter(e => e._id == dadosNovaMov.categoria)[0]._id)
             this.setarFiltro_Categoria(categoriaIndex) */
 
-            console.log(dadosNovaMov)
+            //console.log(dadosNovaMov)
             let mesRefIndex = this.mesesUtilizados.map(e => e.codigoMesRef).indexOf(dadosNovaMov.mesRef)
             this.setarFiltro_Meses(mesRefIndex)
 
@@ -610,7 +610,7 @@ export class FiltrosComponent implements OnInit {
           }
 
           if(dadosNovaMov == 'atualizar'){
-            console.log(filtros)   
+            //console.log(filtros)   
             this.filtrarTabela()
             this.done.emit()
             

@@ -1,5 +1,15 @@
 
-<div class="container" [ngClass]="{'hidden':redirectingAfterRegistration}">
+<div class="container container-visit">
+    <div class="login-cols" style="width: calc(60% + 20px);">
+        <h3 class="titles">Entrar como visitante</h3>
+        <p style="text-align:center;">Todas as funcionalidades disponíveis. Experimente!</p>
+        <button class="entrar-button" (click)="logarVisitante()"> <span *ngIf="!logandoVisitante">entrar</span> <span *ngIf="logandoVisitante" class="spinner-border"></span> </button> 
+    </div>   
+</div>
+
+
+<div *ngIf="!logandoVisitante" class="container" [ngClass]="{'hidden':redirectingAfterRegistration}">
+   
     <div class="login-cols">
         <h3 class="titles">Já tenho conta</h3>
 

@@ -1,10 +1,12 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { WixApiService } from '../servico-teste.service';
 import { ToastrService } from 'ngx-toastr';
-import { Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, RoutesRecognized } from '@angular/router';
 import { LocalStorageService } from '../local-storage.service';
 import { RecuperarSenhaComponent } from '../recuperar-senha/recuperar-senha.component';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+
+import { filter, pairwise } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -39,6 +41,7 @@ export class LoginComponent implements OnInit {
           this.logando = false
           this.toastr.error("","usuário e/ou senha incorretos", {positionClass:'toast-top-center'})
         } else {
+          this._wix.visitorFirstLogin = true
           this.router.navigate(['/paginaprincipal/movimentacoes'])
           //this.linkAtivo[1] = true
           this.logando = false
@@ -141,9 +144,38 @@ export class LoginComponent implements OnInit {
     this.modalRef = this.modalService.open(RecuperarSenhaComponent,{centered:true})
   }
 
+  logandoVisitante = false
+
+  logarVisitante(){
+    this.logandoVisitante = true
+    
+    let dateMark = new Date().getTime()
+    let tempUserEmail = "visitante@" + this._wix.makeId(8) + dateMark + ".com"
+    let tempUserPassword = 'visitantecf2022'
+
+    this.userForRegistration.email = tempUserEmail
+    this.userForRegistration.senha = tempUserPassword
+    this.userForRegistration.name = 'Visitante'
+
+    this.registerWixMember()
 
 
-  constructor(private _wix:WixApiService, private toastr:ToastrService, private router:Router, private _localStorage:LocalStorageService, private modalService:NgbModal) { }
+
+
+   /*  this.logandoVisitante = true
+    this.userForLogin.email = 'visitante@controlefinanceiro.com.br'
+    this.userForLogin.senha = 'visitantecf2022'
+    this.logarWixMembers() */
+
+
+
+  }
+
+
+
+  constructor(private _wix:WixApiService, private toastr:ToastrService, private router:Router, private route:ActivatedRoute, private _localStorage:LocalStorageService, private modalService:NgbModal) { 
+   
+  }
 
   ngOnInit(): void {
     if(this._localStorage.get('userLoggedId')) {

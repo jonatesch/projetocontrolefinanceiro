@@ -12,6 +12,8 @@ export class WixApiService {
 
   constructor(private http: HttpClient) { }
 
+  visitorFirstLogin:boolean | undefined = undefined
+
 
   //OBSERVABLE PARA A NovaMovimentacaoComponent DAR SUBSCRIBE
           //no subscribe ela busca novamente no database as categorias ou origens, dependendo do que for enviado no 'algo'
@@ -47,9 +49,28 @@ export class WixApiService {
 private entradaDiretaSource = new Subject<number>();
 abriuDireto$ = this.entradaDiretaSource.asObservable();
 
-abriuDireto(index:number){
-  this.entradaDiretaSource.next(index)
-}
+  abriuDireto(index:number){
+    this.entradaDiretaSource.next(index)
+  }
+
+
+ private logouVisitante = new Subject<string>();
+ logouVis$ = this.logouVisitante.asObservable()
+
+ visitanteLogou(){
+  this.logouVisitante.next()
+ }
+
+
+ visitor(id:string){
+  let url = 'https://www.jonathanspinelli.com/_functions/Visitor'
+  let data = JSON.stringify(id)
+  return this.http.post(url,data).toPromise().then(data => {
+    return data
+  })
+ }
+
+
 
 
   loginWixMembers(dados:any) {
@@ -92,6 +113,15 @@ abriuDireto(index:number){
       return resposta
     })
 
+  }
+
+  getUserName(id:any) {
+    let url = 'https://www.jonathanspinelli.com/_functions/username'
+    let info = JSON.stringify(id)
+    return this.http.post(url,info).toPromise().then((resposta:any) => {
+      return resposta
+      
+    })
   }
 
 
@@ -472,6 +502,32 @@ abriuDireto(index:number){
       return data
     })
   }
+
+  clearVisitantInfo(){
+    let url = 'https://www.jonathanspinelli.com/_functions/clearVisitantInfo'
+    return this.http.get(url).toPromise().then(res => {
+      return res
+    })
+  }
+
+  setVisitorDefaultMovs(){
+    let url = 'https://www.jonathanspinelli.com/_functions/setVisitorDefaultMovs'
+    return this.http.get(url).toPromise().then(res => {
+      return res
+    })
+  }
+
+  makeId(length:number) {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * 
+    charactersLength));
+   }
+   return result;
+  }
+
 
   
 }
